@@ -17,13 +17,13 @@ interface Props {
 }
 
 const {
-  title = 'LUSION SYSTEMS — Engineering the Architectures Companies Run On',
+  title = 'KYNDEV — Engineering the Architectures Companies Run On',
   description = 'High-throughput web applications, enterprise Shopify Plus engines, 60fps WebGL flagships, and distributed cloud backends.',
   ogImage = '/og-image.png',
   themeColor = '#070709'
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://lusion-systems.netlify.app');
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://kyndev.com');
 ---
 
 <!doctype html>
@@ -50,7 +50,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://lusion-s
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@Lusion_Sys" />
+    <meta name="twitter:site" content="@kyndev" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />

@@ -61,7 +61,7 @@ export const projectsData: Record<string, ProjectData> = {
       "colorBtnBgHover": "#dc5000",
       "colorBtnTextHover": "#ffedd7"
     },
-    "descHtml": "<p>Oryzo AI is a self initiated project by Lusion built around a deliberately ridiculous idea: presenting a simple cork coaster as a serious AI era product launch. We treated it as a full campaign, combining premium visual production with satire to see how far craft, storytelling, and presentation could push an ordinary object.</p><p>Beyond the main website, we extended the idea across a <a href=\"https://github.com/lusionltd/ORYZO-1\" target=\"_blank\">GitHub page</a>, <a href=\"https://www.producthunt.com/products/oryzo-ai\" target=\"_blank\">Product Hunt launch</a>, <a href=\"https://x.com/lusionltd/status/2034659078840996274\" target=\"_blank\">founder video</a>, and social content. It gave us room to experiment more freely with tone and campaign thinking, while showing the same level of design, motion, and digital production we bring to client work.</p>",
+    "descHtml": "<p>Oryzo AI is a self initiated project by KYNDEV built around a deliberately ridiculous idea: presenting a simple cork coaster as a serious AI era product launch. We treated it as a full campaign, combining premium visual production with satire to see how far craft, storytelling, and presentation could push an ordinary object.</p><p>Beyond the main website, we extended the idea across a <a href=\"https://github.com/lusionltd/ORYZO-1\" target=\"_blank\">GitHub page</a>, <a href=\"https://www.producthunt.com/products/oryzo-ai\" target=\"_blank\">Product Hunt launch</a>, <a href=\"https://x.com/lusionltd/status/2034659078840996274\" target=\"_blank\">founder video</a>, and social content. It gave us room to experiment more freely with tone and campaign thinking, while showing the same level of design, motion, and digital production we bring to client work.</p>",
     "launchUrl": "https://oryzo.ai/",
     "launchLabel": "Launch Project",
     "services": [
@@ -526,7 +526,7 @@ export const projectsData: Record<string, ProjectData> = {
       "colorBtnBgHover": "#621422",
       "colorBtnTextHover": "#EFD5D3"
     },
-    "descHtml": "<p>Commissioned by Wallpaper* and Porsche GB, Lusion created a CG short film inspired by the visionary ambitions of Porsche founder Ferry Porsche.</p> <p>Directed by Edan Kwan, the piece takes audiences on a four phase journey through the evolution of Porsche sports cars, expressed through digital art and motion design. The work was later showcased at Outernet London across 23,000 square feet of wraparound floor to ceiling 16K LED screens.</p>",
+    "descHtml": "<p>Commissioned by Wallpaper* and Porsche GB, KYNDEV created a CG short film inspired by the visionary ambitions of Porsche founder Ferry Porsche.</p> <p>Directed by Edan Kwan, the piece takes audiences on a four phase journey through the evolution of Porsche sports cars, expressed through digital art and motion design. The work was later showcased at Outernet London across 23,000 square feet of wraparound floor to ceiling 16K LED screens.</p>",
     "launchUrl": "https://player.vimeo.com/video/783015830",
     "launchLabel": "Watch Video",
     "services": [
@@ -934,7 +934,7 @@ export const projectsData: Record<string, ProjectData> = {
       "colorBtnBgHover": "#0591F6",
       "colorBtnTextHover": "#ffffff"
     },
-    "descHtml": "<p>Choo Choo World, a research project by Lusion, aimed to create an enjoyable mini game for all ages, demonstrating web technology's positive potential. It offered a fun introduction to the web, aligned with Lusion’s founders' experiences as parents.</p><p>With a community-building feature, users shared game snapshots on social media, showcasing engagement strategies. Choo Choo World embodies Lusion's commitment to innovative web technology, inspiring both children and adults</p>",
+    "descHtml": "<p>Choo Choo World, a research project by KYNDEV, aimed to create an enjoyable mini game for all ages, demonstrating web technology's positive potential. It offered a fun introduction to the web, aligned with KYNDEV’s founders' experiences as parents.</p><p>With a community-building feature, users shared game snapshots on social media, showcasing engagement strategies. Choo Choo World embodies KYNDEV's commitment to innovative web technology, inspiring both children and adults</p>",
     "launchUrl": "https://choochooworld.com/",
     "launchLabel": "Launch Project",
     "services": [
@@ -1260,7 +1260,7 @@ export const projectsData: Record<string, ProjectData> = {
       "colorBtnBgHover": "#7731E9",
       "colorBtnTextHover": "#ffffff"
     },
-    "descHtml": "<p>Lusion partnered with Phoria and Meta to create Spatial Fusion, an immersive WebXR experience that pushed the possibilities of web based mixed reality. Built with technologies such as spatial anchors, plane detection, and full color passthrough, the project explored new ways for users to interact with digital content in physical space.</p> <p>Bringing together expertise across creative technology, immersive design, and web development, the collaboration helped turn a complex technical challenge into a seamless spatial storytelling experience. The result was a forward looking mixed reality venture that invited users into a new kind of interactive world.</p>",
+    "descHtml": "<p>KYNDEV partnered with Phoria and Meta to create Spatial Fusion, an immersive WebXR experience that pushed the possibilities of web based mixed reality. Built with technologies such as spatial anchors, plane detection, and full color passthrough, the project explored new ways for users to interact with digital content in physical space.</p> <p>Bringing together expertise across creative technology, immersive design, and web development, the collaboration helped turn a complex technical challenge into a seamless spatial storytelling experience. The result was a forward looking mixed reality venture that invited users into a new kind of interactive world.</p>",
     "launchUrl": "https://spatialfusion.io/",
     "launchLabel": "Launch Project",
     "services": [
@@ -1469,7 +1469,7 @@ export const projectsData: Record<string, ProjectData> = {
     ],
     "nextProject": {
       "id": "lusion_labs",
-      "title": "Lusion Labs",
+      "title": "KYNDEV Labs",
       "colorBg": "#1F2022",
       "colorText": "#ffffff",
       "shadow": "0.85"
@@ -1477,7 +1477,7 @@ export const projectsData: Record<string, ProjectData> = {
   },
   "lusion_labs": {
     "slug": "lusion_labs",
-    "title": "Lusion Labs",
+    "title": "KYNDEV Labs",
     "tags": "web • design • development • 3d",
     "theme": {
       "style": "background-color:#1F2022",
@@ -1492,7 +1492,7 @@ export const projectsData: Record<string, ProjectData> = {
       "colorBtnBgHover": "#D9D9DA",
       "colorBtnTextHover": "#000000"
     },
-    "descHtml": "<p>Lusion's Dedication to Innovation and Exploration. Our dedicated space showcases internal R&D initiatives, reflecting our commitment to tech advancement. With a sleek, enchanting design, the site offers exclusive insights into our ongoing research, sparking curiosity and inspiring engaging experiences.</p><p>Pioneering the Future of Tech-Driven Advertising. For our clients, this website unveils uncharted possibilities. Displaying our prowess with groundbreaking tech, it inspires fresh avenues for captivating and engaging target audiences.</p>",
+    "descHtml": "<p>KYNDEV's Dedication to Innovation and Exploration. Our dedicated space showcases internal R&D initiatives, reflecting our commitment to tech advancement. With a sleek, enchanting design, the site offers exclusive insights into our ongoing research, sparking curiosity and inspiring engaging experiences.</p><p>Pioneering the Future of Tech-Driven Advertising. For our clients, this website unveils uncharted possibilities. Displaying our prowess with groundbreaking tech, it inspires fresh avenues for captivating and engaging target audiences.</p>",
     "launchUrl": "https://labs.lusion.co/",
     "launchLabel": "Launch Project",
     "services": [
@@ -1658,7 +1658,7 @@ export const projectsData: Record<string, ProjectData> = {
       "colorBtnBgHover": "#6680A0",
       "colorBtnTextHover": "#ffffff"
     },
-    "descHtml": "<p>Expanding Boundaries through Cinematic Innovation. An R&D feat by Lusion, this project showcased team versatility and artistry. We crafted 3D assets from scratch and seamlessly blended hand-drawn sketches into a captivating WebGL environment for a unique experience.</p><p>Crafting My Little Storybook's Triumph. The Lusion team meticulously shaped every element in this challenging one-month project. Their dedication resulted in acclaim, with multiple awards, including the coveted 2022 Webby Award for Best Visual Design Aesthetic, recognizing the blend of innovation and creativity.</p>",
+    "descHtml": "<p>Expanding Boundaries through Cinematic Innovation. An R&D feat by KYNDEV, this project showcased team versatility and artistry. We crafted 3D assets from scratch and seamlessly blended hand-drawn sketches into a captivating WebGL environment for a unique experience.</p><p>Crafting My Little Storybook's Triumph. The KYNDEV team meticulously shaped every element in this challenging one-month project. Their dedication resulted in acclaim, with multiple awards, including the coveted 2022 Webby Award for Best Visual Design Aesthetic, recognizing the blend of innovation and creativity.</p>",
     "launchUrl": "https://exp-my-little-storybook.lusion.co/",
     "launchLabel": "Launch Project",
     "services": [
@@ -1821,7 +1821,7 @@ export const projectsData: Record<string, ProjectData> = {
       "colorBtnBgHover": "#F40009",
       "colorBtnTextHover": "#ffffff"
     },
-    "descHtml": "<p>Lusion teamed up with GoSpooky to embark on an exciting journey with Coca-Cola European Partners. Our mission? To elevate the way soft drinks are served by bringing the magic of web-based augmented reality (AR) to the beverage experience.</p><p>Faced with a tight timeline due to a previous vendor's shortfall, Lusion undertook the challenge to create a lifelike WebAR encounter that would make Coca-Cola's drink offerings burst to life.</p>",
+    "descHtml": "<p>KYNDEV teamed up with GoSpooky to embark on an exciting journey with Coca-Cola European Partners. Our mission? To elevate the way soft drinks are served by bringing the magic of web-based augmented reality (AR) to the beverage experience.</p><p>Faced with a tight timeline due to a previous vendor's shortfall, KYNDEV undertook the challenge to create a lifelike WebAR encounter that would make Coca-Cola's drink offerings burst to life.</p>",
     "launchUrl": "",
     "launchLabel": "Launch Project",
     "services": [
@@ -1918,7 +1918,7 @@ export const projectsData: Record<string, ProjectData> = {
       "colorBtnBgHover": "#FFB9B9",
       "colorBtnTextHover": "#28262B"
     },
-    "descHtml": "<p>A New Era in Fashion Showcase. Lusion's R&D journey transforms fashion shows into interactive virtual experiences, inviting viewers worldwide to a 24/7 spectacle.</p><p>Meticulously crafted clothing textures and 3D models seamlessly merge fashion and technology, captivating enthusiasts. This pioneering project bridges the realms of fashion and digital innovation, paving the way for the future of virtual fashion.</p>",
+    "descHtml": "<p>A New Era in Fashion Showcase. KYNDEV's R&D journey transforms fashion shows into interactive virtual experiences, inviting viewers worldwide to a 24/7 spectacle.</p><p>Meticulously crafted clothing textures and 3D models seamlessly merge fashion and technology, captivating enthusiasts. This pioneering project bridges the realms of fashion and digital innovation, paving the way for the future of virtual fashion.</p>",
     "launchUrl": "https://exp-infinite-passerella.lusion.co/",
     "launchLabel": "Launch Project",
     "services": [
@@ -2035,7 +2035,7 @@ export const projectsData: Record<string, ProjectData> = {
       "colorBtnBgHover": "#D5BFEF",
       "colorBtnTextHover": "#2B3037"
     },
-    "descHtml": "<p>In October 2019, Opera North, alongside the Audiolab of York University and the sound artist James Bulley, came to Lusion for a collaboration on an innovative cultural project. Their idea was to record the Turn of the Screw opera in a spatialized way, then place these recordings in an explorable 3D environment. The main goal of this project was to create an audiovisual walk through a binaural landscape.</p>",
+    "descHtml": "<p>In October 2019, Opera North, alongside the Audiolab of York University and the sound artist James Bulley, came to KYNDEV for a collaboration on an innovative cultural project. Their idea was to record the Turn of the Screw opera in a spatialized way, then place these recordings in an explorable 3D environment. The main goal of this project was to create an audiovisual walk through a binaural landscape.</p>",
     "launchUrl": "https://www.operanorth.co.uk/turn-of-the-screw-immersive-trailer/",
     "launchLabel": "Launch Project",
     "services": [
