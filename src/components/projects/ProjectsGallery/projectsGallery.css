@@ -56,3 +56,9 @@
   height: 4vw;
   width: 4vw;
 }
+
+#projects-main:after {
+  content: '';
+  clear: both;
+  display: block;
+}

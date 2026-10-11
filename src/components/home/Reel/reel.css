@@ -493,3 +493,19 @@
     color: var(--color-white, #fff);
   }
 }
+
+#home-reel-video-cursor-svg {
+  width: 3.6rem;
+  height: 3.6rem;
+}
+
+#home-reel-video {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  opacity: 0;
+}
