@@ -6,9 +6,9 @@
 
 export class ProjectDetailsController {
   private domContainer: HTMLElement | null = null;
-  private domItems: HTMLElement[] = [];
   private domPreview: HTMLElement | null = null;
   public isInitialized: boolean = false;
+  private cleanups: Array<() => void> = [];
 
   public init(): void {
     if (typeof window === 'undefined') return;
@@ -16,9 +16,6 @@ export class ProjectDetailsController {
     this.domContainer = document.getElementById('project-details');
     if (!this.domContainer) return;
 
-    this.domItems = Array.from(
-      this.domContainer.querySelectorAll<HTMLElement>('.project-details-item')
-    );
     this.domPreview = this.domContainer.querySelector('#project-details-preview');
 
     this._bindEvents();
@@ -27,13 +24,23 @@ export class ProjectDetailsController {
 
   private _bindEvents(): void {
     if (this.domPreview) {
-      this.domPreview.addEventListener('click', () => {
+      const onPreviewClick = (): void => {
         const nextId = this.domPreview?.dataset.nextId;
         if (nextId) {
           window.location.href = `/projects/${nextId}`;
         }
+      };
+      this.domPreview.addEventListener('click', onPreviewClick);
+      this.cleanups.push(() => {
+        this.domPreview?.removeEventListener('click', onPreviewClick);
       });
     }
+  }
+
+  public destroy(): void {
+    this.cleanups.forEach((cleanup) => cleanup());
+    this.cleanups = [];
+    this.isInitialized = false;
   }
 }
 

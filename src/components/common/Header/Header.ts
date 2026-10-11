@@ -10,10 +10,25 @@ export class HeaderController {
   private domMenuContainer: HTMLElement | null = null;
   private domMenuBtn: HTMLElement | null = null;
   private domSoundBtn: HTMLElement | null = null;
-  private domTalkBtn: HTMLElement | null = null;
   private domContactBtn: HTMLElement | null = null;
   public isMenuOpened: boolean = false;
   public isInitialized: boolean = false;
+
+  private onMenuClick = (): void => {
+    if (this.isMenuOpened) {
+      this.closeMenu();
+    } else {
+      this.openMenu();
+    }
+  };
+
+  private onSoundClick = (): void => {
+    this.toggleSound();
+  };
+
+  private onContactClick = (): void => {
+    this.scrollToContact();
+  };
 
   public init(): void {
     if (typeof window === 'undefined') return;
@@ -24,7 +39,6 @@ export class HeaderController {
     this.domMenuContainer = document.getElementById('header-menu');
     this.domMenuBtn = document.getElementById('header-right-menu-btn');
     this.domSoundBtn = document.getElementById('header-right-sound-btn');
-    this.domTalkBtn = document.getElementById('header-right-talk-btn');
     this.domContactBtn = document.querySelector('.header-menu-link[data-scroll-to="contact"]');
 
     this._bindEvents();
@@ -32,11 +46,28 @@ export class HeaderController {
   }
 
   private _bindEvents(): void {
-    if (this.domContactBtn) {
-      this.domContactBtn.addEventListener('click', () => {
-        this.scrollToContact();
-      });
+    if (this.domMenuBtn) {
+      this.domMenuBtn.addEventListener('click', this.onMenuClick);
     }
+    if (this.domSoundBtn) {
+      this.domSoundBtn.addEventListener('click', this.onSoundClick);
+    }
+    if (this.domContactBtn) {
+      this.domContactBtn.addEventListener('click', this.onContactClick);
+    }
+  }
+
+  public destroy(): void {
+    if (this.domMenuBtn) {
+      this.domMenuBtn.removeEventListener('click', this.onMenuClick);
+    }
+    if (this.domSoundBtn) {
+      this.domSoundBtn.removeEventListener('click', this.onSoundClick);
+    }
+    if (this.domContactBtn) {
+      this.domContactBtn.removeEventListener('click', this.onContactClick);
+    }
+    this.isInitialized = false;
   }
 
   /**

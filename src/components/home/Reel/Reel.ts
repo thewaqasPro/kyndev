@@ -8,13 +8,12 @@
 
 export class ReelController {
   private domContainer: HTMLElement | null = null;
-  private domTitle: HTMLElement | null = null;
-  private domContent: HTMLElement | null = null;
   private domWatchBtn: HTMLElement | null = null;
   private domVideoPlaceholder: HTMLElement | null = null;
   private domTopDeco: HTMLElement | null = null;
   private domBottomDeco: HTMLElement | null = null;
   public isInitialized: boolean = false;
+  private cleanups: Array<() => void> = [];
 
   public init(): void {
     if (typeof window === 'undefined') return;
@@ -22,8 +21,6 @@ export class ReelController {
     this.domContainer = document.querySelector('#home-reel');
     if (!this.domContainer) return;
 
-    this.domTitle = this.domContainer.querySelector('#home-reel-title');
-    this.domContent = this.domContainer.querySelector('#home-reel-content');
     this.domWatchBtn = this.domContainer.querySelector('#home-reel-video-watch-btn');
     this.domVideoPlaceholder = this.domContainer.querySelector('#home-reel-video-placeholder');
     this.domTopDeco = this.domContainer.querySelector('#home-reel-video-container-top');
@@ -35,32 +32,46 @@ export class ReelController {
 
   private _bindEvents(): void {
     if (this.domWatchBtn) {
-      this.domWatchBtn.addEventListener('click', (e: MouseEvent) => {
+      const onBtnClick = (e: MouseEvent): void => {
         e.stopPropagation();
         this.openReelVideo();
-      });
+      };
 
-      this.domWatchBtn.addEventListener('mouseenter', () => {
+      const onEnter = (): void => {
         this._setHoverState(true);
-        if (
-          typeof window !== 'undefined' &&
-          window.audios &&
-          typeof window.audios.countPlay === 'function'
-        ) {
-          window.audios.countPlay('hover');
-        }
-      });
+        window.audios?.countPlay?.('hover');
+      };
 
-      this.domWatchBtn.addEventListener('mouseleave', () => {
+      const onLeave = (): void => {
         this._setHoverState(false);
+      };
+
+      this.domWatchBtn.addEventListener('click', onBtnClick);
+      this.domWatchBtn.addEventListener('mouseenter', onEnter);
+      this.domWatchBtn.addEventListener('mouseleave', onLeave);
+
+      this.cleanups.push(() => {
+        this.domWatchBtn?.removeEventListener('click', onBtnClick);
+        this.domWatchBtn?.removeEventListener('mouseenter', onEnter);
+        this.domWatchBtn?.removeEventListener('mouseleave', onLeave);
       });
     }
 
     if (this.domVideoPlaceholder) {
-      this.domVideoPlaceholder.addEventListener('click', () => {
+      const onPlaceholderClick = (): void => {
         this.openReelVideo();
+      };
+      this.domVideoPlaceholder.addEventListener('click', onPlaceholderClick);
+      this.cleanups.push(() => {
+        this.domVideoPlaceholder?.removeEventListener('click', onPlaceholderClick);
       });
     }
+  }
+
+  public destroy(): void {
+    this.cleanups.forEach((cleanup) => cleanup());
+    this.cleanups = [];
+    this.isInitialized = false;
   }
 
   private _setHoverState(isActive: boolean): void {
@@ -78,32 +89,24 @@ export class ReelController {
    * Opens the main showreel Vimeo video overlay
    */
   public openReelVideo(): void {
-    if (
-      typeof window !== 'undefined' &&
-      window.audios &&
-      typeof window.audios.countPlay === 'function'
-    ) {
-      window.audios.countPlay('click');
-    }
+    window.audios?.countPlay?.('click');
 
-    const win = window as any;
-    if (win.videoOverlay && typeof win.videoOverlay.initAndPlayVideo === 'function') {
+    if (typeof window !== 'undefined' && window.videoOverlay?.initAndPlayVideo) {
       // 761102167 is VIDEO_LIST.MAIN_VIDEO_REEL
-      win.videoOverlay.initAndPlayVideo(761102167);
+      window.videoOverlay.initAndPlayVideo('761102167');
     } else if (
-      win.homeReelSection &&
-      typeof win.homeReelSection._onDomVideoButtonClick === 'function'
+      typeof window !== 'undefined' &&
+      window.homeReelSection &&
+      typeof (window.homeReelSection as { _onDomVideoButtonClick?: () => void })
+        ._onDomVideoButtonClick === 'function'
     ) {
-      win.homeReelSection._onDomVideoButtonClick();
+      (window.homeReelSection as { _onDomVideoButtonClick: () => void })._onDomVideoButtonClick();
     }
   }
 }
 
 // Singleton instance
 export const reelController = new ReelController();
-if (typeof window !== 'undefined') {
-  (window as any).reelController = reelController;
-}
 
 /**
  * Hydration helper function called by Reel.astro

@@ -6,7 +6,6 @@
 
 export class AboutWhoController {
   private domContainer: HTMLElement | null = null;
-  private domFaces: HTMLElement | null = null;
   public isInitialized: boolean = false;
 
   public init(): void {
@@ -15,13 +14,17 @@ export class AboutWhoController {
     this.domContainer = document.getElementById('about-who');
     if (!this.domContainer) return;
 
-    this.domFaces = this.domContainer.querySelector('#about-who-team-faces');
     this._bindEvents();
     this.isInitialized = true;
   }
 
   private _bindEvents(): void {
     // Interactive mouse / touch bindings are coordinated with WebGL aboutHeroFaces
+  }
+
+  public destroy(): void {
+    this.domContainer = null;
+    this.isInitialized = false;
   }
 }
 

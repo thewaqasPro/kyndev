@@ -5,16 +5,13 @@
 
 export class FeaturedController {
   private section: HTMLElement | null = null;
-  private title: HTMLElement | null = null;
   private items: NodeListOf<HTMLElement> | null = null;
-  private cta: HTMLElement | null = null;
+  private cleanups: Array<() => void> = [];
 
   constructor() {
     if (typeof document === 'undefined') return;
     this.section = document.querySelector('#home-featured');
-    this.title = document.querySelector('#home-featured-title');
     this.items = document.querySelectorAll('.project-item');
-    this.cta = document.querySelector('#home-featured-cta');
 
     if (!this.section) return;
     this.init();
@@ -28,22 +25,30 @@ export class FeaturedController {
   private setupHoverEffects(): void {
     if (!this.items) return;
     this.items.forEach((item) => {
-      item.addEventListener('mouseenter', () => {
+      const onEnter = (): void => {
         const id = item.getAttribute('data-id');
         window.dispatchEvent(
           new CustomEvent('lusion:project-hover', {
             detail: { id, active: true },
           })
         );
-      });
+      };
 
-      item.addEventListener('mouseleave', () => {
+      const onLeave = (): void => {
         const id = item.getAttribute('data-id');
         window.dispatchEvent(
           new CustomEvent('lusion:project-hover', {
             detail: { id, active: false },
           })
         );
+      };
+
+      item.addEventListener('mouseenter', onEnter);
+      item.addEventListener('mouseleave', onLeave);
+
+      this.cleanups.push(() => {
+        item.removeEventListener('mouseenter', onEnter);
+        item.removeEventListener('mouseleave', onLeave);
       });
     });
   }
@@ -53,13 +58,22 @@ export class FeaturedController {
     this.items.forEach((item) => {
       item.setAttribute('role', 'article');
       item.setAttribute('tabindex', '0');
-      item.addEventListener('keydown', (e: KeyboardEvent) => {
+      const onKeyDown = (e: KeyboardEvent): void => {
         if (e.key === 'Enter') {
           const href = item.getAttribute('href');
           if (href) window.location.href = href;
         }
+      };
+      item.addEventListener('keydown', onKeyDown);
+      this.cleanups.push(() => {
+        item.removeEventListener('keydown', onKeyDown);
       });
     });
+  }
+
+  public destroy(): void {
+    this.cleanups.forEach((cleanup) => cleanup());
+    this.cleanups = [];
   }
 }
 

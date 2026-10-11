@@ -5,13 +5,12 @@
 
 export class ScrollNavController {
   private section: HTMLElement | null = null;
-  private barInner: HTMLElement | null = null;
   private nextBtn: HTMLElement | null = null;
+  private cleanups: Array<() => void> = [];
 
   constructor() {
     if (typeof document === 'undefined') return;
     this.section = document.getElementById('scroll-nav-section');
-    this.barInner = document.getElementById('scroll-nav-next-bar-inner');
     this.nextBtn = document.getElementById('scroll-nav-next');
 
     if (!this.section) return;
@@ -20,11 +19,21 @@ export class ScrollNavController {
 
   private init(): void {
     if (this.nextBtn) {
-      this.nextBtn.addEventListener('click', () => {
+      const onNextClick = (): void => {
         const path = this.section?.getAttribute('data-path') || '/about';
         window.location.href = path;
+      };
+      this.nextBtn.addEventListener('click', onNextClick);
+      this.cleanups.push(() => {
+        this.nextBtn?.removeEventListener('click', onNextClick);
       });
     }
+  }
+
+  public destroy(): void {
+    this.cleanups.forEach((cleanup) => cleanup());
+    this.cleanups = [];
+    this.section = null;
   }
 }
 

@@ -6,7 +6,6 @@
 
 export class AboutCapabilityController {
   private domContainer: HTMLElement | null = null;
-  private domCardsWrapper: HTMLElement | null = null;
   public isInitialized: boolean = false;
 
   public init(): void {
@@ -15,8 +14,12 @@ export class AboutCapabilityController {
     this.domContainer = document.getElementById('about-capability');
     if (!this.domContainer) return;
 
-    this.domCardsWrapper = document.getElementById('about-capability-cards-wrapper');
     this.isInitialized = true;
+  }
+
+  public destroy(): void {
+    this.domContainer = null;
+    this.isInitialized = false;
   }
 }
 

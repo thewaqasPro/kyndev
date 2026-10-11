@@ -10,8 +10,17 @@ export class HeroController {
   private domVisualContainer: HTMLElement | null = null;
   private domHomeTitle: HTMLElement | null = null;
   private domHomeScroll: HTMLElement | null = null;
-  private domHomeCrosses: HTMLElement[] = [];
   public isInitialized: boolean = false;
+
+  private onVisualClick = (): void => {
+    this.triggerBalloonImpulse();
+  };
+
+  private onWindowWheel = (): void => {
+    if (this.domHomeScroll) {
+      this.domHomeScroll.classList.add('is-animating');
+    }
+  };
 
   public init(): void {
     if (typeof window === 'undefined') return;
@@ -22,47 +31,36 @@ export class HeroController {
     this.domVisualContainer = this.domContainer.querySelector('#home-hero-visual-container');
     this.domHomeTitle = this.domContainer.querySelector('#home-hero-title');
     this.domHomeScroll = this.domContainer.querySelector('#home-hero-scroll');
-    this.domHomeCrosses = Array.from(
-      this.domContainer.querySelectorAll('.home-hero-scroll-container-cross')
-    );
 
     this._bindEvents();
     this.isInitialized = true;
   }
 
   private _bindEvents(): void {
-    if (!this.domVisualContainer) return;
+    if (this.domVisualContainer) {
+      this.domVisualContainer.addEventListener('click', this.onVisualClick);
+    }
+    window.addEventListener('wheel', this.onWindowWheel, { once: true });
+  }
 
-    this.domVisualContainer.addEventListener('click', () => {
-      this.triggerBalloonImpulse();
-    });
-
-    window.addEventListener(
-      'wheel',
-      () => {
-        if (this.domHomeScroll) {
-          this.domHomeScroll.classList.add('is-animating');
-        }
-      },
-      { once: true }
-    );
+  /**
+   * Cleans up event listeners
+   */
+  public destroy(): void {
+    if (this.domVisualContainer) {
+      this.domVisualContainer.removeEventListener('click', this.onVisualClick);
+    }
+    window.removeEventListener('wheel', this.onWindowWheel);
+    this.isInitialized = false;
   }
 
   /**
    * Triggers physical impulse and color change on the 3D balloons
    */
   public triggerBalloonImpulse(): void {
-    const win = window as any;
-    if (win.homeBalloons && win.homeBalloons.changeHomeHeroColorSignal) {
-      win.homeBalloons.changeHomeHeroColorSignal.dispatch();
-    }
-    if (
-      typeof window !== 'undefined' &&
-      window.audios &&
-      typeof window.audios.countPlay === 'function'
-    ) {
-      window.audios.countPlay('click');
-    }
+    if (typeof window === 'undefined') return;
+    window.homeBalloons?.changeHomeHeroColorSignal?.dispatch();
+    window.audios?.countPlay?.('click');
   }
 
   /**
