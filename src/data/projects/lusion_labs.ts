@@ -1,0 +1,169 @@
+// src/data/projects/lusion_labs.ts
+import type { ProjectData } from './types';
+
+export const lusion_labs: ProjectData = {
+  "slug": "lusion_labs",
+  "title": "KYNDEV Labs",
+  "tags": "web • design • development • 3d",
+  "theme": {
+    "style": "background-color:#1F2022",
+    "shadow": "0.85",
+    "colorBg": "#1F2022",
+    "colorHighlight": "#8C8C8D",
+    "colorBtnBg": "#ffffff",
+    "colorBtnText": "#000000",
+    "colorIconBg": "#ffffff",
+    "colorIconColor": "#000000",
+    "colorText": "#ffffff",
+    "colorBtnBgHover": "#D9D9DA",
+    "colorBtnTextHover": "#000000"
+  },
+  "descHtml": "<p>KYNDEV's Dedication to Innovation and Exploration. Our dedicated space showcases internal R&D initiatives, reflecting our commitment to tech advancement. With a sleek, enchanting design, the site offers exclusive insights into our ongoing research, sparking curiosity and inspiring engaging experiences.</p><p>Pioneering the Future of Tech-Driven Advertising. For our clients, this website unveils uncharted possibilities. Displaying our prowess with groundbreaking tech, it inspires fresh avenues for captivating and engaging target audiences.</p>",
+  "launchUrl": "https://labs.lusion.co/",
+  "launchLabel": "Launch Project",
+  "services": [
+    "Concept",
+    "Web Design",
+    "Web Development",
+    "3D Design",
+    "WebGL"
+  ],
+  "links": [
+    {
+      "url": "https://thefwa.com/cases/lusion-labs",
+      "label": "FWA SOTD"
+    },
+    {
+      "url": "https://www.awwwards.com/sites/lusion-labs",
+      "label": "Awwwards SOTD"
+    }
+  ],
+  "items": [
+    {
+      "filename": "/assets/projects/lusion_labs/image1",
+      "type": "image",
+      "width": 1870,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image2",
+      "type": "image",
+      "width": 2480,
+      "height": 1620,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image3",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image4",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/video0",
+      "type": "video",
+      "width": 16,
+      "height": 9,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image5",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image6",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image7",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image8",
+      "type": "image",
+      "width": 2234,
+      "height": 1620,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image9",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image10",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image11",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image12",
+      "type": "image",
+      "width": 2234,
+      "height": 1620,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image13",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image14",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image15",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/lusion_labs/image16",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    }
+  ],
+  "nextProject": {
+    "id": "my_little_story_book",
+    "title": "My Little Storybook",
+    "colorBg": "#D1DDF2",
+    "colorText": "#000000",
+    "shadow": "0.95"
+  }
+};

@@ -1,0 +1,80 @@
+---
+// src/components/common/Header/Header.astro
+import './header.css';
+import HeaderMenu from './HeaderMenu.astro';
+
+interface Props {
+  email?: string;
+}
+
+const {
+  email = "hello@kyndev.com"
+} = Astro.props;
+---
+
+<header id="header">
+  <div id="header-container">
+    <div id="header-background"></div>
+
+    <a id="header-logo" aria-label="Go to home page" href="/">
+      <svg xmlns="http://www.w3.org/2000/svg" width="121" height="24" fill="none" viewBox="0 0 121 24">
+        <g fill="currentColor" style="mix-blend-mode:exclusion">
+          <text x="0" y="19" font-family="'Space Grotesk', -apple-system, sans-serif" font-weight="800" font-size="22" letter-spacing="-0.02em" fill="currentColor">
+            KYNDEV
+          </text>
+        </g>
+      </svg>
+    </a>
+
+    <div id="header-center">
+      <button id="header-center-project-back-btn" aria-label="Back" type="button">
+        <svg id="header-center-project-back-btn-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 12.243 3.757 8m0 0L8 3.757M3.757 8h8.486"></path>
+        </svg>
+        <p id="header-center-project-back-btn-text">back</p>
+        <svg id="header-center-project-back-btn-svg2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 12.243 3.757 8m0 0L8 3.757M3.757 8h8.486"></path>
+        </svg>
+        <div id="project-details-header-back-background"></div>
+      </button>
+    </div>
+
+    <div id="header-right">
+      <button id="header-right-sound-btn" aria-label="Toggle sound" type="button">
+        <canvas></canvas>
+      </button>
+      <button id="header-right-talk-btn-placeholder" type="button"></button>
+      <button id="header-right-talk-btn" type="button">
+        <a href={`mailto:${email}`} aria-label="Email Kyndev"></a>
+        <div id="header-right-talk-container">
+          <span id="header-right-talk-btn-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.343 8h11.314m0 0-4.984 4.984M13.657 8 8.673 3.016"></path>
+            </svg>
+          </span>
+          <span id="header-right-talk-btn-text">Let's talk</span>
+          <span id="header-right-talk-btn-dots">
+            <span class="header-right-talk-btn-dot"></span>
+          </span>
+        </div>
+      </button>
+      <button id="header-right-menu-btn" aria-label="Menu button" type="button">
+        <div id="header-right-menu-btn-inner">
+          <span id="header-right-menu-btn-text">Menu</span>
+          <span id="header-right-menu-btn-text-close">Close</span>
+          <div id="header-right-menu-btn-dots">
+            <span class="header-right-menu-btn-dot"></span>
+            <span class="header-right-menu-btn-dot"></span>
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <HeaderMenu email={email} />
+  </div>
+</header>
+
+<script>
+  import { initHeader } from './Header.ts';
+  initHeader();
+</script>

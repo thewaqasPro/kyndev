@@ -1,0 +1,166 @@
+// src/data/projects/my_little_story_book.ts
+import type { ProjectData } from './types';
+
+export const my_little_story_book: ProjectData = {
+  "slug": "my_little_story_book",
+  "title": "My Little Storybook",
+  "tags": "concept • design • development • 3d",
+  "theme": {
+    "style": "background-color:#D1DDF2",
+    "shadow": "0.95",
+    "colorBg": "#D1DDF2",
+    "colorHighlight": "#6680A0",
+    "colorBtnBg": "#ffffff",
+    "colorBtnText": "#6680A0",
+    "colorIconBg": "#ffffff",
+    "colorIconColor": "#6680A0",
+    "colorText": "#000000",
+    "colorBtnBgHover": "#6680A0",
+    "colorBtnTextHover": "#ffffff"
+  },
+  "descHtml": "<p>Expanding Boundaries through Cinematic Innovation. An R&D feat by KYNDEV, this project showcased team versatility and artistry. We crafted 3D assets from scratch and seamlessly blended hand-drawn sketches into a captivating WebGL environment for a unique experience.</p><p>Crafting My Little Storybook's Triumph. The KYNDEV team meticulously shaped every element in this challenging one-month project. Their dedication resulted in acclaim, with multiple awards, including the coveted 2022 Webby Award for Best Visual Design Aesthetic, recognizing the blend of innovation and creativity.</p>",
+  "launchUrl": "https://exp-my-little-storybook.lusion.co/",
+  "launchLabel": "Launch Project",
+  "services": [
+    "Concept",
+    "Web Design",
+    "Web Development",
+    "3D Design",
+    "WebGL"
+  ],
+  "links": [
+    {
+      "url": "https://thefwa.com/cases/my-little-storybook",
+      "label": "FWA SOTD"
+    },
+    {
+      "url": "https://www.awwwards.com/sites/my-little-storybook",
+      "label": "Awwwards SOTD"
+    },
+    {
+      "url": "https://winners.webbyawards.com/2022/websites-and-mobile-sites/features-design/best-visual-design-aesthetic/206405/my-little-storybook",
+      "label": "Webby Winner"
+    }
+  ],
+  "items": [
+    {
+      "filename": "/assets/projects/my_little_story_book/image1",
+      "type": "image",
+      "width": 1870,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/video0",
+      "type": "video",
+      "width": 16,
+      "height": 9,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image2",
+      "type": "image",
+      "width": 2428,
+      "height": 1620,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image3",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image4",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image5",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image6",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image7",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image8",
+      "type": "image",
+      "width": 2880,
+      "height": 1620,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image9",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image10",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image11",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image12",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image13",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image14",
+      "type": "image",
+      "width": 1637,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/my_little_story_book/image15",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    }
+  ],
+  "nextProject": {
+    "id": "soda_experience",
+    "title": "Soda Experience",
+    "colorBg": "#E1E2E4",
+    "colorText": "#000000",
+    "shadow": "0.85"
+  }
+};

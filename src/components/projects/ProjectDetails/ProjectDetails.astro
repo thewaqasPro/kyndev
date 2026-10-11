@@ -1,0 +1,50 @@
+---
+// src/components/ProjectDetails/ProjectDetails.astro
+import './projectDetails.css';
+import type { ProjectData } from '../../../data/projectsData';
+import ProjectDetailsHeader from './ProjectDetailsHeader.astro';
+import ProjectMediaGallery from './ProjectMediaGallery.astro';
+import ProjectMeta from './ProjectMeta.astro';
+import ProjectNextPreview from './ProjectNextPreview.astro';
+
+interface Props {
+  project: ProjectData;
+}
+
+const { project } = Astro.props;
+---
+
+<div id="project" class="page">
+  <div
+    id="project-details"
+    class="section"
+    style={project.theme.style}
+    data-shadow={project.theme.shadow}
+    data-color-bg={project.theme.colorBg}
+    data-color-highlight={project.theme.colorHighlight}
+    data-color-btn-bg={project.theme.colorBtnBg}
+    data-color-btn-text={project.theme.colorBtnText}
+    data-color-icon-bg={project.theme.colorIconBg}
+    data-color-icon-color={project.theme.colorIconColor}
+    data-color-text={project.theme.colorText}
+    data-color-btn-bg-hover={project.theme.colorBtnBgHover}
+    data-color-btn-text-hover={project.theme.colorBtnTextHover}
+  >
+    <ProjectDetailsHeader />
+    <ProjectMediaGallery items={project.items} />
+    <ProjectMeta
+      title={project.title}
+      descHtml={project.descHtml}
+      launchUrl={project.launchUrl}
+      launchLabel={project.launchLabel}
+      services={project.services}
+      links={project.links}
+    />
+    <ProjectNextPreview nextProject={project.nextProject} />
+  </div>
+</div>
+
+<script>
+  import { initProjectDetails } from './ProjectDetails.ts';
+  initProjectDetails();
+</script>

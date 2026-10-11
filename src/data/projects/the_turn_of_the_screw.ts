@@ -1,0 +1,147 @@
+// src/data/projects/the_turn_of_the_screw.ts
+import type { ProjectData } from './types';
+
+export const the_turn_of_the_screw: ProjectData = {
+  "slug": "the_turn_of_the_screw",
+  "title": "The Turn Of The Screw",
+  "tags": "design • development • 3d",
+  "theme": {
+    "style": "background-color:#2B3037",
+    "shadow": "0.85",
+    "colorBg": "#2B3037",
+    "colorHighlight": "#D5BFEF",
+    "colorBtnBg": "#ffffff",
+    "colorBtnText": "#2B3037",
+    "colorIconBg": "#ffffff",
+    "colorIconColor": "#2B3037",
+    "colorText": "#ffffff",
+    "colorBtnBgHover": "#D5BFEF",
+    "colorBtnTextHover": "#2B3037"
+  },
+  "descHtml": "<p>In October 2019, Opera North, alongside the Audiolab of York University and the sound artist James Bulley, came to KYNDEV for a collaboration on an innovative cultural project. Their idea was to record the Turn of the Screw opera in a spatialized way, then place these recordings in an explorable 3D environment. The main goal of this project was to create an audiovisual walk through a binaural landscape.</p>",
+  "launchUrl": "https://www.operanorth.co.uk/turn-of-the-screw-immersive-trailer/",
+  "launchLabel": "Launch Project",
+  "services": [
+    "Web Design",
+    "Web Development",
+    "3D Design",
+    "WebGL"
+  ],
+  "links": [
+    {
+      "url": "https://thefwa.com/cases/the-turn-of-the-screw",
+      "label": "FWA SOTD"
+    },
+    {
+      "url": "https://www.awwwards.com/sites/the-turn-of-the-screw",
+      "label": "Awwwards SOTM"
+    }
+  ],
+  "items": [
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image1",
+      "type": "image",
+      "width": 1870,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/video0",
+      "type": "video",
+      "width": 16,
+      "height": 9,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image2",
+      "type": "image",
+      "width": 2880,
+      "height": 1620,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image3",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image4",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image5",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image6",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image7",
+      "type": "image",
+      "width": 2880,
+      "height": 1620,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image8",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image9",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image10",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image11",
+      "type": "image",
+      "width": 2684,
+      "height": 1620,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image12",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/the_turn_of_the_screw/image13",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    }
+  ],
+  "nextProject": {
+    "id": "maxmara_bearings_gifts",
+    "title": "Max Mara: Bearing Gifts",
+    "colorBg": "#d2c6b2",
+    "colorText": "#000000",
+    "shadow": "0.95"
+  }
+};

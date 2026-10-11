@@ -1,0 +1,91 @@
+// src/data/projects/atlas_motion.ts
+import type { ProjectData } from './types';
+
+export const atlas_motion: ProjectData = {
+  "slug": "atlas_motion",
+  "title": "Atlas Motion",
+  "tags": "concept • web • design • development • 3d • animation",
+  "theme": {
+    "style": "background-color:#181818",
+    "shadow": "0.95",
+    "colorBg": "#181818",
+    "colorHighlight": "#F65893",
+    "colorBtnBg": "#FFFDE0",
+    "colorBtnText": "#192743",
+    "colorIconBg": "#FFFDE0",
+    "colorIconColor": "#192743",
+    "colorText": "#FFFDE0",
+    "colorBtnBgHover": "#F65893",
+    "colorBtnTextHover": "#FFFDE0"
+  },
+  "descHtml": "<p>Atlas is building next generation motion systems for drones, robotics, and autonomous hardware. We worked with the team to create a focused digital experience that turns a complex manufacturing story into something clear, confident, and tangible. The site introduces Atlas’ joint development model, brings their product and factory story to the surface, and uses precise motion, visual pacing, and selective WebGL to communicate the scale of their ambition without losing the seriousness of the category.</p>",
+  "launchUrl": "https://atlasmotion.com/",
+  "launchLabel": "Launch Project",
+  "services": [
+    "Concept",
+    "Web Design",
+    "Web Development",
+    "3D Design",
+    "WebGL",
+    "Animation"
+  ],
+  "links": [],
+  "items": [
+    {
+      "filename": "/assets/projects/atlas_motion/main",
+      "type": "video",
+      "width": 1234,
+      "height": 720,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/atlas_motion/1",
+      "type": "image",
+      "width": 1820,
+      "height": 1024,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/atlas_motion/2",
+      "type": "image",
+      "width": 1820,
+      "height": 1024,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/atlas_motion/3",
+      "type": "image",
+      "width": 1820,
+      "height": 1024,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/atlas_motion/4",
+      "type": "image",
+      "width": 1820,
+      "height": 1024,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/atlas_motion/5",
+      "type": "image",
+      "width": 1820,
+      "height": 1024,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/atlas_motion/6",
+      "type": "image",
+      "width": 1820,
+      "height": 1024,
+      "fullscreen": false
+    }
+  ],
+  "nextProject": {
+    "id": "devin_ai",
+    "title": "Devin AI",
+    "colorBg": "#121414",
+    "colorText": "#ffffff",
+    "shadow": "0.9"
+  }
+};

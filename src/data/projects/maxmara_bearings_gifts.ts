@@ -1,0 +1,161 @@
+// src/data/projects/maxmara_bearings_gifts.ts
+import type { ProjectData } from './types';
+
+export const maxmara_bearings_gifts: ProjectData = {
+  "slug": "maxmara_bearings_gifts",
+  "title": "Max Mara: Bearing Gifts",
+  "tags": "development • 3D",
+  "theme": {
+    "style": "background-color:#d2c6b2",
+    "shadow": "0.95",
+    "colorBg": "#d2c6b2",
+    "colorHighlight": "#806542",
+    "colorBtnBg": "#ffffff",
+    "colorBtnText": "#806542",
+    "colorIconBg": "#ffffff",
+    "colorIconColor": "#806542",
+    "colorText": "#000000",
+    "colorBtnBgHover": "#D5BFEF",
+    "colorBtnTextHover": "#FFFFFF"
+  },
+  "descHtml": "<p>Collaborating with LOW: Transforming Digital Experiences. Our partnership on the MaxMara project showcases how creativity shapes digital landscapes. LOW's vision for a charming interactive web experience led to Max the Teddy guiding users through playful scenes and product showcases.</p><p>Central to our approach is meticulous planning, aligning render quality, timelines, and budgets for creative practicality. Transparent communication with LOW's team fostered a shared vision, enabling us to explore unique possibilities.</p><p>Strategic decisions ensured consistent experiences across devices, including non-real-time lighting for optimized performance. Collaborating with 3D modeling vendors enriched the application with carefully designed assets, seamlessly integrating our services.</p>",
+  "launchUrl": "",
+  "launchLabel": "Launch Project",
+  "services": [
+    "WebGL"
+  ],
+  "links": [
+    {
+      "url": "https://thefwa.com/cases/maxmara-bearing-gifts",
+      "label": "FWA SOTD"
+    }
+  ],
+  "items": [
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image1",
+      "type": "image",
+      "width": 1870,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/video0",
+      "type": "video",
+      "width": 16,
+      "height": 9,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image2",
+      "type": "image",
+      "width": 2880,
+      "height": 1620,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image3",
+      "type": "image",
+      "width": 2016,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image4",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image5",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image6",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image7",
+      "type": "image",
+      "width": 2386,
+      "height": 1620,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image8",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/video1",
+      "type": "video",
+      "width": 16,
+      "height": 9,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image9",
+      "type": "image",
+      "width": 1638,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image10",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image11",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image12",
+      "type": "image",
+      "width": 2880,
+      "height": 1660,
+      "fullscreen": true
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image13",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image14",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    },
+    {
+      "filename": "/assets/projects/maxmara_bearings_gifts/image15",
+      "type": "image",
+      "width": 2026,
+      "height": 1140,
+      "fullscreen": false
+    }
+  ],
+  "nextProject": {
+    "id": "oryzo_ai",
+    "title": "Oryzo AI",
+    "colorBg": "#1a1411",
+    "colorText": "#ffedd7",
+    "shadow": "0.9"
+  }
+};

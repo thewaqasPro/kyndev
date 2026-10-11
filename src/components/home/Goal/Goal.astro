@@ -1,0 +1,59 @@
+---
+import './goal.css';
+
+export interface Props {
+  title?: string;
+  paragraphs?: string[];
+  tunnelLines?: string[];
+}
+
+const defaultParagraphs = [
+  'We do not chase trends or produce work that looks like everyone else. We focus on creating visually distinctive digital experiences that reflect your brand, engage your audience, and make people remember what they saw.',
+  'Our process blends creative direction, 3D craft, and interactive development to build tailored digital journeys that feel original, polished, and built for impact.',
+];
+
+const defaultTunnelLines = [
+  'Step into a new world',
+  'and let your',
+  'imagination run wild',
+];
+
+const {
+  title = 'Where Creative Ideas Become Immersive Experiences',
+  paragraphs = defaultParagraphs,
+  tunnelLines = defaultTunnelLines,
+} = Astro.props;
+---
+
+<div id="home-goal" class="section">
+  <div id="home-goal-context">
+    <div id="home-goal-context-inner">
+      <div id="home-goal-title">{title}</div>
+      <div id="home-goal-texts">
+        {paragraphs.map((p) => (
+          <div class="home-goal-texts-paragraph">{p}</div>
+        ))}
+      </div>
+    </div>
+  </div>
+  <div id="home-goal-tunnel-title">
+    {tunnelLines.map((line) => (
+      <div class="home-goal-tunnel-title-line">{line}</div>
+    ))}
+  </div>
+  <div id="home-goal-image-in-outer">
+    <div id="home-goal-image-in-inner">
+      <div id="home-goal-image-in"></div>
+    </div>
+  </div>
+  <div id="home-goal-image-out-outer">
+    <div id="home-goal-image-out-inner">
+      <div id="home-goal-image-out"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { initGoal } from './Goal.ts';
+  initGoal();
+</script>
