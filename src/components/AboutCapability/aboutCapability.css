@@ -1,0 +1,308 @@
+/* About Capability / Area of Expertise Section Styles */
+
+#about-capability {
+  color: var(--color-white);
+  align-content: flex-start;
+  font-size: clamp(0.875rem, 1vw, 1.75rem);
+}
+
+@media (max-width: 812px) {
+  #about-capability {
+    font-size: clamp(1rem, 1vw, 1.75rem);
+  }
+}
+
+#about-capability-title {
+  line-height: 1em;
+  grid-column: 1 / span 12;
+  font-size: 12vw;
+  margin-top: calc(2em - 2 * var(--base-padding-y));
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+@media (min-aspect-ratio: 21/9) {
+  #about-capability-title {
+    font-size: 8vw;
+  }
+}
+
+@media (max-width: 812px) {
+  #about-capability-title {
+    grid-column: 1 / span 6;
+    font-size: 18vw;
+  }
+}
+
+#about-capability-title > div {
+  grid-column: 1 / span 8;
+  position: relative;
+}
+
+@media (max-width: 812px) {
+  #about-capability-title > div {
+    grid-column: 1 / span 12;
+  }
+}
+
+#about-capability-title #about-capability-title-line-2 {
+  left: 2em;
+}
+
+@media (max-width: 812px) {
+  #about-capability-title #about-capability-title-line-2 {
+    left: 0;
+  }
+}
+
+#about-capability-subheader {
+  position: absolute;
+  right: var(--base-padding-x);
+  top: var(--base-padding-y);
+  font-size: 0.875em;
+  width: 20em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  margin-top: calc(26vw - 2 * var(--base-padding-y));
+}
+
+@media (min-aspect-ratio: 21/9) {
+  #about-capability-subheader {
+    font-size: 1em;
+    margin-top: calc(17vw - 2 * var(--base-padding-y));
+  }
+}
+
+@media (max-width: 812px) {
+  #about-capability-subheader {
+    position: relative;
+    grid-column: 1 / span 6;
+    margin-top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+
+#about-capability-subheader-text {
+  will-change: transform;
+}
+
+@media (max-width: 812px) {
+  #about-capability-subheader-text {
+    width: 100%;
+    margin-top: 2em;
+    font-size: 1.1em;
+  }
+}
+
+#about-capability-subheader-cards {
+  display: flex;
+  gap: 0.5rem;
+  width: fit-content;
+  margin-top: 2em;
+  overflow: hidden;
+  position: relative;
+  will-change: transform;
+}
+
+@media (max-width: 812px) {
+  #about-capability-subheader-cards {
+    padding: 0;
+  }
+}
+
+.about-capability-subheader-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1em;
+  width: fit-content;
+  border-radius: 0.361rem;
+  border: solid 0.0625em var(--color-white);
+  width: 2.25em;
+  height: 3.125em;
+  font-family: LusionMono;
+  text-align: center;
+  text-indent: 0.1em;
+}
+
+@media (max-width: 812px) {
+  .about-capability-subheader-card {
+    font-size: 1.2em;
+  }
+}
+
+#about-capability-categories-container {
+  position: relative;
+  width: 100%;
+  grid-column: 1 / 13;
+  margin-top: 20rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+#about-capability-categories-container:after {
+  content: "";
+  clear: both;
+  display: block;
+}
+
+@media (max-width: 812px) {
+  #about-capability-categories-container {
+    margin-top: 8rem;
+    gap: 2.8rem 0;
+    grid-column: 1 / 7;
+  }
+}
+
+#about-capability-cards-wrapper {
+  position: relative;
+  grid-column: 1 / span 12;
+  width: 100%;
+  margin: 4em auto calc(var(--vh, 1vh) * 300) auto;
+}
+
+@media (min-aspect-ratio: 21/9) {
+  #about-capability-cards-wrapper {
+    width: 75%;
+  }
+}
+
+@media (max-width: 812px) {
+  #about-capability-cards-wrapper {
+    grid-column: 1 / span 6;
+    margin-bottom: 0;
+  }
+}
+
+#about-capability-cards {
+  perspective: calc(var(--vh, 1vh) * 100);
+  width: 100%;
+  perspective-origin: center;
+}
+
+@media (max-width: 812px) {
+  #about-capability-cards {
+    perspective: 300vw;
+  }
+}
+
+.about-capability-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  width: calc(var(--grid-space) * 3 + var(--grid-gap) * 2);
+  color: var(--color-black);
+  aspect-ratio: 314 / 438;
+  transform-style: preserve-3d;
+  font-size: 1.3vw;
+}
+
+@media (min-aspect-ratio: 21/9) {
+  .about-capability-card {
+    font-size: 0.87vw;
+  }
+}
+
+@media (max-width: 812px) {
+  .about-capability-card {
+    position: relative;
+    width: calc(50% - var(--grid-gap) / 2);
+    margin-left: 0;
+    font-size: 2.4vw;
+  }
+  .about-capability-card:nth-child(n + 3) {
+    margin-top: 3em;
+  }
+  .about-capability-card:nth-child(odd) {
+    float: right;
+  }
+}
+
+@media (max-width: 560px) {
+  .about-capability-card {
+    width: 100%;
+    font-size: 5vw;
+  }
+  .about-capability-card:nth-child(n + 1) {
+    margin-top: 3em;
+  }
+}
+
+.about-capability-card-back {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+  background: var(--color-white);
+  background-image: url(/assets/images/cards/back.png);
+  background-size: contain;
+  border-radius: 0.8em;
+  transform: rotateY(180deg);
+}
+
+.about-capability-card-front {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25em 1.875em;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+  border-radius: 0.8em;
+  background: var(--color-white);
+}
+
+.about-capability-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.about-capability-card-header:last-child {
+  transform: rotate(180deg);
+  justify-self: flex-end;
+}
+
+.about-capability-card-header-text {
+  font-size: 1.5em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.about-capability-card-header-letter {
+  position: relative;
+  left: 0.15em;
+  font-size: 3em;
+  font-family: LusionMono;
+  margin: 0;
+}
+
+.about-capability-list {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.about-capability-list-item {
+  position: relative;
+  font-size: 0.85em;
+}
+
+.about-capability-list-item:not(:last-child):before {
+  content: "..............................";
+  position: absolute;
+  top: 0.6em;
+  font-size: 1.5em;
+  letter-spacing: 0.125em;
+  color: var(--color-blue);
+  opacity: 0.2;
+}
+
+.about-capability-list-item:not(:first-child) {
+  margin-top: 2em;
+}

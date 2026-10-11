@@ -1,0 +1,131 @@
+/* ScrollNav Section Styles */
+
+#scroll-nav-section {
+  display: block;
+  position: relative;
+  background-color: #121416;
+  color: #fff;
+  font-size: clamp(0.875rem, 1vw, 2rem);
+}
+
+@media (max-width: 380px) {
+  #scroll-nav-section {
+    font-size: clamp(0.75rem, 1vw, 2rem);
+  }
+}
+
+#scroll-nav-content {
+  text-transform: uppercase;
+}
+
+#scroll-nav-subtitle {
+  padding-top: 1em;
+}
+
+#scroll-nav-main {
+  position: relative;
+}
+
+#scroll-nav-text {
+  white-space: nowrap;
+  font-size: 3.5em;
+  padding: 1em 0;
+  line-height: 1em;
+}
+
+#scroll-nav-next {
+  position: absolute;
+  display: flex;
+  right: 0;
+  top: 50%;
+  margin-top: -0.5em;
+  min-width: 200px;
+  width: 20%;
+  line-height: 1em;
+}
+
+@media (max-width: 812px) {
+  #scroll-nav-next {
+    position: relative;
+    width: 100%;
+    margin-top: 1em;
+  }
+}
+
+#scroll-nav-next-text {
+  white-space: nowrap;
+}
+
+#scroll-nav-next-bar {
+  margin: calc(0.5em - 1px) 0.75em 0 0.75em;
+  flex-grow: 1;
+  height: 4px;
+  background-color: #34393f;
+}
+
+#scroll-nav-next-bar-inner {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-green);
+  transform-origin: 0 0;
+  transform: scaleX(0.5);
+}
+
+#scroll-nav-next-arrow {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+#scroll-nav-next-arrow svg {
+  width: 100%;
+  height: 100%;
+}
+
+#scroll-nav-cross-line {
+  position: relative;
+  width: calc(100% - 1em);
+  margin-left: 0.5em;
+  height: 1em;
+}
+
+@media (max-width: 812px) {
+  #scroll-nav-cross-line {
+    display: none;
+  }
+}
+
+.scroll-nav-cross {
+  position: absolute;
+  width: 1em;
+  height: 1em;
+}
+
+.scroll-nav-cross:before,
+.scroll-nav-cross:after {
+  position: absolute;
+  content: "";
+  width: 2px;
+  height: 1em;
+  left: 0;
+  background: #fff;
+}
+
+.scroll-nav-cross:after {
+  transform: rotate(90deg);
+}
+
+.scroll-nav-cross:nth-child(2) {
+  left: 25%;
+}
+
+.scroll-nav-cross:nth-child(3) {
+  left: 50%;
+}
+
+.scroll-nav-cross:nth-child(4) {
+  left: 75%;
+}
+
+.scroll-nav-cross:nth-child(5) {
+  left: 100%;
+}

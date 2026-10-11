@@ -1,0 +1,71 @@
+---
+// src/components/ProjectDetails/ProjectMeta.astro
+interface Props {
+  title: string;
+  descHtml: string;
+  launchUrl: string;
+  launchLabel?: string;
+  services: string[];
+  links: Array<{ label: string; url: string }>;
+}
+
+const {
+  title,
+  descHtml,
+  launchUrl,
+  launchLabel = 'Launch Project',
+  services,
+  links
+} = Astro.props;
+---
+
+<div id="project-details-meta">
+  <h2 id="project-details-title">{title}</h2>
+  <div id="project-details-left">
+    <div id="project-details-desc" set:html={descHtml} />
+    {launchUrl && (
+      <a id="project-details-launch-cta" href={launchUrl} target="_blank" data-link-type="regular">
+        <span id="project-details-launch-cta-dot"></span>
+        <p id="project-details-launch-cta-text">{launchLabel}</p>
+        <span id="project-details-launch-cta-arrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M9 9h6m0 0v6m0-6-6 6"></path>
+          </svg>
+        </span>
+      </a>
+    )}
+  </div>
+  <div id="project-details-right">
+    <div id="project-details-side-list">
+      {services.length > 0 && (
+        <div id="project-details-side-list-services">
+          <h4 class="project-details-side-list-title">Services</h4>
+          {services.map((service) => (
+            <div class="project-details-side-list-item">{service}</div>
+          ))}
+        </div>
+      )}
+      {links.length > 0 && (
+        <div id="project-details-side-list-links">
+          <h4 class="project-details-side-list-title">Links</h4>
+          {links.map((link) => (
+            <a class="project-details-side-list-item" href={link.url} target="_blank">
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+    {launchUrl && (
+      <a id="project-details-launch-cta-mobile" href={launchUrl} target="_blank" data-link-type="regular">
+        <span id="project-details-launch-cta-mobile-dot"></span>
+        <p id="project-details-launch-cta-mobile-text">{launchLabel}</p>
+        <span id="project-details-launch-cta-mobile-arrow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M9 9h6m0 0v6m0-6-6 6"></path>
+          </svg>
+        </span>
+      </a>
+    )}
+  </div>
+</div>

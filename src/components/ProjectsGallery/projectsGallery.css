@@ -1,0 +1,58 @@
+/* Scoped Projects Gallery Styles */
+#projects.page {
+  position: relative;
+  width: 100%;
+}
+
+#projects-main {
+  position: relative;
+  width: 100%;
+}
+
+#projects-main-title-top {
+  position: relative;
+  grid-column: 1 / span 12;
+  margin-top: calc(var(--vh, 1vh) * 20);
+}
+
+@media (max-width: 812px) {
+  #projects-main-title-top {
+    grid-column: 1 / span 6;
+    margin-top: 6em;
+    margin-bottom: 2em;
+  }
+}
+
+#projects-main-title-wrapper {
+  position: relative;
+  width: fit-content;
+  font-size: 17vw;
+  left: -0.01em;
+  will-change: transform;
+}
+
+#projects-main-title {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  line-height: 1em;
+  overflow: hidden;
+  left: -1vw;
+}
+
+#projects-main-title-project-number {
+  font-family: IBMPlexMono, monospace;
+  font-size: 4vw;
+  position: absolute !important;
+  overflow: hidden;
+  top: 2vw;
+  right: -9vw;
+}
+
+#projects-main-title-project-arrow {
+  position: absolute;
+  right: -9vw;
+  bottom: 5vw;
+  height: 4vw;
+  width: 4vw;
+}

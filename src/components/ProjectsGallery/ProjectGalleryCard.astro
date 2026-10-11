@@ -1,0 +1,44 @@
+---
+// src/components/ProjectsGallery/ProjectGalleryCard.astro
+import './projectGalleryCard.css';
+
+interface Props {
+  slug: string;
+  title: string;
+  tags: string;
+  colorBg: string;
+  colorText: string;
+  colorShadow: string;
+  type?: string;
+}
+
+const {
+  slug,
+  title,
+  tags,
+  colorBg,
+  colorText,
+  colorShadow,
+  type = 'website'
+} = Astro.props;
+---
+
+<a
+  class={`project-item project-type-${type}`}
+  href={`/projects/${slug}`}
+  data-id={slug}
+  data-color-bg={colorBg}
+  data-color-text={colorText}
+  data-color-shadow={colorShadow}
+>
+  <div class="project-item-main">
+    <div class="project-item-image"></div>
+  </div>
+  <div class="project-item-footer">
+    <div class="project-item-line-1">{tags}</div>
+    <div class="project-item-line-2">
+      <div class="project-item-line-2-icon"></div>
+      <div class="project-item-line-2-inner">{title}</div>
+    </div>
+  </div>
+</a>

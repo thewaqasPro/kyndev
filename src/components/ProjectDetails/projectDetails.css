@@ -1,0 +1,118 @@
+/* Scoped Single Project Details Styles */
+#project.page {
+  position: relative;
+  width: 100%;
+}
+
+#project-details {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+#project-details-header-info {
+  position: absolute;
+  top: 6rem;
+  left: var(--base-padding-x, 2rem);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: IBMPlexMono, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  z-index: 5;
+  opacity: 0.8;
+}
+
+#project-details-header-info-svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+#project-details-items-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+#project-details-items-move-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  will-change: transform;
+}
+
+.project-details-item {
+  position: relative;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+#project-details-meta {
+  position: relative;
+  margin-top: 4rem;
+  padding: 0 var(--base-padding-x, 2rem);
+}
+
+#project-details-title {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+}
+
+#project-details-left {
+  max-width: 45rem;
+}
+
+#project-details-desc {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+#project-details-desc p {
+  margin-bottom: 1.25rem;
+}
+
+#project-details-desc a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+#project-details-side-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.project-details-side-list-title {
+  font-family: IBMPlexMono, monospace;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  opacity: 0.7;
+}
+
+.project-details-side-list-item {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+#project-details-preview {
+  position: relative;
+  margin-top: 6rem;
+  padding: 4rem var(--base-padding-x, 2rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}

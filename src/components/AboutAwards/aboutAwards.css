@@ -1,0 +1,75 @@
+/* Scoped AboutAwards Styles */
+#about-award.section {
+  position: relative;
+  width: 100%;
+}
+
+.about-award-category {
+  position: relative;
+  width: 100%;
+  margin-bottom: 4rem;
+}
+
+.about-award-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1.5rem var(--base-padding-x, 2rem);
+}
+
+.about-award-header-title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 500;
+  margin: 0;
+}
+
+.about-award-header-number {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.about-award-header-svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.about-award-header-text {
+  font-family: IBMPlexMono, monospace;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.about-award-item {
+  position: relative;
+  padding: 1rem var(--base-padding-x, 2rem);
+}
+
+.about-award-item-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+}
+
+.about-award-item-wrapper-text {
+  font-size: 1.125rem;
+  margin: 0;
+}
+
+.about-award-line {
+  position: absolute;
+  bottom: 0;
+  left: var(--base-padding-x, 2rem);
+  right: var(--base-padding-x, 2rem);
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#about-award-title {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin-top: 4rem;
+}

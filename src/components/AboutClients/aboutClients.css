@@ -1,0 +1,53 @@
+/* Scoped AboutClients Styles */
+#about-clients.section {
+  position: relative;
+  width: 100%;
+}
+
+#about-clients-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0 var(--base-padding-x, 2rem);
+  margin-bottom: 3rem;
+}
+
+#about-clients-title {
+  font-family: IBMPlexMono, monospace;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+#about-clients-desc {
+  font-size: clamp(1.25rem, 3vw, 2.5rem);
+  font-weight: 400;
+  line-height: 1.3;
+  margin-top: 1rem;
+  max-width: 45rem;
+}
+
+#about-clients-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.about-clients-carousel-line {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.about-clients-carousel-line img {
+  height: 2rem;
+  width: auto;
+  opacity: 0.8;
+  filter: brightness(0) invert(1);
+}
