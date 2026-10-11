@@ -1,0 +1,126 @@
+---
+// src/layouts/Layout.astro
+import ClientRouter from 'astro/components/ClientRouter.astro';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Menu from '../components/Menu.astro';
+import Footer from '../components/Footer.astro';
+import Preloader from '../components/Preloader.astro';
+import VideoModal from '../components/VideoModal.astro';
+import ScrollHUD from '../components/ScrollHUD.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  themeColor?: string;
+}
+
+const {
+  title = 'LUSION SYSTEMS — Engineering the Architectures Companies Run On',
+  description = 'High-throughput web applications, enterprise Shopify Plus engines, 60fps WebGL flagships, and distributed cloud backends.',
+  ogImage = '/og-image.png',
+  themeColor = '#070709'
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://lusion-systems.netlify.app');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content={themeColor} />
+
+    <!-- Primary SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Lusion_Sys" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- View Transitions Router -->
+    <ClientRouter />
+
+    <!-- Preload Fonts & DNS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+  <body>
+    <!-- 1. Persistent WebGL Full-Screen Canvas -->
+    <canvas id="canvas" transition:persist aria-hidden="true"></canvas>
+
+    <!-- 2. Interactive Custom Cursor -->
+    <div id="cursor" transition:persist aria-hidden="true">
+      <span class="cursor-label"></span>
+    </div>
+
+    <!-- 3. Cinematic Transition Wipe Overlay -->
+    <div id="transition-overlay" transition:persist aria-hidden="true"></div>
+
+    <!-- 4. Digit-Roller Preloader -->
+    <Preloader transition:persist />
+
+    <!-- 5. Case Study Video Modal -->
+    <VideoModal transition:persist />
+
+    <!-- 6. Scroll Telemetry HUD & Crosshairs -->
+    <ScrollHUD transition:persist />
+
+    <!-- 7. Fullscreen Navigation Menu -->
+    <Menu transition:persist />
+
+    <!-- 8. Primary DOM Layer -->
+    <div id="ui">
+      <Header currentPath={Astro.url.pathname} />
+      <main id="main-content">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+
+    <!-- Client-side Persistent WebGL & Motion Hydration -->
+    <script>
+      import { webglScene } from '../scripts/webgl';
+      import { motionSystem } from '../scripts/motion';
+
+      // Initialize singletons once on initial document load
+      let isAppStarted = false;
+
+      function startSystems() {
+        if (isAppStarted) return;
+        isAppStarted = true;
+        webglScene.init();
+        motionSystem.init();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startSystems);
+      } else {
+        startSystems();
+      }
+
+      // Sync route changes
+      document.addEventListener('astro:page-load', () => {
+        // Scroll to top
+        window.scrollTo(0, 0);
+      });
+    </script>
+  </body>
+</html>

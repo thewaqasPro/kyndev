@@ -1,0 +1,34 @@
+---
+// src/components/Preloader.astro
+---
+
+<!-- Input blocker prevents accidental clicks while preloading or transitioning -->
+<div id="input-blocker" aria-hidden="true"></div>
+
+<!-- Digit-Roller Preloader 0 -> 100 -->
+<div id="preloader" aria-label="System Initializer">
+  <div class="preloader-top">
+    <div class="mono-tag cyan">
+      LUSION SYSTEMS ARCHITECTURE // v2.6.0
+    </div>
+    <div class="mono-tag">
+      INITIALIZING CORE BUFFERS
+    </div>
+  </div>
+
+  <div class="preloader-center">
+    <div class="preloader-number" id="preloader-counter">000</div>
+    <div class="mono-tag cyan" id="preloader-status">
+      CONNECTING TO GPU HARDWARE ACCELERATION...
+    </div>
+  </div>
+
+  <div class="preloader-bottom">
+    <div class="preloader-meta">
+      <p class="mono-tag">PRECISION WEBGL RUNTIME // ZERO COMPOSITOR JANK</p>
+    </div>
+    <div class="preloader-bar-wrap">
+      <div class="preloader-bar"></div>
+    </div>
+  </div>
+</div>

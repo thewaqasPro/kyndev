@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lusion-systems.netlify.app/sitemap-index.xml

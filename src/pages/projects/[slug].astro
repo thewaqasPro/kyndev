@@ -1,0 +1,539 @@
+---
+// src/pages/projects/[slug].astro
+import Layout from '../../layouts/Layout.astro';
+import { projects, type Project } from '../../data/projects';
+
+export async function getStaticPaths() {
+  return projects.map((project, idx) => {
+    const nextProject = projects[(idx + 1) % projects.length];
+    return {
+      params: { slug: project.slug },
+      props: { project, nextProject }
+    };
+  });
+}
+
+interface Props {
+  project: Project;
+  nextProject: Project;
+}
+
+const { project, nextProject } = Astro.props;
+---
+
+<Layout
+  title={`${project.title} — Case Study | Lusion Systems`}
+  description={project.overview}
+>
+  <article class="case-study-page container">
+    <!-- Header & Breadcrumbs -->
+    <header class="study-header">
+      <div class="study-nav-top">
+        <a href="/projects" class="back-link mono-tag" data-cursor="hover">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M11 6H1M1 6L6 1M1 6L6 11" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+          <span>BACK TO WORK DIRECTORY</span>
+        </a>
+        <span class="mono-tag cyan">{project.category} // {project.year}</span>
+      </div>
+
+      <h1 class="study-title">{project.title}</h1>
+      <p class="study-tagline">{project.tagline}</p>
+
+      <!-- Key Metrics Row -->
+      <div class="study-metrics-row">
+        {project.metrics.map((metric) => (
+          <div class="study-metric-card glass-panel">
+            <span class="metric-val">{metric.value}</span>
+            <span class="metric-lbl mono-tag">{metric.label}</span>
+          </div>
+        ))}
+      </div>
+    </header>
+
+    <!-- Case Study Interactive Video Stage -->
+    <section class="study-stage-section">
+      <div class="stage-frame glass-panel">
+        <div class="stage-backdrop" style={`background: radial-gradient(circle at 50% 50%, ${project.accentColor}22 0%, rgba(9, 9, 14, 0.95) 70%);`}>
+          <!-- Kinetic Wireframe Centerpiece -->
+          <div class="stage-rings">
+            <div class="ring-orbit ring-1" style={`border-color: ${project.accentColor};`}></div>
+            <div class="ring-orbit ring-2"></div>
+            <div class="ring-core">
+              <span class="mono-tag" style={`color: ${project.accentColor};`}>[ SYSTEM DEPLOYMENT: LIVE ]</span>
+            </div>
+          </div>
+
+          <!-- Video Reel Play HUD -->
+          <button 
+            type="button" 
+            class="stage-play-overlay-btn"
+            data-video-trigger
+            data-project-title={project.title}
+            data-project-client={project.client}
+            data-project-duration={project.reelDuration}
+            data-cursor="play"
+            data-cursor-text="WATCH"
+          >
+            <div class="play-circle">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5V19L19 12L8 5Z" />
+              </svg>
+            </div>
+            <span class="mono-tag">PLAY CASE STUDY REEL [{project.reelDuration}]</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case Study Deep Dive Columns -->
+    <section class="study-deepdive-grid">
+      <!-- Left Meta Details -->
+      <aside class="study-sidebar">
+        <div class="meta-group">
+          <span class="group-title mono-tag cyan">CLIENT ENTITY</span>
+          <p class="group-value">{project.client}</p>
+        </div>
+
+        <div class="meta-group">
+          <span class="group-title mono-tag cyan">RELEASE TIMELINE</span>
+          <p class="group-value">{project.year} // PRODUCTION</p>
+        </div>
+
+        <div class="meta-group">
+          <span class="group-title mono-tag cyan">DISCIPLINES APPLIED</span>
+          <ul class="meta-list">
+            {project.services.map((s) => (
+              <li>{s}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="meta-group">
+          <span class="group-title mono-tag cyan">TECHNICAL ARTIFACTS</span>
+          <div class="tech-pills">
+            {project.techStack.map((tech) => (
+              <span class="tech-pill">{tech}</span>
+            ))}
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Main Architectural Report -->
+      <div class="study-main-report">
+        <!-- Overview -->
+        <div class="report-block">
+          <span class="mono-tag cyan">01 // OVERVIEW & OBJECTIVES</span>
+          <h2 class="report-heading">The Mandate</h2>
+          <p class="report-paragraph">{project.overview}</p>
+        </div>
+
+        <!-- The Challenge -->
+        <div class="report-block">
+          <span class="mono-tag cyan">02 // ARCHITECTURAL BOTTLENECK</span>
+          <h2 class="report-heading">The Core Challenge</h2>
+          <p class="report-paragraph">{project.challenge}</p>
+        </div>
+
+        <!-- The Solution -->
+        <div class="report-block">
+          <span class="mono-tag cyan">03 // ENGINEERING RESOLUTION</span>
+          <h2 class="report-heading">Our Implementation</h2>
+          <p class="report-paragraph">{project.solution}</p>
+        </div>
+
+        <!-- Architectural Blueprint Spec -->
+        <div class="blueprint-box glass-panel">
+          <div class="blueprint-header">
+            <span class="mono-tag cyan">SYSTEM SPECIFICATION // PRODUCTION VERIFIED</span>
+            <span class="mono-tag">SECURITY TIER: ENTERPRISE</span>
+          </div>
+          <div class="blueprint-grid">
+            <div class="bp-item">
+              <span class="bp-label">DEPLOYMENT RUNTIME</span>
+              <span class="bp-val">ASTRO STATIC EDGE + NETLIFY</span>
+            </div>
+            <div class="bp-item">
+              <span class="bp-label">RENDER LATENCY</span>
+              <span class="bp-val">16.6MS / 60 FPS LOCKED</span>
+            </div>
+            <div class="bp-item">
+              <span class="bp-label">STATE ARCHITECTURE</span>
+              <span class="bp-val">DECOUPLED WEB WORKERS</span>
+            </div>
+            <div class="bp-item">
+              <span class="bp-label">ASSET OPTIMIZATION</span>
+              <span class="bp-val">DRACO / BROTLI / WASM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Next Project Navigation Banner -->
+    <nav class="next-project-banner glass-panel" aria-label="Next Project">
+      <div class="next-banner-content">
+        <span class="mono-tag cyan">NEXT CASE STUDY</span>
+        <h3 class="next-title">
+          <a href={`/projects/${nextProject.slug}`} data-cursor="hover">
+            {nextProject.title} →
+          </a>
+        </h3>
+        <p class="next-tagline">{nextProject.tagline}</p>
+      </div>
+      <a href={`/projects/${nextProject.slug}`} class="btn-primary magnetic-btn" data-cursor="hover">
+        <span>VIEW CASE STUDY</span>
+      </a>
+    </nav>
+  </article>
+</Layout>
+
+<style>
+  .case-study-page {
+    padding-top: calc(var(--header-height) + 3.5rem);
+    padding-bottom: 8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  .study-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 3.5rem;
+  }
+
+  .study-nav-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--accent-cyan);
+  }
+
+  .study-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 7vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .study-tagline {
+    font-size: clamp(1.1rem, 2vw, 1.45rem);
+    color: var(--text-secondary);
+    max-width: 860px;
+    line-height: 1.6;
+  }
+
+  .study-metrics-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .study-metric-card {
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .metric-val {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+    line-height: 1;
+  }
+
+  .metric-lbl {
+    font-size: 0.72rem;
+  }
+
+  /* Stage Section */
+  .stage-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 21/9;
+    min-height: 380px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .stage-backdrop {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stage-rings {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .ring-orbit {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .ring-1 {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed;
+    opacity: 0.5;
+    animation: rotateSlow 20s linear infinite;
+  }
+
+  .ring-2 {
+    width: 70%;
+    height: 70%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: rotateSlowReverse 14s linear infinite;
+  }
+
+  @keyframes rotateSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes rotateSlowReverse {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  .stage-play-overlay-btn {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+  }
+
+  .stage-play-overlay-btn:hover {
+    transform: scale(1.06);
+  }
+
+  .play-circle {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: rgba(0, 240, 255, 0.2);
+    border: 1px solid var(--accent-cyan);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-cyan);
+    box-shadow: 0 0 35px rgba(0, 240, 255, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .stage-play-overlay-btn:hover .play-circle {
+    background: var(--accent-cyan);
+    color: #000;
+  }
+
+  /* Deep Dive Grid */
+  .study-deepdive-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 4.5rem;
+    align-items: start;
+  }
+
+  .study-sidebar {
+    position: sticky;
+    top: calc(var(--header-height) + 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    padding-right: 2rem;
+    border-right: 1px solid var(--border-subtle);
+  }
+
+  .meta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .group-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .meta-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .meta-list li {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+  }
+
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .tech-pill {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    padding: 0.25rem 0.55rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    border-radius: 3px;
+    color: var(--text-secondary);
+  }
+
+  .study-main-report {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  .report-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .report-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .report-paragraph {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    max-width: 820px;
+  }
+
+  .blueprint-box {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    border-color: rgba(0, 240, 255, 0.2);
+  }
+
+  .blueprint-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .blueprint-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+
+  .bp-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .bp-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .bp-val {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-cyan);
+  }
+
+  /* Next Project Banner */
+  .next-project-banner {
+    padding: clamp(2rem, 4vw, 3.5rem);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    border-color: var(--border-subtle);
+  }
+
+  .next-banner-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .next-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .next-title a:hover {
+    color: var(--accent-cyan);
+  }
+
+  .next-tagline {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    max-width: 600px;
+  }
+
+  @media (max-width: 960px) {
+    .study-deepdive-grid {
+      grid-template-columns: 1fr;
+    }
+    .study-sidebar {
+      position: static;
+      border-right: none;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-right: 0;
+      padding-bottom: 2.5rem;
+    }
+  }
+</style>

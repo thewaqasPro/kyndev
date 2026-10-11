@@ -1,0 +1,406 @@
+---
+// src/pages/contact.astro
+import Layout from '../layouts/Layout.astro';
+
+const servicesOptions = [
+  'Enterprise Web App',
+  'Shopify Plus & App',
+  'Interactive WebGL & 3D',
+  'High-Scale Backend & APIs',
+  'Headless CMS & WordPress',
+  'Systems Migration'
+];
+
+const budgetOptions = [
+  '$25k — $50k',
+  '$50k — $100k',
+  '$100k — $250k',
+  '$250k+'
+];
+---
+
+<Layout
+  title="INITIATE PROJECT DIALOGUE — Lusion Systems"
+  description="Schedule a technical consultation or submit an RFQ for enterprise web, Shopify Plus, and WebGL architectures."
+>
+  <div class="page-container container">
+    <header class="page-header">
+      <div class="header-breadcrumbs">
+        <a href="/" class="mono-tag" data-cursor="hover">HOME</a>
+        <span class="mono-tag cyan">// TRANSMISSION GATEWAY</span>
+      </div>
+
+      <h1 class="page-title">
+        LET'S INITIATE <br />
+        <span class="highlight-cyan">THE DIALOGUE.</span>
+      </h1>
+
+      <p class="page-summary">
+        We review incoming inquiries on a rolling basis. Submit your project requirements below, and a lead systems architect will respond within 24 hours.
+      </p>
+    </header>
+
+    <div class="contact-layout">
+      <!-- Inquiry Form -->
+      <section class="form-section glass-panel">
+        <div class="form-header">
+          <span class="mono-tag cyan">SYSTEM SPECIFICATION RFQ // FORM 01</span>
+          <span class="mono-tag">ENCRYPTED TRANSMISSION</span>
+        </div>
+
+        <form class="rfq-form" id="contact-rfq-form">
+          <!-- Client Identity -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contact-name" class="mono-tag">YOUR NAME / ENTITY *</label>
+              <input type="text" id="contact-name" name="name" required placeholder="Alexander Vance" />
+            </div>
+            <div class="form-group">
+              <label for="contact-email" class="mono-tag">CORPORATE EMAIL *</label>
+              <input type="email" id="contact-email" name="email" required placeholder="alexander@domain.com" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contact-company" class="mono-tag">ORGANIZATION / DOMAIN</label>
+              <input type="text" id="contact-company" name="company" placeholder="Acme Technologies Inc." />
+            </div>
+            <div class="form-group">
+              <label for="contact-timeline" class="mono-tag">TARGET DEPLOYMENT DATE</label>
+              <input type="text" id="contact-timeline" name="timeline" placeholder="Q1 2026 / 8-12 Weeks" />
+            </div>
+          </div>
+
+          <!-- Disciplines Required -->
+          <div class="form-group">
+            <label class="mono-tag">DISCIPLINES REQUIRED (SELECT APPLICABLE)</label>
+            <div class="checkbox-pill-grid">
+              {servicesOptions.map((opt) => (
+                <label class="pill-checkbox" data-cursor="hover">
+                  <input type="checkbox" name="services" value={opt} />
+                  <span>{opt}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <!-- Budget Range -->
+          <div class="form-group">
+            <label class="mono-tag">ESTIMATED CAPITAL ALLOCATION</label>
+            <div class="radio-pill-grid">
+              {budgetOptions.map((opt, idx) => (
+                <label class="pill-radio" data-cursor="hover">
+                  <input type="radio" name="budget" value={opt} checked={idx === 1} />
+                  <span>{opt}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <!-- Project Brief -->
+          <div class="form-group">
+            <label for="contact-brief" class="mono-tag">PROJECT BRIEF & ARCHITECTURAL OBJECTIVES *</label>
+            <textarea id="contact-brief" name="brief" rows="5" required placeholder="Detail current tech stack, traffic benchmarks, key bottlenecks, and timeline milestones..."></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="form-submit-row">
+            <button type="submit" class="btn-primary magnetic-btn" id="rfq-submit-btn" data-cursor="hover">
+              <span>DISPATCH INQUIRY SPECIFICATION</span>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M1 13L13 1M13 1H3M13 1V11" stroke="currentColor" stroke-width="1.75" />
+              </svg>
+            </button>
+            <div id="contact-feedback" class="form-feedback" aria-live="polite"></div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Sidebar Contact Meta -->
+      <aside class="contact-sidebar">
+        <div class="sidebar-block glass-panel">
+          <span class="mono-tag cyan">DIRECT CHANNELS</span>
+          <div class="sidebar-item">
+            <span class="mono-tag">PARTNERSHIPS:</span>
+            <a href="mailto:partners@lusion-systems.co" class="direct-link">partners@lusion-systems.co</a>
+          </div>
+          <div class="sidebar-item">
+            <span class="mono-tag">TECHNICAL DESK:</span>
+            <a href="mailto:engineering@lusion-systems.co" class="direct-link">engineering@lusion-systems.co</a>
+          </div>
+          <div class="sidebar-item">
+            <span class="mono-tag">DIRECT LINE:</span>
+            <a href="tel:+14158904812" class="direct-link">+1 (415) 890-4812</a>
+          </div>
+        </div>
+
+        <div class="sidebar-block glass-panel">
+          <span class="mono-tag cyan">PHYSICAL HUBS</span>
+          <div class="sidebar-item">
+            <span class="mono-tag">LONDON:</span>
+            <p>122 SHOREDITCH HIGH ST<br />LONDON, E1 6JJ, UNITED KINGDOM</p>
+          </div>
+          <div class="sidebar-item">
+            <span class="mono-tag">SAN FRANCISCO:</span>
+            <p>555 MONTGOMERY ST<br />SAN FRANCISCO, CA 94111, USA</p>
+          </div>
+        </div>
+
+        <div class="sidebar-block glass-panel">
+          <span class="mono-tag cyan">SECURITY & COMPLIANCE</span>
+          <p class="compliance-text">
+            All architectural disclosures and code repositories are governed by mutual non-disclosure contracts. PGP key fingerprints available upon request.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('contact-rfq-form') as HTMLFormElement | null;
+  const feedback = document.getElementById('contact-feedback');
+  const submitBtn = document.getElementById('rfq-submit-btn');
+
+  if (form && feedback && submitBtn) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submitBtn.setAttribute('disabled', 'true');
+      feedback.textContent = 'ENCRYPTING PAYLOAD & DISPATCHING TO ARCHITECTS...';
+      feedback.className = 'form-feedback active';
+
+      setTimeout(() => {
+        feedback.textContent = 'TRANSMISSION RECEIVED // DISPATCH ACKNOWLEDGED. EXPECT CONTACT IN <24H.';
+        feedback.className = 'form-feedback success';
+        form.reset();
+        submitBtn.removeAttribute('disabled');
+      }, 1200);
+    });
+  }
+</script>
+
+<style>
+  .page-container {
+    padding-top: calc(var(--header-height) + 3.5rem);
+    padding-bottom: 8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  .page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 3.5rem;
+  }
+
+  .header-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+
+  .highlight-cyan {
+    color: var(--accent-cyan);
+    text-shadow: 0 0 35px rgba(0, 240, 255, 0.25);
+  }
+
+  .page-summary {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--text-secondary);
+    max-width: 820px;
+    line-height: 1.6;
+  }
+
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .form-section {
+    padding: clamp(2rem, 5vw, 4rem);
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1.25rem;
+  }
+
+  .rfq-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group textarea {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: 0.9rem 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    transition: border-color 0.2s ease;
+    outline: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent-cyan);
+    background: rgba(0, 240, 255, 0.03);
+  }
+
+  .form-group textarea {
+    resize: vertical;
+  }
+
+  .checkbox-pill-grid,
+  .radio-pill-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  .pill-checkbox,
+  .pill-radio {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .pill-checkbox input,
+  .pill-radio input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .pill-checkbox span,
+  .pill-radio span {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+  }
+
+  .pill-checkbox input:checked + span,
+  .pill-radio input:checked + span {
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    background: rgba(0, 240, 255, 0.1);
+  }
+
+  .form-submit-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  .form-feedback {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+  }
+
+  .form-feedback.active {
+    color: var(--accent-amber);
+  }
+
+  .form-feedback.success {
+    color: var(--accent-lime);
+  }
+
+  /* Sidebar */
+  .contact-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .sidebar-block {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .sidebar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .direct-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
+  }
+
+  .direct-link:hover {
+    color: var(--accent-cyan);
+  }
+
+  .sidebar-item p {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .compliance-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 960px) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

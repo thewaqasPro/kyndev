@@ -1,0 +1,491 @@
+---
+// src/pages/index.astro
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+import { services } from '../data/services';
+
+const featuredProjects = projects.filter(p => p.featured);
+---
+
+<Layout 
+  title="LUSION SYSTEMS — We Build the Systems Companies Run On"
+  description="High-throughput web applications, enterprise Shopify Plus engines, 60fps WebGL flagships, and distributed cloud backends."
+>
+  <!-- 1. Hero Section -->
+  <section class="hero-section container" id="hero">
+    <div class="hero-meta-top">
+      <div class="mono-tag cyan">
+        ENGINEERING & INTERACTIVE ARCHITECTURE
+      </div>
+      <div class="mono-tag">
+        GLOBAL DEPLOYMENT // LATENCY: OPTIMIZED
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <h1 class="hero-title">
+        WE BUILD THE <br />
+        <span class="glitch-word" data-text="SYSTEMS">SYSTEMS</span> <br />
+        COMPANIES <br />
+        <span class="gradient-text">RUN ON.</span>
+      </h1>
+
+      <p class="hero-summary">
+        An engineering and interactive studio dedicated to building mission-critical web applications, 
+        high-capacity Shopify Plus engines, decoupled content graphs, and locked-60fps WebGL flagships.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/projects" class="btn-primary magnetic-btn" data-cursor="hover">
+          <span>EXPLORE SELECTED WORK</span>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 13L13 1M13 1H3M13 1V11" stroke="currentColor" stroke-width="1.75" />
+          </svg>
+        </a>
+        <a href="/services" class="btn-outline magnetic-btn" data-cursor="hover">
+          <span>DISCOVER EXPERTISE</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-meta-bottom">
+      <div class="hero-stat-pill">
+        <span class="pill-number">99.99%</span>
+        <span class="pill-label">PRODUCTION UPTIME</span>
+      </div>
+      <div class="hero-stat-pill">
+        <span class="pill-number">&lt; 30MS</span>
+        <span class="pill-label">AVG TTFB EDGE RESPONSE</span>
+      </div>
+      <div class="hero-stat-pill">
+        <span class="pill-number">60 FPS</span>
+        <span class="pill-label">WEBGL COMPOSITOR LOCK</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Featured Work / Project Inventory -->
+  <section class="work-section container" id="work">
+    <div class="section-header">
+      <div class="section-title-wrap">
+        <span class="mono-tag cyan">SELECTED WORK // 2024—2026</span>
+        <h2 class="section-title">PROVEN IN PRODUCTION</h2>
+      </div>
+      <a href="/projects" class="view-all-link" data-cursor="hover">
+        <span>VIEW ALL CASE STUDIES [06]</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M1 6H11M11 6L6 1M11 6L6 11" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      </a>
+    </div>
+
+    <div class="projects-grid">
+      {featuredProjects.map((project, idx) => (
+        <ProjectCard project={project} index={idx} />
+      ))}
+    </div>
+  </section>
+
+  <!-- 3. Expertise Grid / Systems Inventory -->
+  <section class="expertise-section container" id="services">
+    <div class="section-header">
+      <div class="section-title-wrap">
+        <span class="mono-tag cyan">TECHNICAL DISCIPLINES // 06 SYSTEMS</span>
+        <h2 class="section-title">ENGINEERING CAPABILITIES</h2>
+      </div>
+      <p class="section-sub">
+        Every system is engineered from clean primitives — maximizing uptime, minimizing asset footprints, and eliminating vendor lock-in.
+      </p>
+    </div>
+
+    <div class="services-grid">
+      {services.map((service) => (
+        <div class="service-card glass-panel" data-cursor="hover">
+          <div class="service-card-top">
+            <span class="service-num mono-tag">[{service.number}]</span>
+            <span class="mono-tag cyan">{service.stats.value} {service.stats.label}</span>
+          </div>
+
+          <h3 class="service-title">{service.title}</h3>
+          <p class="service-desc">{service.shortDesc}</p>
+
+          <div class="service-deliverables">
+            <span class="deliverable-label mono-tag">DELIVERABLES:</span>
+            <ul class="deliverables-list">
+              {service.deliverables.slice(0, 3).map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="service-stack">
+            {service.techStack.map((tech) => (
+              <span class="tech-badge">{tech}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 4. Studio Manifesto / Text Scrubbing Section -->
+  <section class="manifesto-section container" id="about">
+    <div class="manifesto-card glass-panel">
+      <div class="manifesto-top">
+        <span class="mono-tag cyan">OUR ARCHITECTURAL PHILOSOPHY</span>
+        <span class="mono-tag">NO BLOAT // NO EXCUSES</span>
+      </div>
+
+      <div class="manifesto-statement">
+        <p class="manifesto-lead">
+          WE BELIEVE SOFTWARE SHOULD BE AS <em>FAST AS THOUGHT</em> AND AS <em>RESILIENT AS STEEL</em>.
+        </p>
+        <p class="manifesto-body">
+          Most modern web experiences are bogged down by megabytes of unvetted dependencies and sluggish client-side frameworks. 
+          We reject that compromise. By combining Astro's zero-JS-by-default architecture, persistent 60fps WebGL scenes, and decoupled cloud backends, 
+          we engineer digital platforms that look like cinema and perform like high-frequency trading terminals.
+        </p>
+      </div>
+
+      <div class="manifesto-metrics">
+        <div class="metric-box">
+          <span class="metric-num">0.00%</span>
+          <span class="metric-label">TOLERANCE FOR JANK</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-num">&lt; 1.0s</span>
+          <span class="metric-label">MEDIAN LCP GLOBALLY</span>
+        </div>
+        <div class="metric-box">
+          <span class="metric-num">100%</span>
+          <span class="metric-label">CODE TRANSPARENCY</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero Styles */
+  .hero-section {
+    min-height: 90vh;
+    padding-top: calc(var(--header-height) + 4rem);
+    padding-bottom: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+
+  .hero-meta-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 1200px;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3.2rem, 9vw, 8.5rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+
+  .glitch-word {
+    position: relative;
+    display: inline-block;
+    color: var(--text-primary);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #00f0ff 0%, #8c52ff 50%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 45px rgba(0, 240, 255, 0.3));
+  }
+
+  .hero-summary {
+    font-size: clamp(1.1rem, 2vw, 1.45rem);
+    color: var(--text-secondary);
+    max-width: 780px;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  .hero-meta-bottom {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 2rem;
+  }
+
+  .hero-stat-pill {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .pill-number {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 700;
+    color: var(--accent-cyan);
+    line-height: 1;
+  }
+
+  .pill-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+  }
+
+  /* Section Common */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .section-title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 4.2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .section-sub {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  .view-all-link {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+    color: var(--accent-cyan);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: gap 0.2s ease;
+  }
+
+  .view-all-link:hover {
+    gap: 0.85rem;
+  }
+
+  /* Projects Grid */
+  .work-section {
+    margin-top: 8rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+    gap: 2.5rem;
+  }
+
+  /* Expertise Grid */
+  .expertise-section {
+    margin-top: 10rem;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 2rem;
+  }
+
+  .service-card {
+    padding: clamp(2rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .service-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .service-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 2vw, 1.85rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .service-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .service-deliverables {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 1rem;
+  }
+
+  .deliverables-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .deliverables-list li {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .deliverables-list li::before {
+    content: '→';
+    color: var(--accent-cyan);
+  }
+
+  .service-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+
+  .tech-badge {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+  }
+
+  /* Manifesto Section */
+  .manifesto-section {
+    margin-top: 10rem;
+  }
+
+  .manifesto-card {
+    padding: clamp(2.5rem, 6vw, 5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .manifesto-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1.5rem;
+  }
+
+  .manifesto-statement {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .manifesto-lead {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4.2rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .manifesto-lead em {
+    font-style: normal;
+    color: var(--accent-cyan);
+  }
+
+  .manifesto-body {
+    font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 960px;
+  }
+
+  .manifesto-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2.5rem;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 2.5rem;
+  }
+
+  .metric-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .metric-num {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 800;
+    color: var(--accent-cyan);
+  }
+
+  .metric-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 640px) {
+    .projects-grid {
+      grid-template-columns: 1fr;
+    }
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
