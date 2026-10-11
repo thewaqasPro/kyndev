@@ -1,7 +1,7 @@
 /* Featured Work Section Styles */
 
 #home-featured:after {
-  content: "";
+  content: '';
   clear: both;
   display: block;
 }

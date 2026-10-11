@@ -144,7 +144,7 @@
 }
 
 #about-capability-categories-container:after {
-  content: "";
+  content: '';
   clear: both;
   display: block;
 }
@@ -294,7 +294,7 @@
 }
 
 .about-capability-list-item:not(:last-child):before {
-  content: "..............................";
+  content: '..............................';
   position: absolute;
   top: 0.6em;
   font-size: 1.5em;

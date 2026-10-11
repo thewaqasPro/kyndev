@@ -2,183 +2,177 @@
 import type { ProjectData } from './types';
 
 export const choo_choo_world: ProjectData = {
-  "slug": "choo_choo_world",
-  "title": "Choo Choo World",
-  "tags": "concept • web • game design • 3d",
-  "theme": {
-    "style": "background-color:#E8EEF8",
-    "shadow": "0.95",
-    "colorBg": "#E8EEF8",
-    "colorHighlight": "#0591F6",
-    "colorBtnBg": "#ffffff",
-    "colorBtnText": "#0591F6",
-    "colorIconBg": "#ffffff",
-    "colorIconColor": "#0591F6",
-    "colorText": "#000000",
-    "colorBtnBgHover": "#0591F6",
-    "colorBtnTextHover": "#ffffff"
+  slug: 'choo_choo_world',
+  title: 'Choo Choo World',
+  tags: 'concept • web • game design • 3d',
+  theme: {
+    style: 'background-color:#E8EEF8',
+    shadow: '0.95',
+    colorBg: '#E8EEF8',
+    colorHighlight: '#0591F6',
+    colorBtnBg: '#ffffff',
+    colorBtnText: '#0591F6',
+    colorIconBg: '#ffffff',
+    colorIconColor: '#0591F6',
+    colorText: '#000000',
+    colorBtnBgHover: '#0591F6',
+    colorBtnTextHover: '#ffffff',
   },
-  "descHtml": "<p>Choo Choo World, a research project by KYNDEV, aimed to create an enjoyable mini game for all ages, demonstrating web technology's positive potential. It offered a fun introduction to the web, aligned with KYNDEV’s founders' experiences as parents.</p><p>With a community-building feature, users shared game snapshots on social media, showcasing engagement strategies. Choo Choo World embodies KYNDEV's commitment to innovative web technology, inspiring both children and adults</p>",
-  "launchUrl": "https://choochooworld.com/",
-  "launchLabel": "Launch Project",
-  "services": [
-    "Concept",
-    "Game Design",
-    "Web Design",
-    "Web Development",
-    "3D Design",
-    "WebGL"
+  descHtml:
+    "<p>Choo Choo World, a research project by KYNDEV, aimed to create an enjoyable mini game for all ages, demonstrating web technology's positive potential. It offered a fun introduction to the web, aligned with KYNDEV’s founders' experiences as parents.</p><p>With a community-building feature, users shared game snapshots on social media, showcasing engagement strategies. Choo Choo World embodies KYNDEV's commitment to innovative web technology, inspiring both children and adults</p>",
+  launchUrl: 'https://choochooworld.com/',
+  launchLabel: 'Launch Project',
+  services: ['Concept', 'Game Design', 'Web Design', 'Web Development', '3D Design', 'WebGL'],
+  links: [
+    {
+      url: 'https://thefwa.com/cases/choo-choo-world',
+      label: 'FWA SOTD',
+    },
+    {
+      url: 'https://www.awwwards.com/sites/choo-choo-world',
+      label: 'Awwwards HM',
+    },
   ],
-  "links": [
+  items: [
     {
-      "url": "https://thefwa.com/cases/choo-choo-world",
-      "label": "FWA SOTD"
+      filename: '/assets/projects/choo_choo_world/image1',
+      type: 'image',
+      width: 1870,
+      height: 1140,
+      fullscreen: false,
     },
     {
-      "url": "https://www.awwwards.com/sites/choo-choo-world",
-      "label": "Awwwards HM"
-    }
+      filename: '/assets/projects/choo_choo_world/image2',
+      type: 'image',
+      width: 2428,
+      height: 1620,
+      fullscreen: true,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/video1',
+      type: 'video',
+      width: 16,
+      height: 9,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image4',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image5',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/video2',
+      type: 'video',
+      width: 16,
+      height: 9,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image6',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image7',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image8',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image9',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image10',
+      type: 'image',
+      width: 2270,
+      height: 1620,
+      fullscreen: true,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image11',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image12',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image13',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image14',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image15',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image16',
+      type: 'image',
+      width: 2880,
+      height: 1620,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image17',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/choo_choo_world/image18',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
   ],
-  "items": [
-    {
-      "filename": "/assets/projects/choo_choo_world/image1",
-      "type": "image",
-      "width": 1870,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image2",
-      "type": "image",
-      "width": 2428,
-      "height": 1620,
-      "fullscreen": true
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/video1",
-      "type": "video",
-      "width": 16,
-      "height": 9,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image4",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image5",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/video2",
-      "type": "video",
-      "width": 16,
-      "height": 9,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image6",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image7",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image8",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image9",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image10",
-      "type": "image",
-      "width": 2270,
-      "height": 1620,
-      "fullscreen": true
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image11",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image12",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image13",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image14",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image15",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image16",
-      "type": "image",
-      "width": 2880,
-      "height": 1620,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image17",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/choo_choo_world/image18",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    }
-  ],
-  "nextProject": {
-    "id": "zero_tech",
-    "title": "Zero Tech",
-    "colorBg": "#192743",
-    "colorText": "#ffffff",
-    "shadow": "0.9"
-  }
+  nextProject: {
+    id: 'zero_tech',
+    title: 'Zero Tech',
+    colorBg: '#192743',
+    colorText: '#ffffff',
+    shadow: '0.9',
+  },
 };

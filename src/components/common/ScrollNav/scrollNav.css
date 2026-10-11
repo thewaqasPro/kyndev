@@ -103,7 +103,7 @@
 .scroll-nav-cross:before,
 .scroll-nav-cross:after {
   position: absolute;
-  content: "";
+  content: '';
   width: 2px;
   height: 1em;
   left: 0;

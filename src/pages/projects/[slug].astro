@@ -1,18 +1,12 @@
 ---
 // src/pages/projects/[slug].astro
-import '../../styles/kyndev.css';
+import Layout from '../../layouts/Layout.astro';
 import { projectsData } from '../../data/projectsData';
-import Header from '../../components/common/Header/Header.astro';
-import EndSection from '../../components/common/EndSection/EndSection.astro';
-import Footer from '../../components/common/Footer/Footer.astro';
-import ScrollNav from '../../components/common/ScrollNav/ScrollNav.astro';
-import Overlays from '../../components/common/Overlays/Overlays.astro';
-
 import ProjectDetails from '../../components/projects/ProjectDetails/ProjectDetails.astro';
 
 export async function getStaticPaths() {
   return Object.keys(projectsData).map((slug) => ({
-    params: { slug }
+    params: { slug },
   }));
 }
 
@@ -22,64 +16,20 @@ const project = projectsData[slug as string];
 if (!project) {
   return Astro.redirect('/projects');
 }
+
+const title = `KYNDEV - ${project.title}`;
+const description = `Our detailed case study on ${project.title}. Produced by KYNDEV.`;
+const ogUrl = `https://kyndev.com/projects/${project.slug}/`;
 ---
 
-<!DOCTYPE html>
-<html lang="en" class="no-js">
-  <head>
-    <title>KYNDEV - {project.title}</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <base href="/" />
-    <meta name="description" content={`Our detailed case study on ${project.title}. Produced by KYNDEV.`} />
-    <link id="apple-touch-icon" rel="apple-touch-icon" sizes="180x180" href="./assets/meta/apple-touch-icon.png" />
-    <link id="icon32" rel="icon" type="image/png" sizes="32x32" href="./assets/meta/favicon-32x32.png" media="(prefers-color-scheme: light)" />
-    <link id="icon32" rel="icon" type="image/png" sizes="32x32" href="./assets/meta/dark/favicon-32x32.png" media="(prefers-color-scheme: dark)" />
-    <link id="icon64" rel="icon" type="image/png" sizes="16x16" href="./assets/meta/favicon-16x16.png" media="(prefers-color-scheme: light)" />
-    <link id="icon64" rel="icon" type="image/png" sizes="16x16" href="./assets/meta/dark/favicon-16x16.png" media="(prefers-color-scheme: dark)" />
-    <link href="./assets/meta/favicon.ico" rel="shortcut icon" media="(prefers-color-scheme: light)" />
-    <link href="./assets/meta/dark/favicon.ico" rel="shortcut icon" media="(prefers-color-scheme: dark)" />
-    <link id="manifest" rel="manifest" href="./assets/meta/site.webmanifest" />
-    <link rel="mask-icon" href="./assets/meta/safari-pinned-tab.svg" color="#000000" />
-    <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta property="og:description" content={`Our detailed case study on ${project.title}. Produced by KYNDEV.`} />
-    <meta property="og:image:alt" content={`KYNDEV - ${project.title}`} />
-    <meta property="og:image" content="https://kyndev.com/assets/meta/social_sharing.jpg" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content={`KYNDEV - ${project.title}`} />
-    <meta property="og:title" content={`KYNDEV - ${project.title}`} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={`https://kyndev.com/projects/${project.slug}/`} />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W2XC5XK9QJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'G-W2XC5XK9QJ');
-    </script>
-    <script type="module" src="/assets/scripts/kyndev_runtime.js"></script>
-  </head>
-  <body>
-    <canvas id="canvas"></canvas>
-    <div id="ui">
-      <Header />
-      <div id="page-container">
-        <div id="page-container-inner">
-          <ProjectDetails project={project} />
-        </div>
-        <div id="page-extra-sections">
-          <EndSection />
-          <Footer />
-          <ScrollNav />
-        </div>
-      </div>
-    </div>
-    <Overlays />
-  </body>
-</html>
+<Layout
+  title={title}
+  description={description}
+  ogUrl={ogUrl}
+  ogTitle={title}
+  ogDescription={description}
+  scrollNavPath="/projects"
+  scrollNavText="All Projects"
+>
+  <ProjectDetails project={project} />
+</Layout>

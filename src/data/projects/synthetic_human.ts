@@ -2,88 +2,84 @@
 import type { ProjectData } from './types';
 
 export const synthetic_human: ProjectData = {
-  "slug": "synthetic_human",
-  "title": "Synthetic Human",
-  "tags": "web • design • development • 3d",
-  "theme": {
-    "style": "background-color:#9d8aff",
-    "shadow": "0.95",
-    "colorBg": "#9d8aff",
-    "colorHighlight": "#caddff",
-    "colorBtnBg": "#ffffff",
-    "colorBtnText": "#192743",
-    "colorIconBg": "#ffffff",
-    "colorIconColor": "#192743",
-    "colorText": "#ffffff",
-    "colorBtnBgHover": "#bad3ff",
-    "colorBtnTextHover": "#192743"
+  slug: 'synthetic_human',
+  title: 'Synthetic Human',
+  tags: 'web • design • development • 3d',
+  theme: {
+    style: 'background-color:#9d8aff',
+    shadow: '0.95',
+    colorBg: '#9d8aff',
+    colorHighlight: '#caddff',
+    colorBtnBg: '#ffffff',
+    colorBtnText: '#192743',
+    colorIconBg: '#ffffff',
+    colorIconColor: '#192743',
+    colorText: '#ffffff',
+    colorBtnBgHover: '#bad3ff',
+    colorBtnTextHover: '#192743',
   },
-  "descHtml": "<p>We partnered with Fantasy to launch the campaign website for Synthetic Humans, their new AI product. The goal was to create a visually rich digital experience that could support the ambition and identity of the launch.</p> <p>Our team developed a Houdini FX based workflow to optimize high quality 3D assets for real time use on the web, alongside building the interactive front end of the site. We also created the procedural animations and visual effects that gave the experience its depth, movement, and character.</p>",
-  "launchUrl": "https://synthetic-humans.ai/",
-  "launchLabel": "Launch Project",
-  "services": [
-    "Creative Coding",
-    "Animation",
-    "Frontend development",
-    "3D Visual optimization"
+  descHtml:
+    '<p>We partnered with Fantasy to launch the campaign website for Synthetic Humans, their new AI product. The goal was to create a visually rich digital experience that could support the ambition and identity of the launch.</p> <p>Our team developed a Houdini FX based workflow to optimize high quality 3D assets for real time use on the web, alongside building the interactive front end of the site. We also created the procedural animations and visual effects that gave the experience its depth, movement, and character.</p>',
+  launchUrl: 'https://synthetic-humans.ai/',
+  launchLabel: 'Launch Project',
+  services: ['Creative Coding', 'Animation', 'Frontend development', '3D Visual optimization'],
+  links: [],
+  items: [
+    {
+      filename: '/assets/projects/synthetic_human/video0',
+      type: 'video',
+      width: 16,
+      height: 9,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/synthetic_human/image1',
+      type: 'image',
+      width: 1820,
+      height: 1024,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/synthetic_human/image2',
+      type: 'image',
+      width: 1920,
+      height: 1280,
+      fullscreen: true,
+    },
+    {
+      filename: '/assets/projects/synthetic_human/image3',
+      type: 'image',
+      width: 1820,
+      height: 1024,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/synthetic_human/image4',
+      type: 'image',
+      width: 1820,
+      height: 1024,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/synthetic_human/image5',
+      type: 'image',
+      width: 1820,
+      height: 1024,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/synthetic_human/image6',
+      type: 'image',
+      width: 1820,
+      height: 1024,
+      fullscreen: false,
+    },
   ],
-  "links": [],
-  "items": [
-    {
-      "filename": "/assets/projects/synthetic_human/video0",
-      "type": "video",
-      "width": 16,
-      "height": 9,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/synthetic_human/image1",
-      "type": "image",
-      "width": 1820,
-      "height": 1024,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/synthetic_human/image2",
-      "type": "image",
-      "width": 1920,
-      "height": 1280,
-      "fullscreen": true
-    },
-    {
-      "filename": "/assets/projects/synthetic_human/image3",
-      "type": "image",
-      "width": 1820,
-      "height": 1024,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/synthetic_human/image4",
-      "type": "image",
-      "width": 1820,
-      "height": 1024,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/synthetic_human/image5",
-      "type": "image",
-      "width": 1820,
-      "height": 1024,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/synthetic_human/image6",
-      "type": "image",
-      "width": 1820,
-      "height": 1024,
-      "fullscreen": false
-    }
-  ],
-  "nextProject": {
-    "id": "ddd_2024",
-    "title": "DDD 2024",
-    "colorBg": "#261c46",
-    "colorText": "#ffffff",
-    "shadow": "0.95"
-  }
+  nextProject: {
+    id: 'ddd_2024',
+    title: 'DDD 2024',
+    colorBg: '#261c46',
+    colorText: '#ffffff',
+    shadow: '0.95',
+  },
 };

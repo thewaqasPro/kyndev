@@ -1,6 +1,6 @@
 /**
  * About Awards Section Controller (Kyndev Architectural Redesign)
- * 
+ *
  * Manages award category toggles and hover states.
  */
 

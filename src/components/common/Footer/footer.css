@@ -169,7 +169,7 @@
 }
 
 #footer-business-link:before {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -197,7 +197,7 @@
 }
 
 #footer-enquires-link:before {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -335,7 +335,7 @@
 }
 
 #footer-bottom-labs:before {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 0;
   width: 100%;

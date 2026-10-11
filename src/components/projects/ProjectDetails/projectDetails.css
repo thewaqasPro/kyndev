@@ -161,7 +161,7 @@
   pointer-events: auto;
 }
 #project-details-meta:after {
-  content: "";
+  content: '';
   display: block;
   clear: both;
 }
@@ -222,7 +222,7 @@
 #project-details-desc a:after,
 #project-details-side-list a:after {
   position: absolute;
-  content: "";
+  content: '';
   left: 0;
   top: 100%;
   width: 100%;
@@ -317,8 +317,7 @@
     background: var(--project-details-highlight);
     transition: background cubic-bezier(0.35, 0, 0, 1) 0.5s 0.1s;
   }
-  #project-details-launch-cta-mobile:hover
-    #project-details-launch-cta-text-mobile,
+  #project-details-launch-cta-mobile:hover #project-details-launch-cta-text-mobile,
   #project-details-launch-cta:hover #project-details-launch-cta-text-mobile,
   #project-details-launch-cta-mobile:hover #project-details-launch-cta-text,
   #project-details-launch-cta:hover #project-details-launch-cta-text {
@@ -327,31 +326,23 @@
       color cubic-bezier(0.35, 0, 0, 1) 0.5s,
       transform cubic-bezier(0.35, 0, 0, 1) 0.4s;
   }
-  #project-details-launch-cta-mobile:hover
-    #project-details-launch-cta-dot-mobile,
+  #project-details-launch-cta-mobile:hover #project-details-launch-cta-dot-mobile,
   #project-details-launch-cta:hover #project-details-launch-cta-dot-mobile,
   #project-details-launch-cta-mobile:hover #project-details-launch-cta-dot,
   #project-details-launch-cta:hover #project-details-launch-cta-dot {
     transform: translate3d(5em, 0, 0) scale(26);
     background: var(--project-details-highlight);
   }
-  #project-details-launch-cta-mobile:hover
-    #project-details-launch-cta-arrow-mobile,
+  #project-details-launch-cta-mobile:hover #project-details-launch-cta-arrow-mobile,
   #project-details-launch-cta:hover #project-details-launch-cta-arrow-mobile,
   #project-details-launch-cta-mobile:hover #project-details-launch-cta-arrow,
   #project-details-launch-cta:hover #project-details-launch-cta-arrow {
     transform: scale(1);
     transition: transform cubic-bezier(0.35, 0, 0, 1) 0.4s 0.1s;
   }
-  #project-details-launch-cta-mobile:hover
-    #project-details-launch-cta-arrow-mobile
-    svg,
-  #project-details-launch-cta:hover
-    #project-details-launch-cta-arrow-mobile
-    svg,
-  #project-details-launch-cta-mobile:hover
-    #project-details-launch-cta-arrow
-    svg,
+  #project-details-launch-cta-mobile:hover #project-details-launch-cta-arrow-mobile svg,
+  #project-details-launch-cta:hover #project-details-launch-cta-arrow-mobile svg,
+  #project-details-launch-cta-mobile:hover #project-details-launch-cta-arrow svg,
   #project-details-launch-cta:hover #project-details-launch-cta-arrow svg {
     color: var(--project-details-icon-color);
   }
@@ -377,7 +368,7 @@
 }
 #project-details-launch-cta-mobile-dot,
 #project-details-launch-cta-dot {
-  content: "";
+  content: '';
   width: 0.5em;
   height: 0.5em;
   background: var(--project-details-btn-text);

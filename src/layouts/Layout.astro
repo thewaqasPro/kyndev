@@ -1,0 +1,154 @@
+---
+// src/layouts/Layout.astro
+import '../styles/kyndev.css';
+import Header from '../components/common/Header/Header.astro';
+import EndSection from '../components/common/EndSection/EndSection.astro';
+import Footer from '../components/common/Footer/Footer.astro';
+import ScrollNav from '../components/common/ScrollNav/ScrollNav.astro';
+import Overlays from '../components/common/Overlays/Overlays.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+  ogUrl?: string;
+  ogType?: string;
+  scrollNavPath?: string;
+  scrollNavText?: string;
+  scrollNavSubtitle?: string;
+  scrollNavNextText?: string;
+}
+
+const {
+  title = 'KYNDEV - Award Winning 3D and Interactive Web Studio',
+  description = 'We design and produce 3D visual storytelling, immersive websites, and interactive digital experiences that help brands stand out online.',
+  ogTitle = title,
+  ogDescription = description,
+  ogImage = 'https://kyndev.com/assets/meta/social_sharing.jpg',
+  ogImageAlt = title,
+  ogUrl,
+  ogType = 'website',
+  scrollNavPath = '/about',
+  scrollNavText = 'About Us',
+  scrollNavSubtitle = 'Keep Scrolling<br>to Learn More',
+  scrollNavNextText = 'Next Page',
+} = Astro.props;
+
+const canonicalURL = ogUrl || new URL(Astro.url.pathname, Astro.site || 'https://kyndev.com').href;
+---
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <base href="/" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Favicons & App Icons -->
+    <link
+      id="apple-touch-icon"
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/meta/apple-touch-icon.png"
+    />
+    <link
+      id="icon32"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/meta/favicon-32x32.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      id="icon32-dark"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/assets/meta/dark/favicon-32x32.png"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link
+      id="icon64"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/meta/favicon-16x16.png"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      id="icon64-dark"
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/assets/meta/dark/favicon-16x16.png"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link
+      href="/assets/meta/favicon.ico"
+      rel="shortcut icon"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      href="/assets/meta/dark/favicon.ico"
+      rel="shortcut icon"
+      media="(prefers-color-scheme: dark)"
+    />
+    <link id="manifest" rel="manifest" href="/assets/meta/site.webmanifest" />
+    <link rel="mask-icon" href="/assets/meta/safari-pinned-tab.svg" color="#000000" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="KYNDEV - Award Winning 3D and Interactive Web Studio" />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Sitemap -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Kyndev 3D / WebGL Runtime -->
+    <script type="module" src="/assets/scripts/kyndev_runtime.js"></script>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <div id="ui">
+      <Header />
+      <div id="page-container">
+        <div id="page-container-inner">
+          <slot />
+        </div>
+        <div id="page-extra-sections">
+          <EndSection />
+          <Footer />
+          <ScrollNav
+            path={scrollNavPath}
+            text={scrollNavText}
+            subtitle={scrollNavSubtitle}
+            nextText={scrollNavNextText}
+          />
+        </div>
+      </div>
+    </div>
+    <Overlays />
+  </body>
+</html>

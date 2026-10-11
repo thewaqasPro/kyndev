@@ -7,9 +7,7 @@ interface Props {
   email?: string;
 }
 
-const {
-  email = "hello@kyndev.com"
-} = Astro.props;
+const { email = 'hello@kyndev.com' } = Astro.props;
 ---
 
 <header id="header">
@@ -17,9 +15,23 @@ const {
     <div id="header-background"></div>
 
     <a id="header-logo" aria-label="Go to home page" href="/">
-      <svg xmlns="http://www.w3.org/2000/svg" width="121" height="24" fill="none" viewBox="0 0 121 24">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="121"
+        height="24"
+        fill="none"
+        viewBox="0 0 121 24"
+      >
         <g fill="currentColor" style="mix-blend-mode:exclusion">
-          <text x="0" y="19" font-family="'Space Grotesk', -apple-system, sans-serif" font-weight="800" font-size="22" letter-spacing="-0.02em" fill="currentColor">
+          <text
+            x="0"
+            y="19"
+            font-family="'Space Grotesk', -apple-system, sans-serif"
+            font-weight="800"
+            font-size="22"
+            letter-spacing="-0.02em"
+            fill="currentColor"
+          >
             KYNDEV
           </text>
         </g>
@@ -28,12 +40,36 @@ const {
 
     <div id="header-center">
       <button id="header-center-project-back-btn" aria-label="Back" type="button">
-        <svg id="header-center-project-back-btn-svg" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 12.243 3.757 8m0 0L8 3.757M3.757 8h8.486"></path>
+        <svg
+          id="header-center-project-back-btn-svg"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="1.5"
+            d="M8 12.243 3.757 8m0 0L8 3.757M3.757 8h8.486"
+          ></path>
         </svg>
         <p id="header-center-project-back-btn-text">back</p>
-        <svg id="header-center-project-back-btn-svg2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M8 12.243 3.757 8m0 0L8 3.757M3.757 8h8.486"></path>
+        <svg
+          id="header-center-project-back-btn-svg2"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-width="1.5"
+            d="M8 12.243 3.757 8m0 0L8 3.757M3.757 8h8.486"
+          ></path>
         </svg>
         <div id="project-details-header-back-background"></div>
       </button>
@@ -48,8 +84,20 @@ const {
         <a href={`mailto:${email}`} aria-label="Email Kyndev"></a>
         <div id="header-right-talk-container">
           <span id="header-right-talk-btn-arrow">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.343 8h11.314m0 0-4.984 4.984M13.657 8 8.673 3.016"></path>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 16 16"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M2.343 8h11.314m0 0-4.984 4.984M13.657 8 8.673 3.016"
+              ></path>
             </svg>
           </span>
           <span id="header-right-talk-btn-text">Let's talk</span>

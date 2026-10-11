@@ -1,6 +1,6 @@
 /**
  * About Who Section Controller (Kyndev Architectural Redesign)
- * 
+ *
  * Coordinates team face drag interactions, team member progression, and cursor follower.
  */
 

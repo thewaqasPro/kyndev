@@ -1,6 +1,6 @@
 /**
  * Header Section Controller (Kyndev Architectural Redesign)
- * 
+ *
  * Manages header state, navigation interactions, sound toggle button,
  * full-screen slide-down menu overlay, and smooth contact scrolling.
  */
@@ -43,7 +43,11 @@ export class HeaderController {
    * Toggles sound audio playback via the site audio manager
    */
   public toggleSound(): void {
-    if (typeof window !== 'undefined' && window.audios && typeof window.audios.toggle === 'function') {
+    if (
+      typeof window !== 'undefined' &&
+      window.audios &&
+      typeof window.audios.toggle === 'function'
+    ) {
       window.audios.toggle();
     }
   }
@@ -52,7 +56,11 @@ export class HeaderController {
    * Smoothly scrolls to the footer/contact section
    */
   public scrollToContact(): void {
-    if (typeof window !== 'undefined' && window.scrollManager && typeof window.scrollManager.scrollTo === 'function') {
+    if (
+      typeof window !== 'undefined' &&
+      window.scrollManager &&
+      typeof window.scrollManager.scrollTo === 'function'
+    ) {
       window.scrollManager.scrollTo('footer-section');
     }
     if (this.isMenuOpened) {

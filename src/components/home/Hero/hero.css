@@ -89,7 +89,7 @@
 .home-hero-scroll-container-cross:before,
 .home-hero-scroll-container-cross:after {
   position: absolute;
-  content: "";
+  content: '';
   width: var(--cross-size);
   height: calc(0.125 * var(--cross-size));
   left: 0;

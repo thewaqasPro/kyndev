@@ -1,6 +1,6 @@
 /**
  * Hero Section Controller (Kyndev Architectural Redesign)
- * 
+ *
  * Encapsulates the 3D Balloons Physics interactions, SplitType title word animations,
  * scroll trigger indicators, and click impulses for the Hero section.
  */
@@ -22,7 +22,9 @@ export class HeroController {
     this.domVisualContainer = this.domContainer.querySelector('#home-hero-visual-container');
     this.domHomeTitle = this.domContainer.querySelector('#home-hero-title');
     this.domHomeScroll = this.domContainer.querySelector('#home-hero-scroll');
-    this.domHomeCrosses = Array.from(this.domContainer.querySelectorAll('.home-hero-scroll-container-cross'));
+    this.domHomeCrosses = Array.from(
+      this.domContainer.querySelectorAll('.home-hero-scroll-container-cross')
+    );
 
     this._bindEvents();
     this.isInitialized = true;
@@ -54,7 +56,11 @@ export class HeroController {
     if (win.homeBalloons && win.homeBalloons.changeHomeHeroColorSignal) {
       win.homeBalloons.changeHomeHeroColorSignal.dispatch();
     }
-    if (typeof window !== 'undefined' && window.audios && typeof window.audios.countPlay === 'function') {
+    if (
+      typeof window !== 'undefined' &&
+      window.audios &&
+      typeof window.audios.countPlay === 'function'
+    ) {
       window.audios.countPlay('click');
     }
   }

@@ -1,6 +1,6 @@
 /**
  * About Capability Section Controller (Kyndev Architectural Redesign)
- * 
+ *
  * Manages Area of Expertise section and card 3D transforms.
  */
 

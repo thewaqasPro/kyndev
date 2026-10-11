@@ -1,6 +1,6 @@
 /**
  * About Clients Section Controller (Kyndev Architectural Redesign)
- * 
+ *
  * Manages brand logo carousel infinite scrolling.
  */
 

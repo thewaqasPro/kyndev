@@ -123,7 +123,9 @@
   grid-column: 7 / span 6;
   margin-top: 3em;
   opacity: 0;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 6px 10px rgba(0, 0, 0, 0.04),
+    0 2px 4px rgba(0, 0, 0, 0.04);
   transition: background cubic-bezier(0.35, 0, 0, 1) 0.2s;
   will-change: transform;
 }
@@ -169,13 +171,17 @@
   background: var(--color-black, #000);
   border-radius: 100px;
   z-index: 1;
-  transition: background cubic-bezier(0.35, 0, 0, 1) 0.5s, transform cubic-bezier(0.35, 0, 0, 1) 0.4s;
+  transition:
+    background cubic-bezier(0.35, 0, 0, 1) 0.5s,
+    transform cubic-bezier(0.35, 0, 0, 1) 0.4s;
 }
 
 #home-reel-cta-text {
   position: relative;
   z-index: 1;
-  transition: color cubic-bezier(0.35, 0, 0, 1) 0.5s, transform cubic-bezier(0.35, 0, 0, 1) 0.4s;
+  transition:
+    color cubic-bezier(0.35, 0, 0, 1) 0.5s,
+    transform cubic-bezier(0.35, 0, 0, 1) 0.4s;
 }
 
 #home-reel-cta-arrow {
@@ -325,11 +331,26 @@
   height: var(--cross-size);
 }
 
-.home-reel-video-container-cross:nth-child(1) { left: 0; top: 0; }
-.home-reel-video-container-cross:nth-child(2) { left: calc(25% - calc(var(--cross-size) / 2)); top: 0; }
-.home-reel-video-container-cross:nth-child(3) { left: calc(50% - calc(var(--cross-size) / 2)); top: 0; }
-.home-reel-video-container-cross:nth-child(4) { left: calc(75% - calc(var(--cross-size) / 2)); top: 0; }
-.home-reel-video-container-cross:nth-child(5) { left: calc(100% - var(--cross-size)); top: 0; }
+.home-reel-video-container-cross:nth-child(1) {
+  left: 0;
+  top: 0;
+}
+.home-reel-video-container-cross:nth-child(2) {
+  left: calc(25% - calc(var(--cross-size) / 2));
+  top: 0;
+}
+.home-reel-video-container-cross:nth-child(3) {
+  left: calc(50% - calc(var(--cross-size) / 2));
+  top: 0;
+}
+.home-reel-video-container-cross:nth-child(4) {
+  left: calc(75% - calc(var(--cross-size) / 2));
+  top: 0;
+}
+.home-reel-video-container-cross:nth-child(5) {
+  left: calc(100% - var(--cross-size));
+  top: 0;
+}
 
 @media (max-width: 812px) {
   .home-reel-video-container-cross:nth-child(2),
@@ -341,7 +362,7 @@
 .home-reel-video-container-cross:before,
 .home-reel-video-container-cross:after {
   position: absolute;
-  content: "";
+  content: '';
   left: 0;
   background: var(--color-black, #000);
 }

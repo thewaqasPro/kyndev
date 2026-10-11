@@ -1,6 +1,6 @@
 /**
  * Project Details Controller (Kyndev Architectural Redesign)
- * 
+ *
  * Coordinates case study media items, scroll-to-explore triggers, and next project transitions.
  */
 
@@ -16,7 +16,9 @@ export class ProjectDetailsController {
     this.domContainer = document.getElementById('project-details');
     if (!this.domContainer) return;
 
-    this.domItems = Array.from(this.domContainer.querySelectorAll<HTMLElement>('.project-details-item'));
+    this.domItems = Array.from(
+      this.domContainer.querySelectorAll<HTMLElement>('.project-details-item')
+    );
     this.domPreview = this.domContainer.querySelector('#project-details-preview');
 
     this._bindEvents();

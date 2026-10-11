@@ -39,7 +39,7 @@
 .about-cross:before,
 .about-cross:after {
   position: absolute;
-  content: "";
+  content: '';
   width: var(--cross-size);
   height: calc(0.125 * var(--cross-size));
   margin-left: calc(var(--cross-size) / -2);
@@ -351,8 +351,7 @@
     bottom: 0;
     width: 100%;
     height: calc(
-      100% - (100vw * 56 / 331) - var(--header-size) * 3.1 -
-        var(--base-padding-y) - 1.5em
+      100% - (100vw * 56 / 331) - var(--header-size) * 3.1 - var(--base-padding-y) - 1.5em
     );
   }
 }

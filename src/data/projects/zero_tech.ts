@@ -2,147 +2,142 @@
 import type { ProjectData } from './types';
 
 export const zero_tech: ProjectData = {
-  "slug": "zero_tech",
-  "title": "Zero Tech",
-  "tags": "web • design • development • 3d",
-  "theme": {
-    "style": "background-color:#192743",
-    "shadow": "0.9",
-    "colorBg": "#192743",
-    "colorHighlight": "#15E2FE",
-    "colorBtnBg": "#ffffff",
-    "colorBtnText": "#192743",
-    "colorIconBg": "#ffffff",
-    "colorIconColor": "#192743",
-    "colorText": "#ffffff",
-    "colorBtnBgHover": "#15E2FE",
-    "colorBtnTextHover": "#192743"
+  slug: 'zero_tech',
+  title: 'Zero Tech',
+  tags: 'web • design • development • 3d',
+  theme: {
+    style: 'background-color:#192743',
+    shadow: '0.9',
+    colorBg: '#192743',
+    colorHighlight: '#15E2FE',
+    colorBtnBg: '#ffffff',
+    colorBtnText: '#192743',
+    colorIconBg: '#ffffff',
+    colorIconColor: '#192743',
+    colorText: '#ffffff',
+    colorBtnBgHover: '#15E2FE',
+    colorBtnTextHover: '#192743',
   },
-  "descHtml": "<p>Zero approached us to design an engaging interactive website for Zero.Tech. With a focus on captivating and informing their tech-savvy audience, we seamlessly merged realtime 3D visuals and scroll navigation.</p><p>This created an immersive, visually stunning platform that effectively communicated Zero's innovation and solidified their position as a technology leader.</p>",
-  "launchUrl": "https://client-zero-tech.lusion.co/",
-  "launchLabel": "Launch Project",
-  "services": [
-    "Concept",
-    "Web Design",
-    "Web Development",
-    "3D Design",
-    "WebGL"
+  descHtml:
+    "<p>Zero approached us to design an engaging interactive website for Zero.Tech. With a focus on captivating and informing their tech-savvy audience, we seamlessly merged realtime 3D visuals and scroll navigation.</p><p>This created an immersive, visually stunning platform that effectively communicated Zero's innovation and solidified their position as a technology leader.</p>",
+  launchUrl: 'https://client-zero-tech.lusion.co/',
+  launchLabel: 'Launch Project',
+  services: ['Concept', 'Web Design', 'Web Development', '3D Design', 'WebGL'],
+  links: [
+    {
+      url: 'https://thefwa.com/cases/zero-tech',
+      label: 'FWA SOTD',
+    },
+    {
+      url: 'https://www.awwwards.com/sites/zero-tech',
+      label: 'Awwwards SOTD',
+    },
   ],
-  "links": [
+  items: [
     {
-      "url": "https://thefwa.com/cases/zero-tech",
-      "label": "FWA SOTD"
+      filename: '/assets/projects/zero_tech/image1',
+      type: 'image',
+      width: 1870,
+      height: 1140,
+      fullscreen: false,
     },
     {
-      "url": "https://www.awwwards.com/sites/zero-tech",
-      "label": "Awwwards SOTD"
-    }
+      filename: '/assets/projects/zero_tech/image2',
+      type: 'image',
+      width: 2160,
+      height: 1620,
+      fullscreen: true,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image3',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image4',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image5',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image6',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image7',
+      type: 'image',
+      width: 2790,
+      height: 1620,
+      fullscreen: true,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image8',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image9',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image10',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image11',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image12',
+      type: 'image',
+      width: 2502,
+      height: 1620,
+      fullscreen: true,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image13',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
+    {
+      filename: '/assets/projects/zero_tech/image14',
+      type: 'image',
+      width: 2026,
+      height: 1140,
+      fullscreen: false,
+    },
   ],
-  "items": [
-    {
-      "filename": "/assets/projects/zero_tech/image1",
-      "type": "image",
-      "width": 1870,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image2",
-      "type": "image",
-      "width": 2160,
-      "height": 1620,
-      "fullscreen": true
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image3",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image4",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image5",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image6",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image7",
-      "type": "image",
-      "width": 2790,
-      "height": 1620,
-      "fullscreen": true
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image8",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image9",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image10",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image11",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image12",
-      "type": "image",
-      "width": 2502,
-      "height": 1620,
-      "fullscreen": true
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image13",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    },
-    {
-      "filename": "/assets/projects/zero_tech/image14",
-      "type": "image",
-      "width": 2026,
-      "height": 1140,
-      "fullscreen": false
-    }
-  ],
-  "nextProject": {
-    "id": "spatial_fusion",
-    "title": "Meta: Spatial Fusion",
-    "colorBg": "#D6C8ED",
-    "colorText": "#000000",
-    "shadow": "0.95"
-  }
+  nextProject: {
+    id: 'spatial_fusion',
+    title: 'Meta: Spatial Fusion',
+    colorBg: '#D6C8ED',
+    colorText: '#000000',
+    shadow: '0.95',
+  },
 };

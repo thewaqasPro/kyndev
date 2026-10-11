@@ -9,14 +9,7 @@ interface Props {
   links: Array<{ label: string; url: string }>;
 }
 
-const {
-  title,
-  descHtml,
-  launchUrl,
-  launchLabel = 'Launch Project',
-  services,
-  links
-} = Astro.props;
+const { title, descHtml, launchUrl, launchLabel = 'Launch Project', services, links } = Astro.props;
 ---
 
 <div id="project-details-meta">
@@ -28,8 +21,19 @@ const {
         <span id="project-details-launch-cta-dot"></span>
         <p id="project-details-launch-cta-text">{launchLabel}</p>
         <span id="project-details-launch-cta-arrow">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M9 9h6m0 0v6m0-6-6 6"></path>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="1.5"
+              d="M9 9h6m0 0v6m0-6-6 6"
+            ></path>
           </svg>
         </span>
       </a>
@@ -57,12 +61,28 @@ const {
       )}
     </div>
     {launchUrl && (
-      <a id="project-details-launch-cta-mobile" href={launchUrl} target="_blank" data-link-type="regular">
+      <a
+        id="project-details-launch-cta-mobile"
+        href={launchUrl}
+        target="_blank"
+        data-link-type="regular"
+      >
         <span id="project-details-launch-cta-mobile-dot"></span>
         <p id="project-details-launch-cta-mobile-text">{launchLabel}</p>
         <span id="project-details-launch-cta-mobile-arrow">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M9 9h6m0 0v6m0-6-6 6"></path>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="1.5"
+              d="M9 9h6m0 0v6m0-6-6 6"
+            ></path>
           </svg>
         </span>
       </a>

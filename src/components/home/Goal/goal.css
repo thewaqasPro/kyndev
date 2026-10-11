@@ -10,7 +10,7 @@ html.is-black-bg #home-goal {
 }
 
 #home-goal:after {
-  content: "";
+  content: '';
   clear: both;
   display: block;
 }

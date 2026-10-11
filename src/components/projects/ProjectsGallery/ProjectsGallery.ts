@@ -1,6 +1,6 @@
 /**
  * Projects Gallery Controller (Kyndev Architectural Redesign)
- * 
+ *
  * Manages project card hover states, audio triggers, and 2.5D displacement mesh updates.
  */
 
@@ -29,7 +29,11 @@ export class ProjectsGalleryController {
   }
 
   private _playHoverAudio(): void {
-    if (typeof window !== 'undefined' && window.audios && typeof window.audios.play === 'function') {
+    if (
+      typeof window !== 'undefined' &&
+      window.audios &&
+      typeof window.audios.play === 'function'
+    ) {
       window.audios.play('hover');
     }
   }

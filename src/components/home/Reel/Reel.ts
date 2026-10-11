@@ -1,6 +1,6 @@
 /**
  * Reel Section Controller (Kyndev Architectural Redesign)
- * 
+ *
  * Encapsulates the Showreel Section interactions, including the interactive
  * Play Reel / Watch button, ticker animations, hover states, audio sound effects,
  * and Vimeo modal trigger bridge.
@@ -42,7 +42,11 @@ export class ReelController {
 
       this.domWatchBtn.addEventListener('mouseenter', () => {
         this._setHoverState(true);
-        if (typeof window !== 'undefined' && window.audios && typeof window.audios.countPlay === 'function') {
+        if (
+          typeof window !== 'undefined' &&
+          window.audios &&
+          typeof window.audios.countPlay === 'function'
+        ) {
           window.audios.countPlay('hover');
         }
       });
@@ -74,7 +78,11 @@ export class ReelController {
    * Opens the main showreel Vimeo video overlay
    */
   public openReelVideo(): void {
-    if (typeof window !== 'undefined' && window.audios && typeof window.audios.countPlay === 'function') {
+    if (
+      typeof window !== 'undefined' &&
+      window.audios &&
+      typeof window.audios.countPlay === 'function'
+    ) {
       window.audios.countPlay('click');
     }
 
@@ -82,7 +90,10 @@ export class ReelController {
     if (win.videoOverlay && typeof win.videoOverlay.initAndPlayVideo === 'function') {
       // 761102167 is VIDEO_LIST.MAIN_VIDEO_REEL
       win.videoOverlay.initAndPlayVideo(761102167);
-    } else if (win.homeReelSection && typeof win.homeReelSection._onDomVideoButtonClick === 'function') {
+    } else if (
+      win.homeReelSection &&
+      typeof win.homeReelSection._onDomVideoButtonClick === 'function'
+    ) {
       win.homeReelSection._onDomVideoButtonClick();
     }
   }

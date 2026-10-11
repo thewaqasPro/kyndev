@@ -12,11 +12,11 @@ interface Props {
 }
 
 const {
-  titleLine1 = "Bold Ideas,",
-  titleLine2 = "Brought to Life",
-  description = "We combine design, motion, 3D, and development to create digital experiences that feel visually striking and technically seamless. From campaign launches to immersive brand worlds, we build work that captures attention and invites interaction.",
-  ctaText = "Our Approach",
-  ctaLink = "/about"
+  titleLine1 = 'Bold Ideas,',
+  titleLine2 = 'Brought to Life',
+  description = 'We combine design, motion, 3D, and development to create digital experiences that feel visually striking and technically seamless. From campaign launches to immersive brand worlds, we build work that captures attention and invites interaction.',
+  ctaText = 'Our Approach',
+  ctaLink = '/about',
 } = Astro.props;
 ---
 
@@ -34,8 +34,20 @@ const {
       <span id="home-reel-cta-dot"></span>
       <span id="home-reel-cta-text">{ctaText}</span>
       <span id="home-reel-cta-arrow">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16">
-          <path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.343 8h11.314m0 0L8.673 3.016M13.657 8l-4.984 4.984"></path>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="none"
+          viewBox="0 0 16 16"
+        >
+          <path
+            stroke="#fff"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M2.343 8h11.314m0 0L8.673 3.016M13.657 8l-4.984 4.984"
+          ></path>
         </svg>
       </span>
     </a>
@@ -57,8 +69,18 @@ const {
         <button id="home-reel-video-watch-btn" aria-label="Watch reel button" type="button">
           <div id="home-reel-video-watch-btn-base"></div>
           <div id="home-reel-video-watch-btn-background"></div>
-          <svg id="home-reel-video-watch-btn-svg" xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="none" viewBox="0 0 36 36">
-            <path fill="currentColor" d="M7 7.29c0-1.5 1.59-2.466 2.92-1.776l20.656 10.71c1.439.747 1.439 2.805 0 3.552L9.92 30.486C8.589 31.176 7 30.21 7 28.71V7.29Z"></path>
+          <svg
+            id="home-reel-video-watch-btn-svg"
+            xmlns="http://www.w3.org/2000/svg"
+            width="36"
+            height="36"
+            fill="none"
+            viewBox="0 0 36 36"
+          >
+            <path
+              fill="currentColor"
+              d="M7 7.29c0-1.5 1.59-2.466 2.92-1.776l20.656 10.71c1.439.747 1.439 2.805 0 3.552L9.92 30.486C8.589 31.176 7 30.21 7 28.71V7.29Z"
+            ></path>
           </svg>
         </button>
       </div>
