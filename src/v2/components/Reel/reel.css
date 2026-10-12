@@ -1,0 +1,378 @@
+/* Scoped CSS for Kyndev V2 Reel Component */
+
+.v2-reel-root {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  background: radial-gradient(circle at 50% 25%, #151821 0%, #0b0c0e 75%);
+  padding: 4rem 3rem 6rem;
+  box-sizing: border-box;
+  color: #ffffff;
+  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  overflow: hidden;
+}
+
+.reel-inner-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+/* Header Section */
+.reel-header-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 3rem;
+  align-items: flex-start;
+}
+
+.reel-badge-tag {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  margin-bottom: 1.25rem;
+}
+
+.reel-title {
+  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.reel-title-accent {
+  background: linear-gradient(135deg, #ffffff 40%, rgba(255, 255, 255, 0.4) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.reel-description-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1.75rem;
+}
+
+.reel-description {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+}
+
+.reel-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  width: fit-content;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding-bottom: 0.35rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reel-cta-link:hover {
+  border-color: #38bdf8;
+  color: #38bdf8;
+  transform: translateX(4px);
+}
+
+.reel-cta-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #061dfb;
+}
+
+/* Video Stage Card */
+.reel-stage-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 640px;
+  background: #0e1117;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  box-shadow: 0 35px 80px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Background Poster Image / Grid */
+.reel-poster-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(6, 29, 251, 0.15) 0%, rgba(11, 12, 14, 0.95) 75%),
+              repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.015) 0, rgba(255, 255, 255, 0.015) 1px, transparent 0, transparent 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Filmstrip Ticker Strips */
+.reel-strip-top,
+.reel-strip-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 36px;
+  background: rgba(18, 20, 26, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.08em;
+  z-index: 2;
+}
+
+.reel-strip-top {
+  top: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.reel-strip-bottom {
+  bottom: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.reel-strip-telemetry {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.reel-strip-val {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+/* Interactive Play Reel Button */
+.reel-watch-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  z-index: 3;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reel-watch-btn:hover {
+  transform: scale(1.06);
+}
+
+.reel-btn-orb {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.08);
+  transition: all 0.3s;
+}
+
+.reel-watch-btn:hover .reel-btn-orb {
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 16px 45px rgba(255, 255, 255, 0.35);
+}
+
+.reel-btn-ripple {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  animation: reelSpin 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes reelSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.reel-play-icon {
+  width: 28px;
+  height: 28px;
+  fill: #ffffff;
+  margin-left: 4px;
+  transition: fill 0.2s;
+}
+
+.reel-watch-btn:hover .reel-play-icon {
+  fill: #0b0c0e;
+}
+
+/* Cross Grid Matrix & Running Marquee Tickers */
+.reel-cross-grid {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 5;
+}
+
+.reel-cross {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #38bdf8;
+  display: inline-block;
+  will-change: transform;
+  transform-origin: center center;
+}
+
+.reel-ticker-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  flex: 1;
+  margin: 0 1.5rem;
+  opacity: 0.65;
+  mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.reel-ticker-inner {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: #ffffff;
+  will-change: transform;
+}
+
+/* 3D Kinetic Split Typography */
+.reel-word {
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 0.28em;
+  perspective: 600px;
+}
+
+.reel-char {
+  display: inline-block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+  will-change: transform;
+}
+
+.v2-reel-root.is-in-view .reel-char {
+  transform: translate3d(0, 0, 0) rotate(0deg);
+}
+
+.v2-reel-root:not(.is-in-view) .reel-char {
+  transform: translate3d(0, 0.8em, 0) rotate(12deg);
+  opacity: 0.4;
+}
+
+.reel-btn-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+/* Video Modal */
+.reel-video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 6, 8, 0.88);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reel-video-modal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.reel-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  aspect-ratio: 16 / 9;
+  background: #000000;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.reel-modal-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.reel-modal-close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.reel-modal-close-btn:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: rotate(90deg);
+}
+
+@media (max-width: 900px) {
+  .v2-reel-root {
+    padding: 3rem 1.5rem 4rem;
+  }
+  .reel-header-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .reel-strip-telemetry {
+    display: none;
+  }
+}

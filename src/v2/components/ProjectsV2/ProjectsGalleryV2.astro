@@ -1,0 +1,68 @@
+---
+import './projectsV2.css';
+import ProjectCardV2 from './ProjectCardV2.astro';
+import { projectsList } from '../../../data/projectsData';
+
+interface Props {
+  limit?: number;
+  title?: string;
+}
+
+const { limit, title = "PROJECTS" } = Astro.props;
+const displayedProjects = limit ? projectsList.slice(0, limit) : projectsList;
+---
+
+<section class="v2-projects-section">
+  <div class="v2-projects-header">
+    <div class="v2-projects-title-wrapper">
+      <h2 class="v2-projects-title">{title}</h2>
+      <span class="v2-projects-count">{displayedProjects.length}</span>
+    </div>
+    <div class="v2-projects-meta">
+      <span class="v2-projects-badge">2.5D Displacement &bull; Internal Parallax &bull; Scroll Scale</span>
+      <svg class="v2-projects-arrow-svg" viewBox="0 0 38 38" fill="none">
+        <path
+          d="m2 2 34 34m0 0V6.046M36 36H6.046"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2.5"
+        ></path>
+      </svg>
+    </div>
+  </div>
+
+  <div class="v2-projects-grid">
+    {displayedProjects.map((project) => (
+      <ProjectCardV2
+        slug={project.slug}
+        title={project.title}
+        tags={project.tags}
+        colorBg={project.theme?.colorBg}
+        colorText={project.theme?.colorText}
+        colorShadow={project.theme?.shadow}
+      />
+    ))}
+  </div>
+</section>
+
+<script>
+  import { ProjectCardControllerV2 } from './CardControllerV2';
+
+  function initProjectsGalleryV2() {
+    const cards = document.querySelectorAll<HTMLElement>('.v2-project-card-v2');
+    cards.forEach((card, index) => {
+      // Prevent double initialization
+      if ((card as any).__v2Controller) return;
+      const controller = new ProjectCardControllerV2(card, index);
+      (card as any).__v2Controller = controller;
+      controller.init();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProjectsGalleryV2);
+  } else {
+    initProjectsGalleryV2();
+  }
+</script>

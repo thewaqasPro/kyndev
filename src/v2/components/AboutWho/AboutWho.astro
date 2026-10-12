@@ -1,0 +1,105 @@
+---
+import './aboutWho.css';
+import { TEAM_MEMBERS } from './AboutWhoController';
+
+interface Props {
+  initialMember?: number;
+}
+
+const { initialMember = 0 } = Astro.props;
+const firstMember = TEAM_MEMBERS[initialMember] || TEAM_MEMBERS[0];
+---
+
+<section class="v2-who-root" id="v2-who-root" data-initial-member={initialMember}>
+  <div class="who-inner-wrapper">
+    <!-- Cross Grid Strip -->
+    <div class="who-cross-strip">
+      <span>+</span>
+      <span>+</span>
+      <span>+</span>
+      <span>+</span>
+      <span>+</span>
+    </div>
+
+    <!-- Hero Typography Section -->
+    <div class="who-hero-section">
+      <span class="who-badge-pill">Agency Profile // Kyndev Studio</span>
+      <h2 class="who-headline-main">
+        WE ARE KYNDEV &mdash;
+        <span class="who-headline-accent">A CREATIVE PRODUCTION STUDIO CRAFTING UNIQUE DIGITAL EXPERIENCES</span>
+      </h2>
+    </div>
+
+    <!-- Statement Callout -->
+    <div class="who-statement-banner">
+      <p class="who-statement-text">
+        <em>A worldwide team</em> of specialists in design, motion, 3D, and technology working together to turn ambitious ideas into immersive digital experiences.
+      </p>
+    </div>
+
+    <!-- Team Showcase Section -->
+    <div class="who-team-section">
+      <div class="who-team-header">
+        <span class="who-team-title">Key Leadership &bull; Interactive Team Index</span>
+        <span class="who-team-title">[ 06 CORE PRACTICES ]</span>
+      </div>
+
+      <!-- Active Team Member Card -->
+      <div class="who-team-card">
+        <div class="who-team-col-left">
+          <div class="who-team-number-indicator">
+            [[ <span class="who-team-num-val">{firstMember.num}</span> ]]
+          </div>
+          <h3 class="who-team-member-name">{firstMember.name}</h3>
+          <p class="who-team-member-role">{firstMember.role}</p>
+          <p class="who-team-member-bio">{firstMember.bio}</p>
+        </div>
+
+        <div class="who-team-col-right">
+          <span class="who-team-member-loc">{firstMember.location}</span>
+
+          <div class="who-team-nav-group">
+            <button class="who-team-btn who-team-prev-btn" type="button" aria-label="Previous team member">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <button class="who-team-btn who-team-next-btn" type="button" aria-label="Next team member">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="who-progress-track">
+            <div class="who-progress-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Telemetry -->
+    <div class="who-footer-telemetry">
+      <div>LOCATIONS: <span class="who-footer-highlight">LONDON &bull; ZURICH &bull; TOKYO &bull; BERLIN</span></div>
+      <div>DISCIPLINES: <span class="who-footer-highlight">DESIGN &bull; MOTION &bull; 3D &bull; CODE</span></div>
+      <div>COLLABORATION: <span class="who-footer-highlight">DIRECT &bull; EMBEDDED &bull; AGILE</span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { AboutWhoController } from './AboutWhoController';
+
+  function initV2Who() {
+    const root = document.getElementById('v2-who-root');
+    if (!root) return;
+    const controller = new AboutWhoController();
+    controller.init(root);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initV2Who);
+  } else {
+    initV2Who();
+  }
+</script>

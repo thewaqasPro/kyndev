@@ -1,0 +1,136 @@
+---
+import './aboutAwards.css';
+
+interface AwardItem {
+  org: string;
+  count: string;
+  title: string;
+}
+
+interface AwardCategory {
+  id: string;
+  name: string;
+  tally: string;
+  items: AwardItem[];
+}
+
+const categories: AwardCategory[] = [
+  {
+    id: 'awwwards',
+    name: 'Awwwards',
+    tally: '29 HONORS',
+    items: [
+      { org: 'Awwwards', count: '001', title: 'Site of the Year' },
+      { org: 'Awwwards', count: '001', title: 'Developer Site of the Year' },
+      { org: 'Awwwards', count: '001', title: 'Site of the Month' },
+      { org: 'Awwwards', count: '010', title: 'Site of the Day' },
+      { org: 'Awwwards', count: '016', title: 'Honorable Mention' },
+    ],
+  },
+  {
+    id: 'fwa',
+    name: 'Favourite Website Awards (FWA)',
+    tally: '20 HONORS',
+    items: [
+      { org: 'FWA', count: '001', title: 'Site of the Year' },
+      { org: 'FWA', count: '002', title: 'Site of the Month' },
+      { org: 'FWA', count: '017', title: 'Site of the Day' },
+    ],
+  },
+  {
+    id: 'cssda',
+    name: 'CSS Design Awards (CSSDA)',
+    tally: '02 HONORS',
+    items: [
+      { org: 'CSSDA', count: '001', title: 'Site of the Year' },
+      { org: 'CSSDA', count: '001', title: 'Agency Site of the Year' },
+    ],
+  },
+  {
+    id: 'webby',
+    name: 'The Webby Awards',
+    tally: '02 HONORS',
+    items: [
+      { org: 'Webby', count: '002', title: 'Webby Winner' },
+    ],
+  },
+];
+---
+
+<section class="v2-awards-root" id="v2-awards-root">
+  <div class="awards-inner-wrapper">
+    <!-- Header Row -->
+    <div class="awards-header-row">
+      <div>
+        <span class="awards-badge-pill">Recognition &bull; Industry Accolades</span>
+        <h2 class="awards-headline">AWARDS & RECOGNITION</h2>
+      </div>
+
+      <!-- Starburst Medal Widget -->
+      <div class="awards-medal-box">
+        <div class="awards-medal-3d-wrap" id="awards-medal-3d-wrap">
+          <!-- 3D WebGL Starburst Canvas automatically mounts here -->
+        </div>
+        <div>
+          <div class="awards-total-number">58</div>
+          <div class="awards-total-label">Total Awards</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Strip -->
+    <div class="awards-filter-strip">
+      <button class="awards-filter-pill is-active" data-cat="all">All Honors (58)</button>
+      <button class="awards-filter-pill" data-cat="awwwards">Awwwards (29)</button>
+      <button class="awards-filter-pill" data-cat="fwa">FWA (20)</button>
+      <button class="awards-filter-pill" data-cat="cssda">CSSDA (02)</button>
+      <button class="awards-filter-pill" data-cat="webby">The Webby Awards (02)</button>
+    </div>
+
+    <!-- Category Grid -->
+    <div class="awards-grid-container">
+      {categories.map((cat) => (
+        <div class="awards-category-card" data-cat={cat.id}>
+          <div class="awards-category-header">
+            <h3 class="awards-category-title">{cat.name}</h3>
+            <span class="awards-category-tally">{cat.tally}</span>
+          </div>
+
+          <div class="awards-item-list">
+            {cat.items.map((item) => (
+              <div class="awards-item-row">
+                <span class="awards-org-label">{item.org}</span>
+                <span class="awards-count-number">{item.count}</span>
+                <span class="awards-item-name">{item.title}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Footer Telemetry -->
+    <div class="awards-footer-telemetry">
+      <div>AWARDS SOTY: <span class="awards-footer-highlight">AWWWARDS &bull; FWA &bull; CSSDA</span></div>
+      <div>INDUSTRY RANK: <span class="awards-footer-highlight">GLOBAL TOP 1% PRODUCTION</span></div>
+      <div>VERIFICATION: <span class="awards-footer-highlight">OFFICIAL JURY CERTIFIED</span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { AboutAwardsController } from './AboutAwardsController';
+
+  function initV2Awards() {
+    const root = document.getElementById('v2-awards-root');
+    if (!root) return;
+    const controller = new AboutAwardsController();
+    controller.init(root);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initV2Awards);
+  } else {
+    initV2Awards();
+  }
+</script>

@@ -1,0 +1,334 @@
+/* Scoped CSS for Kyndev V2 ProductViewer */
+
+.product-viewer-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  background: radial-gradient(circle at 50% 35%, #181c24 0%, #0b0c0e 75%);
+  overflow: hidden;
+  user-select: none;
+  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  color: #ffffff;
+}
+
+.product-viewer-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+
+.product-viewer-canvas:active {
+  cursor: grabbing;
+}
+
+/* Floating HUD */
+.viewer-hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem 1.75rem;
+  box-sizing: border-box;
+}
+
+/* Top Bar */
+.hud-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  pointer-events: auto;
+}
+
+.product-info-panel {
+  background: rgba(18, 20, 26, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.2rem 1.5rem;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  max-width: 440px;
+}
+
+.product-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.inspection-pill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+}
+
+.case-study-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.product-title {
+  margin: 0.2rem 0 0.4rem;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.product-tagline {
+  margin: 0 0 0.8rem;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.4;
+}
+
+.telemetry-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.telemetry-item {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.telemetry-label {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.telemetry-val {
+  color: #a5f3fc;
+  font-weight: 600;
+}
+
+/* Render Prepass Selector */
+.prepass-mode-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(18, 20, 26, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 0.35rem;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+
+.prepass-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+  border: none;
+  padding: 0.45rem 0.85rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prepass-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.prepass-btn.is-active {
+  color: #ffffff;
+  background: #061dfb;
+  box-shadow: 0 2px 10px rgba(6, 29, 251, 0.45);
+  font-weight: 600;
+}
+
+/* Bottom Bar */
+.hud-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1.5rem;
+  pointer-events: auto;
+}
+
+/* Tool buttons */
+.hud-tool-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(18, 20, 26, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 0.35rem 0.5rem;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+
+.hud-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.45rem 0.75rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hud-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.hud-btn.is-active {
+  background: rgba(255, 255, 255, 0.16);
+  color: #38bdf8;
+}
+
+.mood-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* Preset Carousel */
+.preset-carousel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(18, 20, 26, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  padding: 0.4rem;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+}
+
+.preset-pill {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.65);
+  background: transparent;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.preset-pill:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.preset-pill.is-active {
+  color: #0b0c0e;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.25);
+  font-weight: 700;
+}
+
+/* Zoom & Help group */
+.hud-zoom-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(18, 20, 26, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 0.3rem;
+}
+
+.zoom-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.orbit-cue {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.04em;
+  background: rgba(18, 20, 26, 0.5);
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Responsive queries */
+@media (max-width: 992px) {
+  .hud-top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .product-info-panel {
+    max-width: 100%;
+  }
+  .hud-bottom-bar {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .preset-carousel {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  .hud-zoom-group {
+    display: none;
+  }
+}

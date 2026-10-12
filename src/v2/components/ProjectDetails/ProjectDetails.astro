@@ -1,0 +1,279 @@
+---
+/**
+ * Kyndev V2 - Project Details Section
+ *
+ * Standalone case study showcase featuring dual-axis inertial scrolling,
+ * dynamic project theme palette switching, high-res media cards, and next-project overscroll springs.
+ */
+import './projectDetails.css';
+import type { ProjectData, ProjectItem } from '../../../data/projects/types';
+
+interface Props {
+  project: ProjectData;
+  backHref?: string;
+}
+
+const { project, backHref = '/preview' } = Astro.props;
+const { theme, nextProject } = project;
+
+// Helper to resolve media file extensions
+function resolveMediaSrc(item: ProjectItem): string {
+  if (item.type === 'video') {
+    return item.filename.endsWith('.mp4') ? item.filename : `${item.filename}.mp4`;
+  }
+  return item.filename.endsWith('.webp') || item.filename.endsWith('.jpg') || item.filename.endsWith('.png')
+    ? item.filename
+    : `${item.filename}.webp`;
+}
+
+// Compute dynamic CSS custom properties for this project's unique palette
+const themeVars = [
+  `--pd-bg: ${theme.colorBg || '#0b0c0e'}`,
+  `--pd-highlight: ${theme.colorHighlight || '#dc5000'}`,
+  `--pd-text: ${theme.colorText || '#ffffff'}`,
+  `--pd-btn-bg: ${theme.colorBtnBg || '#ffffff'}`,
+  `--pd-btn-text: ${theme.colorBtnText || '#0b0c0e'}`,
+  `--pd-btn-hover-bg: ${theme.colorBtnBgHover || theme.colorHighlight || '#dc5000'}`,
+  `--pd-btn-hover-text: ${theme.colorBtnTextHover || '#ffffff'}`,
+  `--pd-next-text: ${nextProject?.colorText || '#ffffff'}`
+].join('; ');
+---
+
+<section id="v2-project-details" style={themeVars} data-slug={project.slug} data-next-slug={nextProject?.id}>
+  <!-- Ambient Atmospheric Spotlight -->
+  <div class="v2-pd-ambient-glow" aria-hidden="true"></div>
+
+  <!-- Floating HUD Header -->
+  <header class="v2-pd-header">
+    <a href={backHref} class="v2-pd-back-btn" aria-label="Back to project gallery">
+      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Back</span>
+    </a>
+
+    <div class="v2-pd-scroll-hint">
+      <span>Scroll to explore</span>
+      <div class="v2-pd-scroll-hint-chevrons">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- Master Horizontal Scroll Viewport -->
+  <div class="v2-pd-viewport">
+    <div class="v2-pd-track">
+      
+      <!-- 1. Left Meta Story Panel -->
+      <article class="v2-pd-meta-panel">
+        <div class="v2-pd-meta-badge">
+          <span class="v2-pd-meta-badge-dot"></span>
+          <span>{project.tags || 'Case Study'}</span>
+        </div>
+
+        <h1 class="v2-pd-title">{project.title}</h1>
+
+        <div class="v2-pd-desc" set:html={project.descHtml} />
+
+        <div class="v2-pd-cta-cluster">
+          {project.launchUrl && (
+            <a href={project.launchUrl} target="_blank" rel="noopener noreferrer" class="v2-pd-launch-cta">
+              <span>{project.launchLabel || 'Launch Project'}</span>
+              <span class="v2-pd-launch-cta-arrow">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                  <line x1="7" y1="17" x2="17" y2="7"></line>
+                  <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+              </span>
+            </a>
+          )}
+
+          <button class="v2-pd-inspect-btn" id="v2-pd-inspect-btn" aria-label="Open 3D Product Inspector">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+            <span>3D Model Inspection</span>
+          </button>
+        </div>
+
+        <!-- Taxonomy: Services & Links -->
+        <div class="v2-pd-taxonomy-grid">
+          {project.services && project.services.length > 0 && (
+            <div class="v2-pd-taxonomy-group">
+              <h2 class="v2-pd-taxonomy-group-title">Services</h2>
+              <ul class="v2-pd-taxonomy-list" style="list-style: none; padding: 0; margin: 0;">
+                {project.services.map((service) => (
+                  <li class="v2-pd-taxonomy-item">{service}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {project.links && project.links.length > 0 && (
+            <div class="v2-pd-taxonomy-group">
+              <h2 class="v2-pd-taxonomy-group-title">Recognition</h2>
+              <div class="v2-pd-taxonomy-list">
+                {project.links.map((link) => (
+                  <a href={link.url} target="_blank" rel="noopener noreferrer" class="v2-pd-taxonomy-link">
+                    <span>{link.label}</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </article>
+
+      <!-- 2. Media Gallery Items -->
+      {project.items && project.items.map((item, idx) => {
+        const aspect = (item.width && item.height) ? item.width / item.height : 1.77;
+        const baseHeight = item.fullscreen ? 720 : 620;
+        const calculatedWidth = Math.round(baseHeight * aspect);
+        const mediaSrc = resolveMediaSrc(item);
+
+        return (
+          <div
+            class={`v2-pd-media-item ${item.fullscreen ? 'is-fullscreen' : ''} is-${item.type}`}
+            style={`width: ${calculatedWidth}px;`}
+            data-index={idx}
+          >
+            <div class="v2-pd-media-inner">
+              {item.type === 'video' ? (
+                <>
+                  <div class="v2-pd-video-badge">
+                    <span>4K MOTION</span>
+                  </div>
+                  <video
+                    src={mediaSrc}
+                    class="v2-pd-media-asset"
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                  />
+                  <button class="v2-pd-video-play-btn" aria-label="Toggle video playback">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </button>
+                </>
+              ) : (
+                <img
+                  src={mediaSrc}
+                  alt={`${project.title} gallery asset ${idx + 1}`}
+                  class="v2-pd-media-asset"
+                  loading={idx < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              )}
+            </div>
+          </div>
+        );
+      })}
+
+      <!-- 3. Next Project Teaser & Overscroll Meter -->
+      {nextProject && (
+        <aside
+          class="v2-pd-next-section"
+          data-next-id={nextProject.id}
+          style={`--pd-next-highlight: ${nextProject.colorBg};`}
+        >
+          <div class="v2-pd-next-badge">Next Case Study</div>
+          <h2 class="v2-pd-next-title">{nextProject.title}</h2>
+
+          <div class="v2-pd-next-overscroll-meter">
+            <div class="v2-pd-meter-labels">
+              <span>Hold / Scroll to open</span>
+              <span class="v2-pd-meter-target">NEXT</span>
+            </div>
+            <div class="v2-pd-meter-track">
+              <div class="v2-pd-meter-fill"></div>
+            </div>
+          </div>
+
+          <div class="v2-pd-next-arrow-btn">
+            <span>Explore Next</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </div>
+        </aside>
+      )}
+
+    </div>
+  </div>
+
+  <!-- Bottom Telemetry HUD -->
+  <footer class="v2-pd-bottom-hud">
+    <div class="v2-pd-hud-track-progress">
+      <div class="v2-pd-hud-bar">
+        <div class="v2-pd-hud-bar-inner"></div>
+      </div>
+      <span class="v2-pd-hud-progress-text">0%</span>
+    </div>
+
+    <div class="v2-pd-hud-telemetry">
+      <span>KYNDEV ARCHIVE • {project.slug}</span>
+    </div>
+  </footer>
+
+  <!-- 3D Product Inspection Modal -->
+  <div class="v2-pd-3d-modal" id="v2-pd-3d-modal" aria-hidden="true">
+    <div class="v2-pd-3d-modal-backdrop" id="v2-pd-3d-modal-backdrop"></div>
+    <div class="v2-pd-3d-modal-card">
+      <div class="v2-pd-3d-modal-header">
+        <div class="v2-pd-3d-modal-title">
+          <span class="v2-pd-3d-badge">PBR 3D INSPECTOR</span>
+          <span>{project.title} &bull; Spatial Artifact</span>
+        </div>
+        <button class="v2-pd-3d-modal-close" id="v2-pd-3d-modal-close" aria-label="Close 3D viewer">&times;</button>
+      </div>
+      <div class="v2-pd-3d-viewer-viewport" id="v2-pd-3d-viewer-viewport"></div>
+      <div class="v2-pd-3d-modal-footer">
+        <span>Click &amp; Drag to Orbit &bull; PBR Metalness 0.85 &bull; Three.js GPU</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { ProjectDetailsController } from './ProjectDetailsController';
+
+  function initV2ProjectDetails() {
+    const root = document.getElementById('v2-project-details');
+    if (!root) return;
+
+    const nextSlug = root.dataset.nextSlug || '';
+    const controller = new ProjectDetailsController({
+      nextSlug,
+      onNextProject: (slug) => {
+        // In preview mode, allow navigating to preview route or project slug
+        if (window.location.pathname.startsWith('/preview')) {
+          window.location.href = `/preview/project-details?slug=${slug}`;
+        } else {
+          window.location.href = `/projects/${slug}`;
+        }
+      }
+    });
+
+    controller.init(root);
+
+    // Clean up when Astro page unmounts
+    document.addEventListener('astro:before-swap', () => controller.destroy(), { once: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initV2ProjectDetails);
+  } else {
+    initV2ProjectDetails();
+  }
+</script>

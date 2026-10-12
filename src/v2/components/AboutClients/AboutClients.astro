@@ -1,0 +1,98 @@
+---
+import './aboutClients.css';
+
+const row1 = [
+  { src: '/assets/images/logo/@logo--cocacola.svg', alt: 'Coca Cola' },
+  { src: '/assets/images/logo/@logo--maxmara.svg', alt: 'Max Mara' },
+  { src: '/assets/images/logo/@logo--calvin-klein.svg', alt: 'Calvin Klein' },
+  { src: '/assets/images/logo/@logo--porsche.svg', alt: 'Porsche' },
+  { src: '/assets/images/logo/@logo--wallpaper.svg', alt: 'Wallpaper' },
+];
+
+const row2 = [
+  { src: '/assets/images/logo/@logo--hyundai.svg', alt: 'Hyundai' },
+  { src: '/assets/images/logo/@logo--google.svg', alt: 'Google' },
+  { src: '/assets/images/logo/@logo--apple.svg', alt: 'Apple' },
+  { src: '/assets/images/logo/@logo--webby-awards.svg', alt: 'Webby Awards' },
+  { src: '/assets/images/logo/@logo--stanford.svg', alt: 'Stanford' },
+  { src: '/assets/images/logo/@logo--sony.svg', alt: 'Sony' },
+];
+
+const row3 = [
+  { src: '/assets/images/logo/@logo--awwwards.svg', alt: 'Awwwards' },
+  { src: '/assets/images/logo/@logo--nvidia.svg', alt: 'Nvidia' },
+  { src: '/assets/images/logo/@logo--akqa.svg', alt: 'AKQA' },
+  { src: '/assets/images/logo/@logo--nexus-studios.svg', alt: 'Nexus Studios' },
+  { src: '/assets/images/logo/@logo--cocacola.svg', alt: 'Coca Cola' },
+];
+---
+
+<section class="v2-clients-root" id="v2-clients-root">
+  <div class="clients-inner-wrapper">
+    <!-- Header Row -->
+    <div class="clients-header-row">
+      <div>
+        <span class="clients-badge-pill">Global Relationships &bull; Industry Trust</span>
+        <h2 class="clients-headline">BRANDS WE WORK WITH</h2>
+      </div>
+
+      <div class="clients-desc">
+        Trusted by global brands, cultural institutions, and forward thinking teams.
+      </div>
+    </div>
+
+    <!-- Marquee Stage -->
+    <div class="clients-marquee-stage">
+      <!-- Row 1: Leftward -->
+      <div class="clients-marquee-row">
+        <div class="clients-marquee-track marquee-left">
+          {[...row1, ...row1, ...row1, ...row1].map((logo) => (
+            <img src={logo.src} alt={logo.alt} class="clients-logo-item" loading="lazy" />
+          ))}
+        </div>
+      </div>
+
+      <!-- Row 2: Rightward -->
+      <div class="clients-marquee-row">
+        <div class="clients-marquee-track marquee-right">
+          {[...row2, ...row2, ...row2, ...row2].map((logo) => (
+            <img src={logo.src} alt={logo.alt} class="clients-logo-item" loading="lazy" />
+          ))}
+        </div>
+      </div>
+
+      <!-- Row 3: Leftward (Fast) -->
+      <div class="clients-marquee-row">
+        <div class="clients-marquee-track marquee-fast">
+          {[...row3, ...row3, ...row3, ...row3].map((logo) => (
+            <img src={logo.src} alt={logo.alt} class="clients-logo-item" loading="lazy" />
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Telemetry -->
+    <div class="clients-footer-telemetry">
+      <div>ENTERPRISE NETWORK: <span class="clients-footer-highlight">40+ PARTNERS</span></div>
+      <div>GEOGRAPHY: <span class="clients-footer-highlight">14 COUNTRIES WORLDWIDE</span></div>
+      <div>COLLABORATION: <span class="clients-footer-highlight">LONG-TERM STRATEGIC</span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { AboutClientsController } from './AboutClientsController';
+
+  function initV2Clients() {
+    const root = document.getElementById('v2-clients-root');
+    if (!root) return;
+    const controller = new AboutClientsController();
+    controller.init(root);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initV2Clients);
+  } else {
+    initV2Clients();
+  }
+</script>

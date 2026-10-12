@@ -1,0 +1,164 @@
+---
+import './aboutCapability.css';
+
+interface CapabilityPillar {
+  title: string;
+  letter: string;
+  items: string[];
+  manifesto: string;
+  tags: string[];
+}
+
+const pillars: CapabilityPillar[] = [
+  {
+    title: 'Strategy',
+    letter: 's',
+    items: [
+      'Digital Experience Strategy',
+      'Technology Architecture',
+      'Creative Direction',
+      'Discovery & Research',
+      'Brand Narrative',
+    ],
+    manifesto:
+      'Designing intentional digital architectures before writing code. We align commercial ambitions with bespoke technical execution.',
+    tags: ['Architecture', 'Discovery', 'Creative Direction', 'Roadmaps'],
+  },
+  {
+    title: 'Creative',
+    letter: 'c',
+    items: [
+      'Art Direction',
+      'UX / UI Design Systems',
+      'Motion Choreography',
+      'Interactive Spatial Design',
+      'Bespoke Illustration',
+    ],
+    manifesto:
+      'Visuals that evoke wonder and invite interaction. Curated palettes, modern typography, and fluid micro-interactions.',
+    tags: ['Art Direction', 'UI / UX', 'Motion', 'Kinetic Type'],
+  },
+  {
+    title: 'Technology',
+    letter: 't',
+    items: [
+      'WebGL & GLSL Shaders',
+      'High-Performance Frontend',
+      'Three.js GPU Pipelines',
+      'Interactive Installations',
+      'AR & Spatial Experiences',
+    ],
+    manifesto:
+      'Engineering 60fps web experiences with GPU acceleration, custom binary mesh loaders, and zero unnecessary bloat.',
+    tags: ['Three.js', 'WebGL', 'TypeScript', 'GLSL Compute'],
+  },
+  {
+    title: 'Production',
+    letter: 'P',
+    items: [
+      'Procedural 3D Modeling',
+      'High-Density Asset Creation',
+      'Geometry Optimization (.buf)',
+      'Physics Simulations',
+      'End-to-End Pipeline',
+    ],
+    manifesto:
+      'Bridging high-polygon studio pipelines with instant browser execution using proprietary binary mesh compression.',
+    tags: ['Blender', 'Houdini', 'BufLoader', 'Rigid Body'],
+  },
+];
+---
+
+<section class="v2-capability-root" id="v2-capability-root">
+  <div class="capability-inner-wrapper">
+    <!-- Header Row -->
+    <div class="capability-header-row">
+      <div>
+        <span class="capability-badge-pill">Core Practices &bull; End-to-End Scope</span>
+        <h2 class="capability-headline">AREA OF EXPERTISE</h2>
+        <div class="capability-glyphs-row">
+          <span class="capability-glyph-pill">s</span>
+          <span class="capability-glyph-pill">c</span>
+          <span class="capability-glyph-pill">t</span>
+          <span class="capability-glyph-pill">p</span>
+        </div>
+      </div>
+
+      <div class="capability-desc">
+        Multidisciplinary expertise across strategy, creative, technology, and production.
+      </div>
+    </div>
+
+    <!-- 3D Flip Card Grid -->
+    <div class="capability-card-grid">
+      {pillars.map((pillar) => (
+        <div class="capability-3d-card" role="button" tabindex="0" aria-label={`Inspect ${pillar.title} capabilities`}>
+          <div class="capability-card-inner">
+            <!-- Front Face -->
+            <div class="capability-face capability-face-front">
+              <div>
+                <div class="capability-card-header">
+                  <h3 class="capability-title">{pillar.title}</h3>
+                  <div class="capability-letter-badge">{pillar.letter}</div>
+                </div>
+
+                <ul class="capability-items-list">
+                  {pillar.items.map((item) => (
+                    <li class="capability-item">{item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="capability-flip-cue">
+                <span>Pillar &bull; 0{pillars.indexOf(pillar) + 1}</span>
+                <span>Click to Flip &rarr;</span>
+              </div>
+            </div>
+
+            <!-- Back Face -->
+            <div class="capability-face capability-face-back">
+              <div>
+                <h4 class="capability-back-headline">{pillar.title} Mastery</h4>
+                <p class="capability-back-bio">{pillar.manifesto}</p>
+
+                <div class="capability-tech-stack">
+                  {pillar.tags.map((tag) => (
+                    <span class="capability-tech-tag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div class="capability-flip-cue">
+                <span>[ RETURN TO FRONT &rarr; ]</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Footer Telemetry -->
+    <div class="capability-footer-telemetry">
+      <div>DISCIPLINES: <span class="capability-footer-highlight">04 PILLARS INTEGRATED</span></div>
+      <div>COLLABORATION: <span class="capability-footer-highlight">END-TO-END EXECUTION</span></div>
+      <div>STANDARDS: <span class="capability-footer-highlight">AESTHETIC &amp; TECHNICAL EXCELLENCE</span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { AboutCapabilityController } from './AboutCapabilityController';
+
+  function initV2Capability() {
+    const root = document.getElementById('v2-capability-root');
+    if (!root) return;
+    const controller = new AboutCapabilityController();
+    controller.init(root);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initV2Capability);
+  } else {
+    initV2Capability();
+  }
+</script>

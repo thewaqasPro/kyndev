@@ -1,0 +1,68 @@
+---
+import './projects.css';
+import ProjectCard from './ProjectCard.astro';
+import { projectsList } from '../../../data/projectsData';
+
+interface Props {
+  limit?: number;
+  title?: string;
+}
+
+const { limit, title = "PROJECTS" } = Astro.props;
+const displayedProjects = limit ? projectsList.slice(0, limit) : projectsList;
+---
+
+<section class="v2-projects-section">
+  <div class="v2-projects-header">
+    <div class="v2-projects-title-wrapper">
+      <h2 class="v2-projects-title">{title}</h2>
+      <span class="v2-projects-count">{displayedProjects.length}</span>
+    </div>
+    <div class="v2-projects-meta">
+      <span class="v2-projects-badge">2.5D Displacement &bull; Pointer Parallax</span>
+      <svg class="v2-projects-arrow-svg" viewBox="0 0 38 38" fill="none">
+        <path
+          d="m2 2 34 34m0 0V6.046M36 36H6.046"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2.5"
+        ></path>
+      </svg>
+    </div>
+  </div>
+
+  <div class="v2-projects-grid">
+    {displayedProjects.map((project) => (
+      <ProjectCard
+        slug={project.slug}
+        title={project.title}
+        tags={project.tags}
+        colorBg={project.theme?.colorBg}
+        colorText={project.theme?.colorText}
+        colorShadow={project.theme?.shadow}
+      />
+    ))}
+  </div>
+</section>
+
+<script>
+  import { ProjectCardController } from './CardController';
+
+  function initProjectsGallery() {
+    const cards = document.querySelectorAll<HTMLElement>('.v2-project-card');
+    cards.forEach((card) => {
+      // Prevent double initialization
+      if ((card as any).__v2Controller) return;
+      const controller = new ProjectCardController(card);
+      (card as any).__v2Controller = controller;
+      controller.init();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProjectsGallery);
+  } else {
+    initProjectsGallery();
+  }
+</script>
