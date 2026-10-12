@@ -7,6 +7,19 @@ import Footer from '../components/common/Footer/Footer.astro';
 import ScrollNav from '../components/common/ScrollNav/ScrollNav.astro';
 import Overlays from '../components/common/Overlays/Overlays.astro';
 
+// SPA Navigation Styles: import all page styles globally so client transitions have complete stylesheets
+import '../components/home/Hero/hero.css';
+import '../components/home/Featured/featured.css';
+import '../components/home/Goal/goal.css';
+import '../components/home/Reel/reel.css';
+import '../components/about/AboutWho/aboutWho.css';
+import '../components/about/AboutClients/aboutClients.css';
+import '../components/about/AboutAwards/aboutAwards.css';
+import '../components/about/AboutCapability/aboutCapability.css';
+import '../components/projects/ProjectsGallery/projectsGallery.css';
+import '../components/projects/ProjectsGallery/projectGalleryCard.css';
+import '../components/projects/ProjectDetails/projectDetails.css';
+
 interface Props {
   title?: string;
   description?: string;
@@ -127,7 +140,9 @@ const canonicalURL = ogUrl || new URL(Astro.url.pathname, Astro.site || 'https:/
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- Kyndev 3D / WebGL Runtime -->
-    <script type="module" src="/assets/scripts/kyndev_runtime.js"></script>
+    <script>
+      import '../scripts/runtime.js';
+    </script>
   </head>
   <body>
     <canvas id="canvas"></canvas>
