@@ -1,0 +1,97 @@
+/* Services List Grid Styles */
+
+#services-list {
+  position: relative;
+  row-gap: clamp(30px, 4vw, 50px);
+  padding-bottom: clamp(60px, 8vw, 120px);
+}
+
+.services-list-card {
+  grid-column: span 6;
+  position: relative;
+  background: #ffffff;
+  border: 1px solid var(--color-dark-white);
+  border-radius: var(--global-border-radius);
+  padding: clamp(24px, 3.5vw, 45px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.services-list-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-blue);
+  box-shadow: 0 16px 36px rgba(26, 47, 251, 0.08);
+}
+
+.services-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5em;
+}
+
+.services-card-num {
+  font-family: 'IBMPlexMono', monospace;
+  font-size: 0.85em;
+  color: var(--color-blue);
+  letter-spacing: 0.05em;
+}
+
+.services-card-badge {
+  font-family: 'IBMPlexMono', monospace;
+  font-size: 0.75em;
+  padding: 0.3em 0.8em;
+  border-radius: 999px;
+  background: var(--color-off-white);
+  color: #333644;
+  text-transform: uppercase;
+}
+
+.services-card-title {
+  font-size: clamp(1.5rem, 2.2vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.15;
+  margin: 0 0 0.75em 0;
+  color: var(--color-black);
+}
+
+.services-card-desc {
+  font-size: clamp(0.95rem, 1.1vw, 1.2rem);
+  line-height: 1.5;
+  color: #555968;
+  margin: 0 0 2em 0;
+  flex-grow: 1;
+}
+
+.services-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-top: auto;
+  padding-top: 1.5em;
+  border-top: 1px dashed var(--color-dark-white);
+}
+
+.services-card-tag {
+  font-family: 'IBMPlexMono', monospace;
+  font-size: 0.75em;
+  padding: 0.35em 0.75em;
+  border-radius: 4px;
+  background: var(--color-off-white);
+  color: #2b2e3a;
+}
+
+.services-list-card:hover .services-card-tag {
+  background: rgba(26, 47, 251, 0.06);
+  color: var(--color-blue);
+}
+
+@media (max-width: 812px) {
+  .services-list-card {
+    grid-column: span 6;
+    padding: 24px;
+  }
+}

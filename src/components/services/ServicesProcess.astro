@@ -1,0 +1,48 @@
+---
+// src/components/services/ServicesProcess.astro
+import './servicesProcess.css';
+
+interface ProcessStep {
+  num: string;
+  title: string;
+  desc: string;
+}
+
+const steps: ProcessStep[] = [
+  {
+    num: '01',
+    title: 'Discovery',
+    desc: 'Uncovering brand objectives, audience behaviors, and technical opportunities through collaborative workshops.',
+  },
+  {
+    num: '02',
+    title: 'Architecture',
+    desc: 'Engineering user journeys, conversion wireframes, and design systems tailored specifically to your goals.',
+  },
+  {
+    num: '03',
+    title: 'Production',
+    desc: 'Crafting responsive layouts, WebGL animations, and seamless user experiences with zero boilerplate fluff.',
+  },
+  {
+    num: '04',
+    title: 'Optimization',
+    desc: 'Refining Core Web Vitals, deploying tracking, and executing iteration loops for sustainable compounding growth.',
+  },
+];
+---
+
+<div id="services-process" class="section">
+  <div id="services-process-header">
+    <div id="services-process-eyebrow">Our Methodology //</div>
+    <h2 id="services-process-title">How we deliver results that matter</h2>
+  </div>
+
+  {steps.map((step) => (
+    <div class="services-process-step">
+      <div class="services-process-num">{step.num}</div>
+      <h3 class="services-process-step-title">{step.title}</h3>
+      <p class="services-process-step-desc">{step.desc}</p>
+    </div>
+  ))}
+</div>

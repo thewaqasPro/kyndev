@@ -1,0 +1,31 @@
+---
+// src/components/contact/ContactHero.astro
+import './contactHero.css';
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}
+
+const {
+  eyebrow = 'Contact Us // Get In Touch',
+  title = "Let's build something unforgettable together.",
+  description = "Whether you have a question, a project idea, or just want to say hello — we're all ears. Drop us a message and we'll get back to you as soon as we can.",
+} = Astro.props;
+---
+
+<div id="contact-hero" class="section">
+  <div class="contact-hero-crosses">
+    <div class="contact-hero-cross"></div>
+    <div class="contact-hero-cross"></div>
+  </div>
+
+  <div id="contact-hero-eyebrow">
+    <span class="dot"></span>
+    <span>{eyebrow}</span>
+  </div>
+
+  <h1 id="contact-hero-title">{title}</h1>
+  <p id="contact-hero-desc">{description}</p>
+</div>

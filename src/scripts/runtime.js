@@ -14289,10 +14289,11 @@ class Header {
         "click",
         this._domRightMenuBtnClick.bind(this),
       ),
-      this.domMenuLinkContact.addEventListener(
-        "click",
-        this._onDomMenuLinkContact.bind(this),
-      ),
+      this.domMenuLinkContact &&
+        this.domMenuLinkContact.addEventListener(
+          "click",
+          this._onDomMenuLinkContact.bind(this),
+        ),
       this.containers.forEach((e, t) => {
         (e.style.setProperty("--open-delay", t / 50 + "s"),
           e.style.setProperty(
@@ -20927,6 +20928,18 @@ class AboutPage extends Page {
   }
 }
 const aboutPage = new AboutPage();
+class ServicesPage extends Page {
+  path = "services";
+  id = "services";
+  endVisualColor = properties.blueColorHex;
+}
+const servicesPage = new ServicesPage();
+class ContactPage extends Page {
+  path = "contact";
+  id = "contact";
+  endVisualColor = properties.blueColorHex;
+}
+const contactPage = new ContactPage();
 class ProjectsMainSection {
   domContainer;
   domTitle;
@@ -23113,7 +23126,7 @@ class TransitionOverlay {
 const transitionOverlay = new TransitionOverlay();
 class PageManager {
   pages = {};
-  pageList = [homePage, aboutPage, projectPage, projectsPage, playgroundPage];
+  pageList = [homePage, aboutPage, projectPage, projectsPage, playgroundPage, servicesPage, contactPage];
   scrollTargetPage = null;
   domContainer = null;
   domInner = null;

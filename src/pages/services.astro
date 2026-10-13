@@ -1,0 +1,22 @@
+---
+// src/pages/services.astro
+import Layout from '../layouts/Layout.astro';
+import ServicesHero from '../components/services/ServicesHero.astro';
+import ServicesList from '../components/services/ServicesList.astro';
+import ServicesProcess from '../components/services/ServicesProcess.astro';
+---
+
+<Layout
+  title="KYNDEV - Our Services"
+  description="Responsive web development, UX/UI design, and digital growth services tailored to your goals. No templates, no guesswork."
+  ogUrl="https://kyndev.com/services/"
+  scrollNavPath="/projects"
+  scrollNavText="Our Projects"
+  scrollNavSubtitle="Next"
+>
+  <div id="services" class="page">
+    <ServicesHero />
+    <ServicesList />
+    <ServicesProcess />
+  </div>
+</Layout>

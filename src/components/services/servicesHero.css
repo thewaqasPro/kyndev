@@ -1,0 +1,107 @@
+/* Services Hero Component Styles */
+
+#services-hero {
+  position: relative;
+  min-height: 50vh;
+  padding-top: calc(var(--base-padding-y) + 80px);
+  padding-bottom: clamp(40px, 6vw, 80px);
+  color: var(--color-black);
+}
+
+.services-hero-crosses {
+  position: absolute;
+  top: calc(var(--base-padding-y) + 60px);
+  left: var(--base-padding-x);
+  right: var(--base-padding-x);
+  height: calc(100% - var(--base-padding-y) - 60px);
+  pointer-events: none;
+}
+
+.services-hero-cross {
+  position: absolute;
+  width: var(--cross-size);
+  height: var(--cross-size);
+}
+
+.services-hero-cross:before,
+.services-hero-cross:after {
+  position: absolute;
+  content: '';
+  width: var(--cross-size);
+  height: calc(0.125 * var(--cross-size));
+  left: 0;
+  top: calc(0.5 * var(--cross-size));
+  background: var(--color-black);
+}
+
+.services-hero-cross:after {
+  transform: rotate(90deg);
+}
+
+.services-hero-cross:nth-child(1) {
+  left: 0;
+  top: 0;
+}
+
+.services-hero-cross:nth-child(2) {
+  right: 0;
+  top: 0;
+}
+
+#services-hero-eyebrow {
+  grid-column: 1 / span 12;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  font-family: 'IBMPlexMono', monospace;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-blue);
+  margin-bottom: 1.5em;
+}
+
+#services-hero-eyebrow .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-blue);
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.6; }
+}
+
+#services-hero-title {
+  grid-column: 1 / span 12;
+  font-size: clamp(2.5rem, 5vw, 6rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.5em 0;
+  color: var(--color-black);
+}
+
+#services-hero-desc {
+  grid-column: 1 / span 8;
+  font-size: clamp(1.1rem, 1.6vw, 1.8rem);
+  line-height: 1.45;
+  color: #333644;
+  margin: 0;
+}
+
+@media (max-width: 812px) {
+  #services-hero {
+    padding-top: calc(var(--base-padding-y) + 60px);
+  }
+  #services-hero-title {
+    grid-column: 1 / span 6;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+  }
+  #services-hero-desc {
+    grid-column: 1 / span 6;
+    font-size: 1.1em;
+  }
+}

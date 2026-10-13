@@ -1,0 +1,31 @@
+---
+// src/components/services/ServicesHero.astro
+import './servicesHero.css';
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}
+
+const {
+  eyebrow = 'Services / What We Do',
+  title = 'Crafting tailored digital solutions that connect, convert, and create lasting impact.',
+  description = 'At Kynd Studio, every service begins with understanding your vision and ends with results that matter. No templates. No guesswork. Just thoughtful, intentional work that helps your brand grow with clarity and confidence.',
+} = Astro.props;
+---
+
+<div id="services-hero" class="section">
+  <div class="services-hero-crosses">
+    <div class="services-hero-cross"></div>
+    <div class="services-hero-cross"></div>
+  </div>
+
+  <div id="services-hero-eyebrow">
+    <span class="dot"></span>
+    <span>{eyebrow}</span>
+  </div>
+
+  <h1 id="services-hero-title">{title}</h1>
+  <p id="services-hero-desc">{description}</p>
+</div>

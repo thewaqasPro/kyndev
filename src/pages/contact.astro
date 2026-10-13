@@ -1,0 +1,20 @@
+---
+// src/pages/contact.astro
+import Layout from '../layouts/Layout.astro';
+import ContactHero from '../components/contact/ContactHero.astro';
+import ContactForm from '../components/contact/ContactForm.astro';
+---
+
+<Layout
+  title="KYNDEV - Contact Us"
+  description="Get in touch with KYNDEV. Whether you have a project idea, question, or want to collaborate, drop us a message."
+  ogUrl="https://kyndev.com/contact/"
+  scrollNavPath="/"
+  scrollNavText="Home"
+  scrollNavSubtitle="Back To"
+>
+  <div id="contact" class="page">
+    <ContactHero />
+    <ContactForm />
+  </div>
+</Layout>

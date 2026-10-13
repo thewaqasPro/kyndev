@@ -1,0 +1,74 @@
+/* Services Process Section Styles */
+
+#services-process {
+  position: relative;
+  border-top: 1px solid var(--color-dark-white);
+  padding-top: clamp(60px, 8vw, 100px);
+  padding-bottom: clamp(60px, 8vw, 100px);
+  color: var(--color-black);
+}
+
+#services-process-header {
+  grid-column: 1 / span 12;
+  margin-bottom: clamp(30px, 5vw, 60px);
+}
+
+#services-process-eyebrow {
+  font-family: 'IBMPlexMono', monospace;
+  font-size: 0.85em;
+  color: var(--color-blue);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.75em;
+}
+
+#services-process-title {
+  font-size: clamp(2rem, 3.5vw, 3.8rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.services-process-step {
+  grid-column: span 3;
+  position: relative;
+  background: var(--color-off-white);
+  border-radius: var(--global-border-radius);
+  padding: clamp(20px, 2.5vw, 35px);
+  display: flex;
+  flex-direction: column;
+}
+
+.services-process-num {
+  font-family: 'IBMPlexMono', monospace;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--color-blue);
+  margin-bottom: 0.75em;
+  line-height: 1;
+}
+
+.services-process-step-title {
+  font-size: 1.35em;
+  font-weight: 500;
+  margin: 0 0 0.5em 0;
+  color: var(--color-black);
+}
+
+.services-process-step-desc {
+  font-size: 0.95em;
+  line-height: 1.5;
+  color: #4b4f5d;
+  margin: 0;
+}
+
+@media (max-width: 812px) {
+  #services-process-header {
+    grid-column: 1 / span 6;
+  }
+  .services-process-step {
+    grid-column: span 6;
+    margin-bottom: 15px;
+  }
+}

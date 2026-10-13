@@ -11,6 +11,7 @@ export class HeaderController {
   private domMenuBtn: HTMLElement | null = null;
   private domSoundBtn: HTMLElement | null = null;
   private domContactBtn: HTMLElement | null = null;
+  private domMenuLinks: NodeListOf<Element> | null = null;
   public isMenuOpened: boolean = false;
   public isInitialized: boolean = false;
 
@@ -30,6 +31,10 @@ export class HeaderController {
     this.scrollToContact();
   };
 
+  private onMenuLinkClick = (): void => {
+    this.closeMenu();
+  };
+
   public init(): void {
     if (typeof window === 'undefined') return;
 
@@ -40,6 +45,7 @@ export class HeaderController {
     this.domMenuBtn = document.getElementById('header-right-menu-btn');
     this.domSoundBtn = document.getElementById('header-right-sound-btn');
     this.domContactBtn = document.querySelector('.header-menu-link[data-scroll-to="contact"]');
+    this.domMenuLinks = document.querySelectorAll('.header-menu-link');
 
     this._bindEvents();
     this.isInitialized = true;
@@ -55,6 +61,11 @@ export class HeaderController {
     if (this.domContactBtn) {
       this.domContactBtn.addEventListener('click', this.onContactClick);
     }
+    if (this.domMenuLinks) {
+      this.domMenuLinks.forEach((link) => {
+        link.addEventListener('click', this.onMenuLinkClick);
+      });
+    }
   }
 
   public destroy(): void {
@@ -66,6 +77,11 @@ export class HeaderController {
     }
     if (this.domContactBtn) {
       this.domContactBtn.removeEventListener('click', this.onContactClick);
+    }
+    if (this.domMenuLinks) {
+      this.domMenuLinks.forEach((link) => {
+        link.removeEventListener('click', this.onMenuLinkClick);
+      });
     }
     this.isInitialized = false;
   }
@@ -126,13 +142,13 @@ export class HeaderController {
   }
 }
 
-export const headerController = new HeaderController();
+// Global Singleton Instance
+let headerControllerInstance: HeaderController | null = null;
 
-export function initHeader(): void {
-  if (typeof document === 'undefined') return;
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => headerController.init());
-  } else {
-    headerController.init();
+export function initHeader(): HeaderController {
+  if (!headerControllerInstance) {
+    headerControllerInstance = new HeaderController();
   }
+  headerControllerInstance.init();
+  return headerControllerInstance;
 }
