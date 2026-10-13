@@ -5875,19 +5875,20 @@ class Audios {
       properties.camera.add(this.listener));
   }
   addHoverClickEvents(e) {
+    if (!e) return;
     SKIP_AUDIO || (this.addHoverEvent(e), this.addClickEvent(e));
   }
   addHoverEvent(e, t = "hover") {
-    SKIP_AUDIO ||
-      e.addEventListener("mouseenter", () => {
-        this.countPlay(t);
-      });
+    if (!e || SKIP_AUDIO) return;
+    e.addEventListener("mouseenter", () => {
+      this.countPlay(t);
+    });
   }
   addClickEvent(e, t = "click") {
-    SKIP_AUDIO ||
-      input.onClicked.add(() => {
-        input.hasThroughElem(e, t) && this.countPlay(t);
-      });
+    if (!e || SKIP_AUDIO) return;
+    input.onClicked.add(() => {
+      input.hasThroughElem(e, t) && this.countPlay(t);
+    });
   }
   countPlay(e) {
     if (SKIP_AUDIO) return;
@@ -14049,12 +14050,25 @@ class RouteManager {
   }
   _fetchHtml(e) {
     let t = this.routes[e];
-    t
-      ? t.dom && this._onDomReady(t)
-      : properties.loader.load("/" + e, {
-          type: "text",
-          onLoad: this._initDom.bind(this, this._createRoute(e)),
-        });
+    if (t && t.dom) {
+      this._onDomReady(t);
+      return;
+    }
+    let route = t || this._createRoute(e);
+    if (route._isFetching) return;
+    route._isFetching = true;
+    let url = "/" + (e ? e.replace(/^\/|\/$/g, "") + "/" : "");
+    properties.loader.load(url, {
+      type: "text",
+      onLoad: (html) => {
+        route._isFetching = false;
+        this._initDom(route, html);
+      },
+      onError: () => {
+        route._isFetching = false;
+        window.location.href = url;
+      },
+    });
   }
   _initDom(e, t) {
     let r = document,
@@ -14294,7 +14308,7 @@ class Header {
           "click",
           this._onDomMenuLinkContact.bind(this),
         ),
-      this.containers.forEach((e, t) => {
+      this.containers.filter(Boolean).forEach((e, t) => {
         (e.style.setProperty("--open-delay", t / 50 + "s"),
           e.style.setProperty(
             "--close-delay",
@@ -23023,6 +23037,20 @@ class TransitionOverlay {
   }
   update(e) {
     if (this.activeRatio > 0) {
+      if (!this._safetyWatchdog) {
+        this._safetyWatchdog = setTimeout(() => {
+          this.contentShowRatio = 1;
+          this.contentHideRatio = 1;
+          this.showTextRatio = 1;
+          this.hideTextRatio = 1;
+          this.needsShowText = false;
+          this.needsHideText = false;
+          if (this.canvas) this.canvas.style.display = "none";
+          this.onShowTextCompleted.dispatch();
+          this.onHideTextCompleted.dispatch();
+          this._safetyWatchdog = null;
+        }, 1500);
+      }
       let t = properties.viewportWidth + 2,
         r = properties.viewportHeight + 2,
         n = this.pixelWidth,
@@ -23120,7 +23148,13 @@ class TransitionOverlay {
             u.restore());
       }
       (u.restore(), (this.canvas.style.display = "block"));
-    } else this.canvas.style.display = "none";
+    } else {
+      if (this._safetyWatchdog) {
+        clearTimeout(this._safetyWatchdog);
+        this._safetyWatchdog = null;
+      }
+      this.canvas.style.display = "none";
+    }
   }
 }
 const transitionOverlay = new TransitionOverlay();
