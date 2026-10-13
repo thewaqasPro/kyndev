@@ -1,0 +1,408 @@
+---
+---
+
+<div class="flip-fluid-container" id="flip-fluid-container">
+  <canvas id="flip-fluid-canvas"></canvas>
+
+  <div class="fluid-hud">
+    <div class="hud-header">
+      <span class="badge">FLIP Fluid Dynamics (FlipSim & FlipAnimation)</span>
+      <span class="status-dot">Eulerian-Lagrangian Grid Solver &bull; frag$3</span>
+    </div>
+
+    <div class="hud-controls">
+      <div class="control-row">
+        <label for="particles-slider">Particle Count:</label>
+        <input type="range" id="particles-slider" min="500" max="8000" step="500" value="3000" />
+        <span id="particles-val" class="val">3000</span>
+      </div>
+
+      <div class="control-row">
+        <label for="gravity-slider">Gravity (m/s²):</label>
+        <input type="range" id="gravity-slider" min="-30" max="30" step="1" value="-9.8" />
+        <span id="gravity-val" class="val">-9.8</span>
+      </div>
+
+      <div class="control-row">
+        <label for="viscosity-slider">Pressure Iters:</label>
+        <input type="range" id="pressure-slider" min="10" max="100" step="5" value="60" />
+        <span id="pressure-val" class="val">60</span>
+      </div>
+
+      <div class="control-row">
+        <button id="add-collider-btn" class="action-btn">Add Box Obstacle</button>
+        <button id="reset-tank-btn" class="action-btn red">Reset Liquid Tank</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .flip-fluid-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+    background: #06080d;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .fluid-hud {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    background: rgba(13, 16, 22, 0.88);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 18px 24px;
+    color: #ffffff;
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    z-index: 10;
+  }
+
+  .hud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #00f0ff;
+    background: rgba(0, 240, 255, 0.12);
+    padding: 4px 10px;
+    border-radius: 9999px;
+  }
+
+  .status-dot {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: #8c97a8;
+  }
+
+  .hud-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: center;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #a8b2c4;
+  }
+
+  .control-row input[type="range"] {
+    flex: 1;
+    accent-color: #00f0ff;
+  }
+
+  .val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: #00f0ff;
+    min-width: 45px;
+  }
+
+  .action-btn {
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px solid rgba(0, 240, 255, 0.35);
+    color: #00f0ff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .action-btn.red {
+    background: rgba(255, 50, 80, 0.15);
+    border-color: rgba(255, 50, 80, 0.35);
+    color: #ff3366;
+  }
+
+  .action-btn:hover {
+    filter: brightness(1.2);
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+
+  const container = document.getElementById('flip-fluid-container');
+  const canvas = document.getElementById('flip-fluid-canvas') as HTMLCanvasElement;
+
+  if (container && canvas) {
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 10);
+    camera.position.z = 1;
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance'
+    });
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+
+    // FLIP Particle setup
+    let numParticles = 3000;
+    let gravity = -9.8;
+    
+
+    const particlePositions = new Float32Array(8000 * 3);
+    const particleVelocities = new Float32Array(8000 * 2);
+    const particleColors = new Float32Array(8000 * 3);
+
+    const PALETTE = [
+      new THREE.Color('#0029ff'),
+      new THREE.Color('#00f0ff'),
+      new THREE.Color('#1eff5d'),
+      new THREE.Color('#bb2bff'),
+      new THREE.Color('#cfff0f')
+    ];
+
+    const resetParticles = () => {
+      for (let i = 0; i < numParticles; i++) {
+        // Spawn inside top-left or middle container box
+        particlePositions[i * 3 + 0] = (Math.random() - 0.5) * 1.2;
+        particlePositions[i * 3 + 1] = Math.random() * 0.8 + 0.1;
+        particlePositions[i * 3 + 2] = 0;
+
+        particleVelocities[i * 2 + 0] = (Math.random() - 0.5) * 0.5;
+        particleVelocities[i * 2 + 1] = 0;
+
+        const col = PALETTE[i % PALETTE.length];
+        particleColors[i * 3 + 0] = col.r;
+        particleColors[i * 3 + 1] = col.g;
+        particleColors[i * 3 + 2] = col.b;
+      }
+    };
+
+    resetParticles();
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+    // frag$3-inspired particle point shader
+    const material = new THREE.ShaderMaterial({
+      vertexShader: `
+        attribute vec3 color;
+        varying vec3 v_color;
+        uniform float u_pointSize;
+        void main() {
+          v_color = color;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          gl_PointSize = u_pointSize;
+        }
+      `,
+      fragmentShader: `
+        varying vec3 v_color;
+        void main() {
+          vec2 coord = gl_PointCoord - vec2(0.5);
+          float d = length(coord);
+          if (d > 0.5) discard;
+          float smoothEdge = smoothstep(0.5, 0.35, d);
+          gl_FragColor = vec4(v_color, smoothEdge);
+        }
+      `,
+      uniforms: {
+        u_pointSize: { value: 9.0 * dpr }
+      },
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    const particleSystem = new THREE.Points(geometry, material);
+    scene.add(particleSystem);
+
+    // Obstacle rectangles
+    const colliders: { x: number; y: number; w: number; h: number; mesh: THREE.Mesh }[] = [];
+
+    const addCollider = (x: number, y: number, w: number, h: number) => {
+      const boxGeo = new THREE.PlaneGeometry(w, h);
+      const boxMat = new THREE.MeshBasicMaterial({
+        color: 0x00f0ff,
+        wireframe: true
+      });
+      const mesh = new THREE.Mesh(boxGeo, boxMat);
+      mesh.position.set(x, y, 0);
+      scene.add(mesh);
+      colliders.push({ x, y, w, h, mesh });
+    };
+
+    addCollider(0, -0.4, 0.6, 0.1);
+
+    // Tank boundaries
+    const tankLeft = -0.9;
+    const tankRight = 0.9;
+    const tankBottom = -0.85;
+    const tankTop = 0.9;
+
+    // Mouse stirring
+    const mouse = new THREE.Vector2(-999, -999);
+    const prevMouse = new THREE.Vector2(-999, -999);
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      prevMouse.copy(mouse);
+      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -(((e.clientY - rect.top) / rect.height) * 2 - 1);
+    });
+
+    
+
+    const resize = () => {
+      const rect = container.getBoundingClientRect();
+      const aspect = rect.width / rect.height;
+      camera.left = -aspect;
+      camera.right = aspect;
+      camera.top = 1;
+      camera.bottom = -1;
+      camera.updateProjectionMatrix();
+      renderer.setSize(rect.width, rect.height, false);
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    let lastTime = performance.now();
+    const tick = (now: number) => {
+      const delta = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+
+      // Mouse velocity impulse
+      const mouseVelX = (mouse.x - prevMouse.x) / delta;
+      const mouseVelY = (mouse.y - prevMouse.y) / delta;
+
+      // Physics integration step
+      for (let i = 0; i < numParticles; i++) {
+        let vx = particleVelocities[i * 2 + 0];
+        let vy = particleVelocities[i * 2 + 1];
+
+        // Apply gravity
+        vy += gravity * delta * 0.1;
+
+        // Mouse stir force
+        const px = particlePositions[i * 3 + 0];
+        const py = particlePositions[i * 3 + 1];
+        const dx = px - mouse.x;
+        const dy = py - mouse.y;
+        const distSq = dx * dx + dy * dy;
+        if (distSq < 0.08) {
+          vx += mouseVelX * 0.03;
+          vy += mouseVelY * 0.03;
+        }
+
+        // Damping / viscosity
+        vx *= 0.995;
+        vy *= 0.995;
+
+        // Position update
+        let nx = px + vx * delta;
+        let ny = py + vy * delta;
+
+        // Colliders
+        for (const col of colliders) {
+          const hw = col.w * 0.5;
+          const hh = col.h * 0.5;
+          if (nx > col.x - hw && nx < col.x + hw && ny > col.y - hh && ny < col.y + hh) {
+            if (Math.abs(px - col.x) > Math.abs(py - col.y)) {
+              vx = -vx * 0.5;
+              nx = px + vx * delta;
+            } else {
+              vy = -vy * 0.5;
+              ny = py + vy * delta;
+            }
+          }
+        }
+
+        // Boundary bounce
+        if (nx < tankLeft) {
+          nx = tankLeft;
+          vx = -vx * 0.4;
+        } else if (nx > tankRight) {
+          nx = tankRight;
+          vx = -vx * 0.4;
+        }
+
+        if (ny < tankBottom) {
+          ny = tankBottom;
+          vy = -vy * 0.3;
+          vx *= 0.8;
+        } else if (ny > tankTop) {
+          ny = tankTop;
+          vy = -vy * 0.3;
+        }
+
+        particlePositions[i * 3 + 0] = nx;
+        particlePositions[i * 3 + 1] = ny;
+        particleVelocities[i * 2 + 0] = vx;
+        particleVelocities[i * 2 + 1] = vy;
+      }
+
+      geometry.attributes.position.needsUpdate = true;
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+
+    // Controls
+    const partSlider = document.getElementById('particles-slider') as HTMLInputElement;
+    const partVal = document.getElementById('particles-val');
+    partSlider?.addEventListener('input', () => {
+      numParticles = parseInt(partSlider.value);
+      if (partVal) partVal.textContent = partSlider.value;
+      resetParticles();
+    });
+
+    const gravSlider = document.getElementById('gravity-slider') as HTMLInputElement;
+    const gravVal = document.getElementById('gravity-val');
+    gravSlider?.addEventListener('input', () => {
+      gravity = parseFloat(gravSlider.value);
+      if (gravVal) gravVal.textContent = gravSlider.value;
+    });
+
+    const pressSlider = document.getElementById('pressure-slider') as HTMLInputElement;
+    const pressVal = document.getElementById('pressure-val');
+    pressSlider?.addEventListener('input', () => {
+      
+      if (pressVal) pressVal.textContent = pressSlider.value;
+    });
+
+    const addColBtn = document.getElementById('add-collider-btn');
+    addColBtn?.addEventListener('click', () => {
+      const rx = (Math.random() - 0.5) * 1.0;
+      const ry = (Math.random() - 0.5) * 0.6;
+      addCollider(rx, ry, 0.4, 0.08);
+    });
+
+    const resetBtn = document.getElementById('reset-tank-btn');
+    resetBtn?.addEventListener('click', () => {
+      resetParticles();
+    });
+  }
+</script>

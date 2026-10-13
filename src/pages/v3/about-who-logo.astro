@@ -1,0 +1,111 @@
+---
+import AboutWhoLogo from '../../v3/components/AboutWhoLogo/AboutWhoLogo.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>V3 Preview: About Who 3D Wireframe Logo (AboutWhoLogo)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+        color: #0c0d0e;
+        font-family: 'Space Grotesk', -apple-system, sans-serif;
+        overflow-x: hidden;
+      }
+
+      .preview-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        width: 100vw;
+        box-sizing: border-box;
+      }
+
+      .preview-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 2.5rem 0.75rem;
+        flex-shrink: 0;
+      }
+
+      .back-link {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: 0.85rem;
+        color: #061dfb;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .title-block h1 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .title-block p {
+        margin: 0.2rem 0 0;
+        font-size: 0.82rem;
+        color: #666;
+        font-family: 'IBM Plex Mono', monospace;
+      }
+
+      .viewport-stage {
+        flex: 1;
+        padding: 0 2.5rem 2rem;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .stage-inner {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.15);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-wrapper">
+      <header class="preview-header">
+        <a href="/v3" class="back-link">&larr; Return to V3 Master Hub</a>
+        <div class="title-block">
+          <h1>About Who 3D Wireframe Logo</h1>
+          <p>Source: deobfuscated.js (AboutWhoLogo &bull; vert$1 / frag$4 &bull; logo_text.buf)</p>
+        </div>
+      </header>
+
+      <main class="viewport-stage">
+        <div class="stage-inner">
+          <AboutWhoLogo />
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

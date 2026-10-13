@@ -11,6 +11,7 @@ If you are an AI agent or developer tasked with maintaining, modifying, or creat
 
 | Document / Area | Link | Description |
 | :--- | :--- | :--- |
+| **Reverse-Engineering Master Plan** | [`docs/REVERSE_ENGINEERING_PLAN.md`](file:///Users/waqas/DEV/kyndev.com/src/v2/docs/REVERSE_ENGINEERING_PLAN.md) | **MASTER ROADMAP**: Step-by-step blueprint to reverse-engineer `runtime.js` into modular effects. |
 | **How to Build New Components** | [`docs/COMPONENT_CREATION_WORKFLOW.md`](file:///Users/waqas/DEV/kyndev.com/src/v2/docs/COMPONENT_CREATION_WORKFLOW.md) | **MANDATORY**: Step-by-step SOP to build new components 4 through 20. |
 | **Complete System Architecture** | [`docs/V2_ARCHITECTURE_SYSTEM.md`](file:///Users/waqas/DEV/kyndev.com/src/v2/docs/V2_ARCHITECTURE_SYSTEM.md) | Deep technical breakdown of `core/`, `shared/`, WebGL context limits, and shaders. |
 | **Hero 3D Physics Scene** | [`components/Hero/README.md`](file:///Users/waqas/DEV/kyndev.com/src/v2/components/Hero/README.md) | Rigid body physics, BufLoader, repulsion math, and palette cycler. |
@@ -60,6 +61,7 @@ src/v2/
 │   └── ProjectDetails/         # Case Study Track, Dynamic Palette & Parallax Media
 │
 └── docs/                       # Standard Operating Procedures & Guidelines
+    ├── REVERSE_ENGINEERING_PLAN.md
     ├── COMPONENT_CREATION_WORKFLOW.md
     └── V2_ARCHITECTURE_SYSTEM.md
 ```

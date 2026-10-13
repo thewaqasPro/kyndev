@@ -1,0 +1,331 @@
+---
+---
+
+<div class="space-tunnels-container" id="space-tunnels-container">
+  <canvas id="space-tunnels-canvas"></canvas>
+
+  <div class="tunnels-hud">
+    <div class="hud-header">
+      <span class="badge">Zero-G Cosmic Tunnels & Glass Shatter</span>
+      <span class="status-dot">GoalTunnels &bull; grid_structure_hd.buf &bull; astronaut_helmet.buf</span>
+    </div>
+
+    <div class="hud-controls">
+      <div class="control-row">
+        <label for="tunnel-depth-slider">Tunnel Warp Depth:</label>
+        <input type="range" id="tunnel-depth-slider" min="0" max="1" step="0.005" value="0.4" />
+        <span id="tunnel-depth-val" class="val">40%</span>
+      </div>
+
+      <div class="control-row">
+        <label for="shatter-slider">Glass Shatter Blast:</label>
+        <input type="range" id="shatter-slider" min="0" max="1" step="0.01" value="0.0" />
+        <span id="shatter-val" class="val">0%</span>
+      </div>
+
+      <div class="control-row">
+        <button id="trigger-shatter-btn" class="action-btn red">Trigger Glass Detonation</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .space-tunnels-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+    background: #030407;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .tunnels-hud {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    background: rgba(13, 16, 22, 0.88);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 18px 24px;
+    color: #ffffff;
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    z-index: 10;
+  }
+
+  .hud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #00f0ff;
+    background: rgba(0, 240, 255, 0.12);
+    padding: 4px 10px;
+    border-radius: 9999px;
+  }
+
+  .status-dot {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: #8c97a8;
+  }
+
+  .hud-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    align-items: center;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #a8b2c4;
+  }
+
+  .control-row input[type="range"] {
+    flex: 1;
+    accent-color: #00f0ff;
+  }
+
+  .val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: #00f0ff;
+    min-width: 45px;
+  }
+
+  .action-btn {
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px solid rgba(0, 240, 255, 0.35);
+    color: #00f0ff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .action-btn.red {
+    background: rgba(255, 50, 80, 0.15);
+    border-color: rgba(255, 50, 80, 0.35);
+    color: #ff3366;
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import { BufLoader } from '../../core/BufLoader';
+
+  const container = document.getElementById('space-tunnels-container');
+  const canvas = document.getElementById('space-tunnels-canvas') as HTMLCanvasElement;
+
+  if (container && canvas) {
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x030407, 0.08);
+
+    const camera = new THREE.PerspectiveCamera(65, 1, 0.1, 100);
+    camera.position.set(0, 0, 5);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance'
+    });
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+
+    const amb = new THREE.AmbientLight(0x112233, 1.0);
+    scene.add(amb);
+
+    const cyanPoint = new THREE.PointLight(0x00f0ff, 3.5, 25);
+    cyanPoint.position.set(0, 0, 0);
+    scene.add(cyanPoint);
+
+    const blueDir = new THREE.DirectionalLight(0x0055ff, 2.0);
+    blueDir.position.set(0, 5, -5);
+    scene.add(blueDir);
+
+    let helmetMesh: THREE.Mesh | null = null;
+    let glassMesh: THREE.Mesh | null = null;
+    let tunnelRings: THREE.Group = new THREE.Group();
+    scene.add(tunnelRings);
+
+    let warpDepth = 0.4;
+    let shatterProgress = 0.0;
+    let isShattering = false;
+
+    // Build 3D Tunnel Grid Rings
+    const ringCount = 18;
+    for (let i = 0; i < ringCount; i++) {
+      const ringGeo = new THREE.TorusGeometry(2.5, 0.04, 8, 32);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: new THREE.Color().setHSL(0.55 + i * 0.015, 1.0, 0.5),
+        wireframe: true
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.z = -i * 2.5;
+      tunnelRings.add(ring);
+    }
+
+    // Load Astronaut Helmet
+    BufLoader.load('/assets/models/tunnels/astronaut_helmet.buf').then((geo) => {
+      geo.center();
+      const mat = new THREE.MeshPhysicalMaterial({
+        color: 0xdddddd,
+        metalness: 0.9,
+        roughness: 0.15,
+        clearcoat: 1.0
+      });
+      helmetMesh = new THREE.Mesh(geo, mat);
+      helmetMesh.position.set(0, 0, 1.2);
+      helmetMesh.scale.setScalar(0.7);
+      scene.add(helmetMesh);
+    });
+
+    // Load Broken Glass
+    BufLoader.load('/assets/models/tunnels/broken_glass.buf').then((geo) => {
+      geo.center();
+      const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0x99eeff,
+        transmission: 0.9,
+        opacity: 0.85,
+        transparent: true,
+        roughness: 0.05,
+        ior: 1.5
+      });
+      glassMesh = new THREE.Mesh(geo, glassMat);
+      glassMesh.position.set(0, 0, -1.5);
+      glassMesh.scale.setScalar(1.2);
+      scene.add(glassMesh);
+    });
+
+    // Vortex Particle Stream
+    const partCount = 1200;
+    const partGeo = new THREE.BufferGeometry();
+    const partPos = new Float32Array(partCount * 3);
+    for (let i = 0; i < partCount; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 1.0 + Math.random() * 2.0;
+      partPos[i * 3 + 0] = Math.cos(angle) * radius;
+      partPos[i * 3 + 1] = Math.sin(angle) * radius;
+      partPos[i * 3 + 2] = -Math.random() * 45;
+    }
+    partGeo.setAttribute('position', new THREE.BufferAttribute(partPos, 3));
+    const partMat = new THREE.PointsMaterial({
+      color: 0x00f0ff,
+      size: 0.06,
+      transparent: true,
+      opacity: 0.75
+    });
+    const vortex = new THREE.Points(partGeo, partMat);
+    scene.add(vortex);
+
+    const resize = () => {
+      const rect = container.getBoundingClientRect();
+      camera.aspect = rect.width / rect.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(rect.width, rect.height, false);
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    let lastTime = performance.now();
+    const tick = (now: number) => {
+      const delta = (now - lastTime) * 0.001;
+      lastTime = now;
+
+      // Tunnel Forward Warp
+      tunnelRings.position.z = (now * 0.002 * (1.0 + warpDepth * 3)) % 2.5;
+
+      // Camera drift & lookAt
+      camera.position.x = Math.sin(now * 0.001) * 0.4;
+      camera.position.y = Math.cos(now * 0.0008) * 0.3;
+
+      // Floating Astronaut Helmet
+      if (helmetMesh) {
+        helmetMesh.rotation.y = Math.sin(now * 0.0007) * 0.4;
+        helmetMesh.rotation.x = Math.cos(now * 0.0005) * 0.25;
+        helmetMesh.position.y = Math.sin(now * 0.0012) * 0.2;
+      }
+
+      // Shatter Blast event
+      if (isShattering) {
+        shatterProgress = Math.min(1.0, shatterProgress + delta * 0.8);
+        const slider = document.getElementById('shatter-slider') as HTMLInputElement;
+        const valSpan = document.getElementById('shatter-val');
+        if (slider && valSpan) {
+          slider.value = shatterProgress.toFixed(2);
+          valSpan.textContent = `${Math.round(shatterProgress * 100)}%`;
+        }
+        if (shatterProgress >= 1.0) isShattering = false;
+      }
+
+      if (glassMesh) {
+        const blast = shatterProgress * 3.5;
+        glassMesh.scale.setScalar(1.2 + blast * 0.5);
+        glassMesh.rotation.z = shatterProgress * 1.5;
+        (glassMesh.material as THREE.MeshPhysicalMaterial).opacity = Math.max(0, 0.85 - shatterProgress);
+      }
+
+      // Vortex particle stream flow
+      const positions = partGeo.attributes.position.array as Float32Array;
+      for (let i = 0; i < partCount; i++) {
+        positions[i * 3 + 2] += delta * (15 + warpDepth * 25);
+        if (positions[i * 3 + 2] > 2) {
+          positions[i * 3 + 2] = -45;
+        }
+      }
+      partGeo.attributes.position.needsUpdate = true;
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+
+    // Controls
+    const depthSlider = document.getElementById('tunnel-depth-slider') as HTMLInputElement;
+    const depthVal = document.getElementById('tunnel-depth-val');
+    depthSlider?.addEventListener('input', () => {
+      warpDepth = parseFloat(depthSlider.value);
+      if (depthVal) depthVal.textContent = `${Math.round(warpDepth * 100)}%`;
+    });
+
+    const shatterSlider = document.getElementById('shatter-slider') as HTMLInputElement;
+    const shatterVal = document.getElementById('shatter-val');
+    shatterSlider?.addEventListener('input', () => {
+      shatterProgress = parseFloat(shatterSlider.value);
+      if (shatterVal) shatterVal.textContent = `${Math.round(shatterProgress * 100)}%`;
+    });
+
+    const triggerBtn = document.getElementById('trigger-shatter-btn');
+    triggerBtn?.addEventListener('click', () => {
+      shatterProgress = 0.0;
+      isShattering = true;
+    });
+  }
+</script>

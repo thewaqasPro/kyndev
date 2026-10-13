@@ -1,0 +1,324 @@
+---
+---
+
+<div class="screen-paint-container" id="screen-paint-container">
+  <canvas id="screen-paint-canvas"></canvas>
+
+  <div class="background-backdrop">
+    <div class="hero-typography">
+      <span class="sub-tag">KYNDEV V3 FLUID REFRACTION</span>
+      <h2>VISCOUS DYNAMICS</h2>
+      <p>Move your cursor across this stage to inject real-time fluid momentum. Watch the underlying typography refract and distort through chromatic aberration shaders.</p>
+    </div>
+  </div>
+
+  <div class="paint-hud">
+    <div class="hud-header">
+      <span class="badge">ScreenPaint & Distortion Pass</span>
+      <span class="status-dot">Shaders: vert$k, frag$n, frag$1</span>
+    </div>
+
+    <div class="hud-controls">
+      <div class="control-row">
+        <label for="push-slider">Push Strength:</label>
+        <input type="range" id="push-slider" min="5" max="80" step="1" value="25" />
+        <span id="push-val" class="val">25</span>
+      </div>
+
+      <div class="control-row">
+        <label for="decay-slider">Decay Viscosity:</label>
+        <input type="range" id="decay-slider" min="0.92" max="0.999" step="0.002" value="0.985" />
+        <span id="decay-val" class="val">0.985</span>
+      </div>
+
+      <div class="control-row">
+        <label for="rgb-slider">RGB Shift Aberration:</label>
+        <input type="range" id="rgb-slider" min="0" max="3" step="0.1" value="1.0" />
+        <span id="rgb-val" class="val">1.0</span>
+      </div>
+
+      <div class="control-row">
+        <button id="clear-paint-btn" class="action-btn">Clear Fluid Buffer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .screen-paint-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+    background: #060709;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 2;
+  }
+
+  .background-backdrop {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    box-sizing: border-box;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(circle at 50% 50%, #151924 0%, #060709 80%);
+  }
+
+  .hero-typography {
+    text-align: center;
+    max-width: 750px;
+    color: #ffffff;
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+  }
+
+  .sub-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: #00f0ff;
+    text-transform: uppercase;
+  }
+
+  .hero-typography h2 {
+    font-size: clamp(2.8rem, 6vw, 4.8rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin: 1rem 0;
+    background: linear-gradient(180deg, #ffffff 0%, #506080 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-typography p {
+    font-size: 1.05rem;
+    color: #8c97a8;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .paint-hud {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    background: rgba(13, 16, 22, 0.88);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 18px 24px;
+    color: #ffffff;
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    z-index: 10;
+  }
+
+  .hud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #00f0ff;
+    background: rgba(0, 240, 255, 0.12);
+    padding: 4px 10px;
+    border-radius: 9999px;
+  }
+
+  .status-dot {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: #8c97a8;
+  }
+
+  .hud-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: center;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #a8b2c4;
+  }
+
+  .control-row input[type="range"] {
+    flex: 1;
+    accent-color: #00f0ff;
+  }
+
+  .val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: #00f0ff;
+    min-width: 45px;
+  }
+
+  .action-btn {
+    background: rgba(255, 0, 85, 0.15);
+    border: 1px solid rgba(255, 0, 85, 0.35);
+    color: #ff3366;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .action-btn:hover {
+    background: rgba(255, 0, 85, 0.25);
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import { ScreenPaint } from '../../effects/ScreenPaint/ScreenPaint';
+  import { ScreenDistortionPass } from '../../effects/ScreenPaint/ScreenDistortionPass';
+  import { FboHelper } from '../../shared/fbo';
+
+  const container = document.getElementById('screen-paint-container');
+  const canvas = document.getElementById('screen-paint-canvas') as HTMLCanvasElement;
+
+  if (container && canvas) {
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance'
+    });
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+
+    const screenPaint = new ScreenPaint(renderer);
+    const distortionPass = new ScreenDistortionPass();
+
+    // Scene to be distorted (3D background scene)
+    const bgScene = new THREE.Scene();
+    const bgCamera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
+    bgCamera.position.z = 5;
+
+    // Add geometric shapes inside the scene
+    const group = new THREE.Group();
+    for (let i = 0; i < 24; i++) {
+      const geo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+      const mat = new THREE.MeshBasicMaterial({
+        color: new THREE.Color().setHSL(i / 24, 0.8, 0.5),
+        wireframe: true
+      });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(
+        (Math.random() - 0.5) * 6,
+        (Math.random() - 0.5) * 4,
+        (Math.random() - 0.5) * 2
+      );
+      group.add(mesh);
+    }
+    bgScene.add(group);
+
+    const baseSceneRT = FboHelper.createRenderTarget(512, 512);
+
+    const resize = () => {
+      const rect = container.getBoundingClientRect();
+      const w = Math.max(rect.width, 1);
+      const h = Math.max(rect.height, 1);
+
+      renderer.setSize(w, h, false);
+      baseSceneRT.setSize(w * dpr, h * dpr);
+      bgCamera.aspect = w / h;
+      bgCamera.updateProjectionMatrix();
+
+      screenPaint.resize(w, h);
+      distortionPass.resize(w, h);
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Pointer events
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      screenPaint.onPointerMove(e.clientX - rect.left, e.clientY - rect.top, rect.width, rect.height);
+    });
+
+    container.addEventListener('mousedown', () => screenPaint.onPointerDown());
+    window.addEventListener('mouseup', () => screenPaint.onPointerUp());
+
+    let lastTime = performance.now();
+    const tick = (now: number) => {
+      const delta = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+
+      // Rotate geometric elements
+      group.rotation.x = now * 0.0003;
+      group.rotation.y = now * 0.0005;
+
+      // 1. Update fluid paint buffer
+      screenPaint.update(delta);
+
+      // 2. Render background scene to RT
+      renderer.setRenderTarget(baseSceneRT);
+      renderer.clear();
+      renderer.render(bgScene, bgCamera);
+
+      // 3. Render distortion pass directly to screen
+      distortionPass.render(renderer, baseSceneRT.texture, screenPaint.texture, null);
+
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+
+    // HUD sliders
+    const pushSlider = document.getElementById('push-slider') as HTMLInputElement;
+    const pushVal = document.getElementById('push-val');
+    pushSlider?.addEventListener('input', () => {
+      screenPaint.pushStrength = parseFloat(pushSlider.value);
+      if (pushVal) pushVal.textContent = pushSlider.value;
+    });
+
+    const decaySlider = document.getElementById('decay-slider') as HTMLInputElement;
+    const decayVal = document.getElementById('decay-val');
+    decaySlider?.addEventListener('input', () => {
+      screenPaint.velocityDissipation = parseFloat(decaySlider.value);
+      if (decayVal) decayVal.textContent = decaySlider.value;
+    });
+
+    const rgbSlider = document.getElementById('rgb-slider') as HTMLInputElement;
+    const rgbVal = document.getElementById('rgb-val');
+    rgbSlider?.addEventListener('input', () => {
+      distortionPass.rgbShift = parseFloat(rgbSlider.value);
+      if (rgbVal) rgbVal.textContent = rgbSlider.value;
+    });
+
+    const clearBtn = document.getElementById('clear-paint-btn');
+    clearBtn?.addEventListener('click', () => {
+      screenPaint.clear();
+    });
+  }
+</script>

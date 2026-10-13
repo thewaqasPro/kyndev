@@ -1,0 +1,328 @@
+---
+---
+
+<div class="lunar-scene-container" id="lunar-scene-container">
+  <canvas id="lunar-scene-canvas"></canvas>
+
+  <div class="lunar-hud">
+    <div class="hud-header">
+      <span class="badge">Lunar 3D Spline Journey</span>
+      <span class="status-dot">AboutHero Suite &bull; terrain.buf &bull; camera_spline.buf</span>
+    </div>
+
+    <div class="hud-controls">
+      <div class="control-row">
+        <label for="timeline-slider">Spline Flight Progress:</label>
+        <input type="range" id="timeline-slider" min="0" max="1" step="0.005" value="0.25" />
+        <span id="timeline-val" class="val">25%</span>
+      </div>
+
+      <div class="control-row">
+        <label for="levitation-slider">Rock Levitation:</label>
+        <input type="range" id="levitation-slider" min="0" max="3" step="0.1" value="1.0" />
+        <span id="levitation-val" class="val">1.0</span>
+      </div>
+
+      <div class="control-row">
+        <button id="toggle-flight-btn" class="action-btn">Pause Auto-Flight</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .lunar-scene-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 600px;
+    background: #040508;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .lunar-hud {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    background: rgba(13, 16, 22, 0.88);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 18px 24px;
+    color: #ffffff;
+    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    z-index: 10;
+  }
+
+  .hud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #00f0ff;
+    background: rgba(0, 240, 255, 0.12);
+    padding: 4px 10px;
+    border-radius: 9999px;
+  }
+
+  .status-dot {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: #8c97a8;
+  }
+
+  .hud-controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    align-items: center;
+  }
+
+  .control-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #a8b2c4;
+  }
+
+  .control-row input[type="range"] {
+    flex: 1;
+    accent-color: #00f0ff;
+  }
+
+  .val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: #00f0ff;
+    min-width: 45px;
+  }
+
+  .action-btn {
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px solid rgba(0, 240, 255, 0.35);
+    color: #00f0ff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import { BufLoader } from '../../core/BufLoader';
+
+  const container = document.getElementById('lunar-scene-container');
+  const canvas = document.getElementById('lunar-scene-canvas') as HTMLCanvasElement;
+
+  if (container && canvas) {
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x040508, 0.05);
+
+    const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 200);
+    camera.position.set(0, 4, 12);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance'
+    });
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+
+    const amb = new THREE.AmbientLight(0x223344, 0.8);
+    scene.add(amb);
+
+    const sun = new THREE.DirectionalLight(0xddeeff, 2.8);
+    sun.position.set(10, 20, 15);
+    scene.add(sun);
+
+    // Blue earthshine light
+    const earthshine = new THREE.DirectionalLight(0x0088ff, 1.2);
+    earthshine.position.set(-10, -5, -10);
+    scene.add(earthshine);
+
+    let terrainMesh: THREE.Mesh | null = null;
+    let rockMesh: THREE.Mesh | null = null;
+    let astronautMesh: THREE.Mesh | null = null;
+    let splinePoints: THREE.Vector3[] = [];
+    let splineCurve: THREE.CatmullRomCurve3 | null = null;
+
+    let flightProgress = 0.25;
+    let isAutoFlying = true;
+    let rockLevitationStrength = 1.0;
+
+    // Load Terrain
+    BufLoader.load('/assets/models/about/terrain.buf').then((geo) => {
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0x444b55,
+        roughness: 0.85,
+        metalness: 0.1
+      });
+      terrainMesh = new THREE.Mesh(geo, mat);
+      terrainMesh.position.y = -2;
+      scene.add(terrainMesh);
+    });
+
+    // Load Levitating Rock
+    BufLoader.load('/assets/models/about/rock_0.buf').then((geo) => {
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0x556070,
+        roughness: 0.7,
+        metalness: 0.2
+      });
+      rockMesh = new THREE.Mesh(geo, mat);
+      rockMesh.position.set(1.5, 2.0, 3.0);
+      rockMesh.scale.setScalar(0.8);
+      scene.add(rockMesh);
+    });
+
+    // Load Astronaut
+    BufLoader.load('/assets/models/about/person.buf').then((geo) => {
+      const mat = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.3,
+        metalness: 0.5
+      });
+      astronautMesh = new THREE.Mesh(geo, mat);
+      astronautMesh.position.set(-1.5, -0.5, 2.0);
+      astronautMesh.scale.setScalar(0.6);
+      scene.add(astronautMesh);
+    });
+
+    // Load Camera Spline
+    BufLoader.load('/assets/models/about/camera_spline.buf').then((geo) => {
+      const posAttr = geo.getAttribute('position');
+      if (posAttr) {
+        for (let i = 0; i < posAttr.count; i += 4) {
+          splinePoints.push(new THREE.Vector3(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i)));
+        }
+        if (splinePoints.length > 2) {
+          splineCurve = new THREE.CatmullRomCurve3(splinePoints);
+        }
+      }
+    });
+
+    // Cosmic Dust Particles
+    const dustCount = 800;
+    const dustGeo = new THREE.BufferGeometry();
+    const dustPos = new Float32Array(dustCount * 3);
+    for (let i = 0; i < dustCount; i++) {
+      dustPos[i * 3 + 0] = (Math.random() - 0.5) * 30;
+      dustPos[i * 3 + 1] = Math.random() * 15;
+      dustPos[i * 3 + 2] = (Math.random() - 0.5) * 30;
+    }
+    dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+    const dustMat = new THREE.PointsMaterial({
+      color: 0x00f0ff,
+      size: 0.08,
+      transparent: true,
+      opacity: 0.6
+    });
+    const dustParticles = new THREE.Points(dustGeo, dustMat);
+    scene.add(dustParticles);
+
+    const resize = () => {
+      const rect = container.getBoundingClientRect();
+      camera.aspect = rect.width / rect.height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(rect.width, rect.height, false);
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    let lastTime = performance.now();
+    const tick = (now: number) => {
+      const delta = (now - lastTime) * 0.001;
+      lastTime = now;
+
+      if (isAutoFlying) {
+        flightProgress = (Math.sin(now * 0.0003) * 0.5 + 0.5);
+        const slider = document.getElementById('timeline-slider') as HTMLInputElement;
+        const valSpan = document.getElementById('timeline-val');
+        if (slider && valSpan) {
+          slider.value = flightProgress.toFixed(3);
+          valSpan.textContent = `${Math.round(flightProgress * 100)}%`;
+        }
+      }
+
+      // Spline camera movement
+      if (splineCurve) {
+        const camPos = splineCurve.getPointAt(flightProgress);
+        const lookTarget = splineCurve.getPointAt(Math.min(flightProgress + 0.05, 1.0));
+        camera.position.lerp(camPos, 0.1);
+        camera.lookAt(lookTarget);
+      } else {
+        camera.position.x = Math.sin(now * 0.0004) * 8;
+        camera.position.z = Math.cos(now * 0.0004) * 10 + 4;
+        camera.lookAt(0, 0, 0);
+      }
+
+      // Levitating rocks
+      if (rockMesh) {
+        rockMesh.position.y = 2.0 + Math.sin(now * 0.0015) * 0.5 * rockLevitationStrength;
+        rockMesh.rotation.y += 0.4 * delta;
+        rockMesh.rotation.x = Math.sin(now * 0.001) * 0.2;
+      }
+
+      // Astronaut idle float
+      if (astronautMesh) {
+        astronautMesh.rotation.y = Math.sin(now * 0.0008) * 0.3;
+      }
+
+      // Dust drift
+      dustParticles.rotation.y = now * 0.00008;
+
+      renderer.render(scene, camera);
+      requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+
+    // Controls
+    const timeSlider = document.getElementById('timeline-slider') as HTMLInputElement;
+    const timeVal = document.getElementById('timeline-val');
+    timeSlider?.addEventListener('input', () => {
+      isAutoFlying = false;
+      flightProgress = parseFloat(timeSlider.value);
+      if (timeVal) timeVal.textContent = `${Math.round(flightProgress * 100)}%`;
+      const btn = document.getElementById('toggle-flight-btn');
+      if (btn) btn.textContent = 'Resume Auto-Flight';
+    });
+
+    const levSlider = document.getElementById('levitation-slider') as HTMLInputElement;
+    const levVal = document.getElementById('levitation-val');
+    levSlider?.addEventListener('input', () => {
+      rockLevitationStrength = parseFloat(levSlider.value);
+      if (levVal) levVal.textContent = rockLevitationStrength.toFixed(1);
+    });
+
+    const toggleBtn = document.getElementById('toggle-flight-btn');
+    toggleBtn?.addEventListener('click', () => {
+      isAutoFlying = !isAutoFlying;
+      toggleBtn.textContent = isAutoFlying ? 'Pause Auto-Flight' : 'Resume Auto-Flight';
+    });
+  }
+</script>
