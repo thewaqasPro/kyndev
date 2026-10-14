@@ -818,5 +818,5 @@ globalThis.homeReelSection = homeReelSection;
 
 sectionRegistry.register("#home-reel", () => homeReelSection);
 
-export { HomeReelSection, homeReelSection, videoVert, videoFrag };
+export { HomeReelSection, homeReelSection };
 export default homeReelSection;

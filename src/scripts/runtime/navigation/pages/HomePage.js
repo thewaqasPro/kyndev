@@ -1229,13 +1229,7 @@ const homePage = new HomePage();
 globalThis.homePage = homePage;
 
 export {
-  HomeHeroSection,
-  HomeReelSection,
-  HomeFeaturedSection,
   HomePage,
   homePage,
-  frameVert,
-  frameFrag,
-  
 };
 export default homePage;

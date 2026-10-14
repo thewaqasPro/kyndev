@@ -13,7 +13,6 @@
  */
 
 // Decoupled Three.js
-export * from './three.js';
 export { default as THREE } from './three.js';
 
 // Core Subsystem
