@@ -7,6 +7,7 @@ globalThis.getLightUvShader = getLightUvShader;
  * 3D Lunar Scene: Moon Terrain Displacement, Floating Rocks, GPGPU Dust & Astronaut
  */
 import * as THREE from "../../three.js";
+import { logoVertexShader, logoFragmentShader } from "../../shaders/lunar/AboutWhoLogoShaders.js";
 class AboutHeroLight {
   shadowMapSize = 1024;
   position = new Vector3(0, 8, 0);
@@ -1982,14 +1983,9 @@ class AboutHero extends Stage3D {
       this.sceneRatio > 0 && this.hudRatio < 1 && light.postUpdate(e));
   }
 }
-const aboutHero = new AboutHero(),
-  vert$1 = `#define GLSLIFY 1
-attribute float char;uniform float u_time;uniform float u_showRatio;uniform float u_hideRatio;uniform float u_aspect;uniform vec2 u_toDomXY;uniform vec2 u_toDomWH;uniform vec2 u_toDomPivot;varying float v_dist;
-#include <ufxVert>
-float linearStep(float edge0,float edge1,float x){return clamp((x-edge0)/(edge1-edge0),0.0,1.0);}float cubicInOut(float t){return t<0.5? 4.0*t*t*t: 0.5*pow(2.0*t-2.0,3.0)+1.0;}float cubicBezier(float p0,float p1,float p2,float p3,float t){float c=(p1-p0)*3.;float b=(p2-p1)*3.-c;float a=p3-p0-c-b;float t2=t*t;float t3=t2*t;return a*t3+b*t2+c*t+p0;}float easeOutBack(float t){return cubicBezier(0.,1.3,1.1,1.,t);}void main(){vec3 pos=vec3(position.xy,0.);vec3 aspectCorrectedPos=pos*vec3(1.,u_aspect,1.);v_dist=position.z;vec3 basePos=getBasePosition(aspectCorrectedPos);basePos.y=1.-basePos.y;vec3 screenPos=getScreenPosition(basePos);float vertexShowRatio=easeOutBack(linearStep(0.,1.,u_showRatio*2.2-aspectCorrectedPos.x-(aspectCorrectedPos.y)*0.2));screenPos.y-=(1.0-vertexShowRatio)*(u_domWH.y+min(u_domWH.y*1.1,100.));pos.x-=char/5.*0.08;vec3 aspectCorrectedToPos=pos*vec3(1.,u_aspect,1.);vec3 toBasePos=vec3((aspectCorrectedToPos.xy)*u_toDomWH-u_toDomPivot,aspectCorrectedToPos.z);toBasePos.y=1.-toBasePos.y;vec3 toScreenPos=toBasePos+vec3(u_toDomPivot.xy,0.);toScreenPos=(toScreenPos+vec3(u_toDomXY.xy,0.))*vec3(1.,-1.,1.);float vertexHideRatio=cubicInOut(linearStep(0.,1.,u_hideRatio*2.2-aspectCorrectedPos.x-pow(aspectCorrectedPos.y,1.+u_hideRatio)*0.2));screenPos=mix(screenPos,toScreenPos,vertexHideRatio);gl_Position=projectionMatrix*modelViewMatrix*vec4(screenPos,1.0);}`,
-  frag$4 = `#define GLSLIFY 1
-varying float v_dist;void main(){float alpha=smoothstep(0.,0.+fwidth(v_dist),v_dist);gl_FragColor=vec4(1.,1.,1.,alpha);}`;
-let _needsSync = !1;
+const aboutHero = new AboutHero();
+let _needsSync = false;
+
 class AboutWhoLogo {
   container = new Object3D();
   fromDom;
@@ -1998,18 +1994,25 @@ class AboutWhoLogo {
   toMesh;
   containerWidth = 0;
   hideRatio = 0;
+  enabled = true;
+
   preInit(e) {
-    ((this.fromDom = e.querySelector("#about-who-title-main-logo")),
-      (this.toDom = e.querySelector("#about-who-title-left-2")),
-      aboutPage.postUfxContainer.add(this.container),
-      (this.toMesh = new UfxMesh({ refDom: this.toDom })),
-      properties.loader.add(settings.MODEL_PATH + "about/logo_text.buf", {
-        onLoad: this._onGeometryLoad.bind(this),
-      }));
+    if (!this.enabled) return;
+    this.fromDom = e.querySelector("#about-who-title-main-logo");
+    this.toDom = e.querySelector("#about-who-title-left-2");
+    if (!this.fromDom || !this.toDom) return;
+
+    aboutPage.postUfxContainer.add(this.container);
+    this.toMesh = new UfxMesh({ refDom: this.toDom });
+    properties.loader.add(settings.MODEL_PATH + "about/logo_text.buf", {
+      onLoad: this._onGeometryLoad.bind(this),
+    });
   }
+
   _onGeometryLoad(e) {
+    if (!this.enabled || !this.toMesh) return;
     let t = this.toMesh.material.uniforms;
-    ((this.mesh = new UfxMesh({
+    this.mesh = new UfxMesh({
       refDom: this.fromDom,
       geometry: e,
       uniforms: {
@@ -2021,35 +2024,40 @@ class AboutWhoLogo {
         u_toDomPivot: t.u_domPivot,
         u_time: properties.sharedUniforms.u_time,
       },
-      vertexShader: vert$1,
-      fragmentShader: frag$4,
-    })),
-      this.container.add(this.mesh));
+      vertexShader: logoVertexShader,
+      fragmentShader: logoFragmentShader,
+    });
+    this.container.add(this.mesh);
   }
+
   init() {}
+
   resize(e, t) {
-    _needsSync = !0;
+    _needsSync = true;
   }
+
   update(e, t, r, n, a) {
-    this.mesh &&
-      (_needsSync &&
-        ((_needsSync = !1),
-        this.mesh.syncDom(r, t - n),
-        this.toMesh.syncDom(r, t - a)),
-      (this.mesh.material.uniforms.u_showRatio.value = math.fit(
-        aboutPage.time,
-        0.5,
-        1.5,
-        0,
-        1,
-      )),
-      properties.useMobileLayout
-        ? ((this.mesh.material.uniforms.u_showRatio.value *=
-            1 - this.hideRatio),
-          (this.mesh.material.uniforms.u_hideRatio.value = 0))
-        : (this.mesh.material.uniforms.u_hideRatio.value = this.hideRatio),
-      this.mesh.update(r, t),
-      this.toMesh.update(r, t));
+    if (!this.enabled || !this.mesh) return;
+    if (_needsSync) {
+      _needsSync = false;
+      this.mesh.syncDom(r, t - n);
+      this.toMesh.syncDom(r, t - a);
+    }
+    this.mesh.material.uniforms.u_showRatio.value = math.fit(
+      aboutPage.time,
+      0.5,
+      1.5,
+      0,
+      1,
+    );
+    if (properties.useMobileLayout) {
+      this.mesh.material.uniforms.u_showRatio.value *= 1 - this.hideRatio;
+      this.mesh.material.uniforms.u_hideRatio.value = 0;
+    } else {
+      this.mesh.material.uniforms.u_hideRatio.value = this.hideRatio;
+    }
+    this.mesh.update(r, t);
+    this.toMesh.update(r, t);
   }
 }
 const aboutWhoLogo = new AboutWhoLogo();
