@@ -619,70 +619,70 @@ export class HeroToolsScene {
     }
   }
 
+  private onPointerMove = (e: MouseEvent) => {
+    if (!this.renderer || !this.renderer.domElement) return;
+    const el = this.renderer.domElement;
+    const rect = el.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    this.mouseVelocity.set(x - this.lastMouse.x, y - this.lastMouse.y);
+    this.lastMouse.set(x, y);
+    this.mouse.set(x, y);
+
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+
+    if (this.draggedBody) {
+      if (this.raycaster.ray.intersectPlane(this.plane, this.intersectionPoint)) {
+        this.draggedBody.velocity.copy(
+          this.intersectionPoint.clone().sub(this.draggedBody.position).multiplyScalar(15),
+        );
+      }
+    }
+  };
+
+  private onPointerDown = (e: MouseEvent) => {
+    this.onPointerMove(e);
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    const intersects = this.raycaster.intersectObjects(
+      this.bodies.map((b) => b.mesh),
+    );
+
+    if (intersects.length > 0) {
+      const hitMesh = intersects[0].object as THREE.Mesh;
+      const body = this.bodies.find((b) => b.mesh === hitMesh);
+      if (body) {
+        this.draggedBody = body;
+        body.isDragging = true;
+        this.plane.setFromNormalAndCoplanarPoint(
+          new THREE.Vector3(0, 0, 1),
+          body.position,
+        );
+        this.onToolSelect?.(body.tool);
+        this.applyImpulseToAll(body.position);
+      }
+    }
+  };
+
+  private onPointerUp = () => {
+    if (this.draggedBody) {
+      this.draggedBody.isDragging = false;
+      this.draggedBody.velocity.add(
+        new THREE.Vector3(
+          this.mouseVelocity.x * 25,
+          this.mouseVelocity.y * 25,
+          (Math.random() - 0.5) * 5,
+        ),
+      );
+      this.draggedBody = null;
+    }
+  };
+
   private bindEvents(): void {
     const el = this.renderer.domElement;
-
-    const onPointerMove = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      this.mouseVelocity.set(x - this.lastMouse.x, y - this.lastMouse.y);
-      this.lastMouse.set(x, y);
-      this.mouse.set(x, y);
-
-      this.raycaster.setFromCamera(this.mouse, this.camera);
-
-      if (this.draggedBody) {
-        if (this.raycaster.ray.intersectPlane(this.plane, this.intersectionPoint)) {
-          this.draggedBody.velocity.copy(
-            this.intersectionPoint.clone().sub(this.draggedBody.position).multiplyScalar(15),
-          );
-        }
-      }
-    };
-
-    const onPointerDown = (e: MouseEvent) => {
-      onPointerMove(e);
-      this.raycaster.setFromCamera(this.mouse, this.camera);
-      const intersects = this.raycaster.intersectObjects(
-        this.bodies.map((b) => b.mesh),
-      );
-
-      if (intersects.length > 0) {
-        const hitMesh = intersects[0].object as THREE.Mesh;
-        const body = this.bodies.find((b) => b.mesh === hitMesh);
-        if (body) {
-          this.draggedBody = body;
-          body.isDragging = true;
-          this.plane.setFromNormalAndCoplanarPoint(
-            new THREE.Vector3(0, 0, 1),
-            body.position,
-          );
-          this.onToolSelect?.(body.tool);
-          this.applyImpulseToAll(body.position);
-        }
-      }
-    };
-
-    const onPointerUp = () => {
-      if (this.draggedBody) {
-        this.draggedBody.isDragging = false;
-        this.draggedBody.velocity.add(
-          new THREE.Vector3(
-            this.mouseVelocity.x * 25,
-            this.mouseVelocity.y * 25,
-            (Math.random() - 0.5) * 5,
-          ),
-        );
-        this.draggedBody = null;
-      }
-    };
-
-    el.addEventListener('mousemove', onPointerMove);
-    el.addEventListener('mousedown', onPointerDown);
-    window.addEventListener('mouseup', onPointerUp);
-
+    el.addEventListener('mousemove', this.onPointerMove);
+    el.addEventListener('mousedown', this.onPointerDown);
+    window.addEventListener('mouseup', this.onPointerUp);
     window.addEventListener('resize', this.onResize);
   }
 
@@ -816,11 +816,20 @@ export class HeroToolsScene {
     this.isDestroyed = true;
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
     }
+    if (this.renderer && this.renderer.domElement) {
+      const el = this.renderer.domElement;
+      el.removeEventListener('mousemove', this.onPointerMove);
+      el.removeEventListener('mousedown', this.onPointerDown);
+      if (el.parentElement) {
+        el.parentElement.removeChild(el);
+      }
+    }
+    window.removeEventListener('mouseup', this.onPointerUp);
     window.removeEventListener('resize', this.onResize);
-    this.renderer.dispose();
-    if (this.renderer.domElement.parentElement) {
-      this.renderer.domElement.parentElement.removeChild(this.renderer.domElement);
-    }
+    try {
+      this.renderer.dispose();
+    } catch (e) {}
   }
 }

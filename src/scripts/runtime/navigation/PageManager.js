@@ -5,6 +5,7 @@ import projectsPage from './pages/ProjectsPage.js';
 import playgroundPage from './pages/PlaygroundPage.js';
 import servicesPage from './pages/ServicesPage.js';
 import contactPage from './pages/ContactPage.js';
+import heroToolsPage from './pages/HeroToolsPage.js';
 import routeManager, { Route } from './RouteManager.js';
 import { MinSignal$2 } from '../loaders/QuickLoader.js';
 import { preUfx, postUfx } from '../webgl/passes/PostEffect.js';
@@ -21,7 +22,7 @@ import audios from '../audio/Audios.js';
  */
 class PageManager {
   pages = {};
-  pageList = [homePage, aboutPage, projectPage, projectsPage, playgroundPage, servicesPage, contactPage];
+  pageList = [homePage, aboutPage, projectPage, projectsPage, playgroundPage, servicesPage, contactPage, heroToolsPage];
   scrollTargetPage = null;
   domContainer = null;
   domInner = null;
@@ -50,7 +51,6 @@ class PageManager {
     (transitionOverlay.onShowTextCompleted.add(this._onShowTextComplete, this),
       transitionOverlay.onHideTextCompleted.add(this._onHideTextComplete, this),
       taskManager.onCompleted.add(this._onTaskComplete, this));
-    routeManager.addPath("hero-tools", homePage);
   }
   preInit() {
     ((this.domContainer = document.getElementById("page-container")),

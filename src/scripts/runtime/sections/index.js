@@ -1,3 +1,4 @@
+import { heroToolsSection } from "./HeroToolsSection.js";
 /**
  * Section Controllers Index
  * Central export for modular, independent section controllers
@@ -9,6 +10,7 @@ import { homeFeaturedSection, HomeFeaturedSection } from "./FeaturedSection.js";
 
 // Register default sections with registry
 sectionRegistry.register("#home-hero", () => homeHeroSection);
+sectionRegistry.register("#home-hero-tools", () => heroToolsSection);
 sectionRegistry.register("#home-reel", () => homeReelSection);
 sectionRegistry.register("#home-featured", () => homeFeaturedSection);
 sectionRegistry.register("#home-goal", () => window.homeGoalSection);
@@ -27,3 +29,5 @@ export * from "./SectionRegistry.js";
 export * from "./HeroSection.js";
 export * from "./ReelSection.js";
 export * from "./FeaturedSection.js";
+
+export * from "./HeroToolsSection.js";

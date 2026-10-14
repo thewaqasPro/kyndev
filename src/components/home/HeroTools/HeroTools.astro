@@ -21,7 +21,7 @@ const {
       <span class="pulse-dot"></span>
       <span>3D Marketing Tools Prototype</span>
       <span>•</span>
-      <a href="/">View Original Balloons Hero →</a>
+      <a href="/" data-link-type="internal">View Original Balloons Hero →</a>
     </div>
   )}
 
@@ -50,58 +50,8 @@ const {
       </svg>
       Scatter Stack
     </button>
-    <a href="/services" class="hero-tools-btn hero-tools-btn-secondary">
+    <a href="/services" class="hero-tools-btn hero-tools-btn-secondary" data-link-type="internal">
       Explore Our Services →
     </a>
   </div>
 </div>
-
-<script>
-  import { HeroToolsScene, type MarketingToolConfig } from "./HeroToolsScene";
-
-  let scene: HeroToolsScene | null = null;
-
-  function init(): void {
-    const container = document.getElementById("hero-tools-canvas-container");
-    if (!container || scene) return;
-
-    scene = new HeroToolsScene(container);
-
-    const hudIcon = document.getElementById("hero-tools-hud-icon");
-    const hudName = document.getElementById("hero-tools-hud-name");
-    const hudSub = document.getElementById("hero-tools-hud-sub");
-    const impulseBtn = document.getElementById("hero-tools-impulse-btn");
-
-    scene.onToolSelect = (tool: MarketingToolConfig) => {
-      if (hudIcon) {
-        hudIcon.textContent = tool.name.charAt(0);
-        hudIcon.style.backgroundColor = tool.primaryColor;
-      }
-      if (hudName) {
-        hudName.textContent = tool.name;
-        hudName.style.color = tool.primaryColor;
-      }
-      if (hudSub) {
-        hudSub.textContent = tool.subtitle;
-      }
-      if (typeof window !== "undefined" && (window as any).audios?.countPlay) {
-        (window as any).audios.countPlay("click");
-      }
-    };
-
-    if (impulseBtn) {
-      impulseBtn.addEventListener("click", () => {
-        scene?.applyImpulseToAll();
-        if (typeof window !== "undefined" && (window as any).audios?.countPlay) {
-          (window as any).audios.countPlay("click");
-        }
-      });
-    }
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
-</script>

@@ -92,6 +92,7 @@ export * from './navigation/pages/ContactPage.js';
 export * from './navigation/pages/ProjectsPage.js';
 export * from './navigation/pages/ProjectPage.js';
 export * from './navigation/pages/PlaygroundPage.js';
+export * from './navigation/pages/HeroToolsPage.js';
 export * from './navigation/PageManager.js';
 
 // ============================================================================
