@@ -1,0 +1,107 @@
+---
+// src/components/home/HeroTools/HeroTools.astro
+import "./heroTools.css";
+
+interface Props {
+  title?: string;
+  tag?: string;
+  showReturnBanner?: boolean;
+}
+
+const {
+  title = "Scale your revenue with battle-tested 3D performance across top platforms.",
+  tag = "Performance Marketing Ecosystem",
+  showReturnBanner = true,
+} = Astro.props;
+---
+
+<div id="home-hero-tools" class="section">
+  {showReturnBanner && (
+    <div id="hero-tools-preview-banner">
+      <span class="pulse-dot"></span>
+      <span>3D Marketing Tools Prototype</span>
+      <span>•</span>
+      <a href="/">View Original Balloons Hero →</a>
+    </div>
+  )}
+
+  <div id="hero-tools-header">
+    <span id="hero-tools-tag">{tag}</span>
+    <h1 id="hero-tools-title">
+      We engineer high-converting campaigns across <span class="accent">Google, Meta, HubSpot & Klaviyo</span>.
+    </h1>
+  </div>
+
+  <div id="hero-tools-canvas-container" aria-label="Interactive 3D Marketing Tools Simulation"></div>
+
+  <div id="hero-tools-hud">
+    <div id="hero-tools-hud-icon">G</div>
+    <div id="hero-tools-hud-content">
+      <h3 id="hero-tools-hud-name">Google Ads</h3>
+      <span id="hero-tools-hud-sub">PPC & Search Scaling</span>
+      <span id="hero-tools-hud-hint">Click or drag any 3D tool badge to toss & inspect</span>
+    </div>
+  </div>
+
+  <div id="hero-tools-controls">
+    <button id="hero-tools-impulse-btn" class="hero-tools-btn" type="button">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+      </svg>
+      Scatter Stack
+    </button>
+    <a href="/services" class="hero-tools-btn hero-tools-btn-secondary">
+      Explore Our Services →
+    </a>
+  </div>
+</div>
+
+<script>
+  import { HeroToolsScene, type MarketingToolConfig } from "./HeroToolsScene";
+
+  let scene: HeroToolsScene | null = null;
+
+  function init(): void {
+    const container = document.getElementById("hero-tools-canvas-container");
+    if (!container || scene) return;
+
+    scene = new HeroToolsScene(container);
+
+    const hudIcon = document.getElementById("hero-tools-hud-icon");
+    const hudName = document.getElementById("hero-tools-hud-name");
+    const hudSub = document.getElementById("hero-tools-hud-sub");
+    const impulseBtn = document.getElementById("hero-tools-impulse-btn");
+
+    scene.onToolSelect = (tool: MarketingToolConfig) => {
+      if (hudIcon) {
+        hudIcon.textContent = tool.name.charAt(0);
+        hudIcon.style.backgroundColor = tool.primaryColor;
+      }
+      if (hudName) {
+        hudName.textContent = tool.name;
+        hudName.style.color = tool.primaryColor;
+      }
+      if (hudSub) {
+        hudSub.textContent = tool.subtitle;
+      }
+      if (typeof window !== "undefined" && (window as any).audios?.countPlay) {
+        (window as any).audios.countPlay("click");
+      }
+    };
+
+    if (impulseBtn) {
+      impulseBtn.addEventListener("click", () => {
+        scene?.applyImpulseToAll();
+        if (typeof window !== "undefined" && (window as any).audios?.countPlay) {
+          (window as any).audios.countPlay("click");
+        }
+      });
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+</script>

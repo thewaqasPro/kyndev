@@ -1,0 +1,23 @@
+---
+// src/pages/hero-tools.astro
+import Layout from "../layouts/Layout.astro";
+import HeroTools from "../components/home/HeroTools/HeroTools.astro";
+import Reel from "../components/home/Reel/Reel.astro";
+import Featured from "../components/home/Featured/Featured.astro";
+import Goal from "../components/home/Goal/Goal.astro";
+---
+
+<Layout
+  title="KYNDEV - 3D Marketing Tools Hero Preview"
+  description="Interactive 3D Marketing Stack featuring Google Ads, Meta, HubSpot, Klaviyo, GA4, Shopify, and TikTok physics."
+  ogUrl="https://kyndev.com/hero-tools"
+  scrollNavPath="/about"
+  scrollNavText="About Us"
+>
+  <div id="home" class="page">
+    <HeroTools />
+    <Reel />
+    <Featured />
+    <Goal />
+  </div>
+</Layout>

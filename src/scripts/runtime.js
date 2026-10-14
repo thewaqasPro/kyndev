@@ -23189,6 +23189,7 @@ class PageManager {
     (transitionOverlay.onShowTextCompleted.add(this._onShowTextComplete, this),
       transitionOverlay.onHideTextCompleted.add(this._onHideTextComplete, this),
       taskManager.onCompleted.add(this._onTaskComplete, this));
+    routeManager.addPath("hero-tools", homePage);
   }
   preInit() {
     ((this.domContainer = document.getElementById("page-container")),
