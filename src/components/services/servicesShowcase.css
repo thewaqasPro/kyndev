@@ -1,0 +1,188 @@
+/* src/components/services/servicesShowcase.css */
+
+.services-showcase-section {
+  position: relative;
+  width: 100%;
+  padding: calc(var(--base-padding-y) * 2) var(--base-padding-x);
+  background: transparent;
+}
+
+.services-showcase-header {
+  grid-column: 1 / span 12;
+  margin-bottom: clamp(40px, 5vw, 70px);
+}
+
+.services-showcase-tag {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--color-blue, #1a2ffb);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.services-showcase-title {
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--color-black, #000);
+  text-transform: uppercase;
+}
+
+.services-showcase-grid {
+  grid-column: 1 / span 12;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .services-showcase-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.services-showcase-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid var(--color-dark-white, #e4e6ef);
+  border-radius: var(--global-border-radius, 20px);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.services-showcase-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-blue, #1a2ffb);
+  box-shadow: 0 20px 45px rgba(26, 47, 251, 0.08);
+}
+
+.showcase-card-num {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.9rem;
+  color: var(--color-blue, #1a2ffb);
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+
+.showcase-card-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 1rem 0;
+  color: var(--color-black, #000);
+}
+
+.showcase-card-desc {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #555968;
+  margin: 0 0 2rem 0;
+  flex-grow: 1;
+}
+
+.showcase-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-dark-white, #e4e6ef);
+}
+
+.showcase-card-tag {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--color-off-white, #f0f1fa);
+  color: #2b2e3a;
+}
+
+/* ==========================================================================
+   PHILOSOPHY SECTION
+   ========================================================================== */
+.services-philosophy-section {
+  position: relative;
+  width: 100%;
+  padding: calc(var(--base-padding-y) * 2.5) var(--base-padding-x);
+  background: #000000;
+  color: #ffffff;
+  border-radius: var(--global-border-radius, 20px);
+  margin-bottom: clamp(60px, 8vw, 120px);
+}
+
+.services-philosophy-header {
+  grid-column: 1 / span 12;
+  margin-bottom: 3rem;
+}
+
+.services-philosophy-tag {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--color-green, #c1ff00);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.services-philosophy-title {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.services-philosophy-grid {
+  grid-column: 1 / span 12;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .services-philosophy-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.services-philosophy-card {
+  padding: 2.5rem;
+  border-radius: var(--global-border-radius, 20px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  transition: transform 0.4s ease, border-color 0.4s ease;
+}
+
+.services-philosophy-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(26, 47, 251, 0.5);
+}
+
+.philosophy-card-icon {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 2rem;
+  color: var(--color-green, #c1ff00);
+  margin-bottom: 1.5rem;
+}
+
+.philosophy-card-heading {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.philosophy-card-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}

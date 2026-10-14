@@ -1,0 +1,39 @@
+---
+// src/components/services/ServicesPhilosophy.astro
+import './servicesShowcase.css';
+
+const values = [
+  {
+    icon: '⚡',
+    title: 'Zero Bloat & Templates',
+    text: 'Every line of code and every pixel is crafted intentionally. We do not use off-the-shelf templates, heavy drag-and-drop builders, or generic frameworks.',
+  },
+  {
+    icon: '🎯',
+    title: 'Performance as an Art Form',
+    text: 'We hold our work to the highest technical standards—guaranteeing 60-120 FPS render loops, flawless Core Web Vitals, and sub-second global load times.',
+  },
+  {
+    icon: '👁️',
+    title: 'Immersive Emotional Resonance',
+    text: 'We fuse artistic creative direction with deep human psychology to create websites and digital worlds that people truly remember, share, and love.',
+  },
+];
+---
+
+<div id="services-philosophy" class="section services-philosophy-section">
+  <div class="services-philosophy-header">
+    <div class="services-philosophy-tag">// The Studio Ethos</div>
+    <h2 class="services-philosophy-title">Built for Brands That Refuse to Be Ignored</h2>
+  </div>
+
+  <div class="services-philosophy-grid">
+    {values.map((val) => (
+      <div class="services-philosophy-card">
+        <div class="philosophy-card-icon">{val.icon}</div>
+        <h3 class="philosophy-card-heading">{val.title}</h3>
+        <p class="philosophy-card-text">{val.text}</p>
+      </div>
+    ))}
+  </div>
+</div>

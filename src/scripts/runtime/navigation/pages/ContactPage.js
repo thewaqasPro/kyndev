@@ -29,6 +29,11 @@ class ContactPage extends Page {
     contactStage.resize(w, h);
   }
 
+  update(e, t, r, n, a) {
+    super.update(e, t, r, n, a);
+    contactStage.isActive = true;
+  }
+
   show(e, t, r) {
     super.show(e, t, r);
     contactStage.isActive = true;

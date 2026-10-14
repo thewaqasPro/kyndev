@@ -63,9 +63,6 @@ void main() {
 `;
 
 class ServicesStage extends Stage3D {
-  defaultCameraPosition = new Vector3(0, 0, 16);
-  defaultLookAtPosition = new Vector3(0, 0, 0);
-
   crystalGroup = new Object3D();
   crystalMesh = null;
   crystalWire = null;
@@ -76,7 +73,27 @@ class ServicesStage extends Stage3D {
   scrollRatio = 0;
   time = 0;
 
+  constructor() {
+    super({
+      defaultCameraPosition: new Vector3(0, 0, 15),
+      defaultLookAtPosition: new Vector3(0, 0, 0),
+      properties: {
+        defaultCameraPosition: new Vector3(0, 0, 15),
+        defaultLookAtPosition: new Vector3(0, 0, 0),
+        useFinal: true,
+      },
+    });
+  }
+
+  syncProperties(e) {
+    if (this.properties?.defaultCameraPosition) {
+      this.properties.defaultCameraPosition.set(0, 0, 15);
+      this.properties.defaultLookAtPosition.set(0, 0, 0);
+    }
+  }
+
   preInit() {
+    if (this.crystalGroup.children.length > 0) return;
     this._initCrystal();
     this._initParticles();
     this.add(this.crystalGroup);
@@ -152,7 +169,6 @@ class ServicesStage extends Stage3D {
 
   resize(w, h) {
     if (w < 812) {
-      // Center and scale down for mobile screens
       this.crystalGroup.position.set(0, 3, -4);
       this.crystalGroup.scale.setScalar(0.7);
     } else {
@@ -172,14 +188,12 @@ class ServicesStage extends Stage3D {
       this.crystalMesh.material.uniforms.u_time.value = this.time;
     }
 
-    // Continuous kinetic rotation + mouse tilt
     if (this.crystalGroup) {
       this.crystalGroup.rotation.x = this.time * 0.25 + this.mouseCurrent.y * 0.4;
       this.crystalGroup.rotation.y = this.time * 0.35 + this.mouseCurrent.x * 0.6;
       this.crystalGroup.position.y += Math.sin(this.time * 1.5) * 0.003;
     }
 
-    // Slow orbital drift for particle matrix
     if (this.particlesMesh) {
       this.particlesMesh.rotation.y = this.time * 0.02;
     }
@@ -187,5 +201,6 @@ class ServicesStage extends Stage3D {
 }
 
 const servicesStage = new ServicesStage();
+globalThis.servicesStage = servicesStage;
 export { ServicesStage, servicesStage };
 export default servicesStage;

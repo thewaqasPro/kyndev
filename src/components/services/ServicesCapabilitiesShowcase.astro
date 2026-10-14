@@ -1,0 +1,47 @@
+---
+// src/components/services/ServicesCapabilitiesShowcase.astro
+import './servicesShowcase.css';
+
+const pillars = [
+  {
+    num: '01',
+    title: '3D & Creative Engineering',
+    desc: 'Custom WebGL shaders, Three.js pipelines, procedural physics, and interactive fluid simulations engineered for buttery smooth 60-120 FPS performance.',
+    tags: ['Custom GLSL', 'Three.js / WebGL2', 'GPU Computing', 'Micro-Interactions'],
+  },
+  {
+    num: '02',
+    title: 'Bespoke Digital Product Design',
+    desc: 'Award-caliber UI/UX systems, emotive typography hierarchies, and intuitive user journeys that transform digital interfaces into memorable brand statements.',
+    tags: ['Design Systems', 'Kinetic Direction', 'Spatial Prototyping', 'Accessibility'],
+  },
+  {
+    num: '03',
+    title: 'Full-Stack Performance Systems',
+    desc: 'Scalable headless web architecture, sub-second TTFB, edge computing, and zero layout shift designed to convert high-volume commercial traffic.',
+    tags: ['Astro / Next.js', 'Headless CMS', 'Edge Deployment', 'Core Web Vitals 100%'],
+  },
+];
+---
+
+<div id="services-showcase" class="section services-showcase-section">
+  <div class="services-showcase-header">
+    <div class="services-showcase-tag">// Studio Capabilities Matrix</div>
+    <h2 class="services-showcase-title">Creative Technology & Digital Mastery</h2>
+  </div>
+
+  <div class="services-showcase-grid">
+    {pillars.map((pillar) => (
+      <div class="services-showcase-card">
+        <div class="showcase-card-num">{pillar.num} // PILLAR</div>
+        <h3 class="showcase-card-title">{pillar.title}</h3>
+        <p class="showcase-card-desc">{pillar.desc}</p>
+        <div class="showcase-card-tags">
+          {pillar.tags.map((tag) => (
+            <span class="showcase-card-tag">{tag}</span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>

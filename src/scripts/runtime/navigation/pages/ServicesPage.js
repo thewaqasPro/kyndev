@@ -29,6 +29,11 @@ class ServicesPage extends Page {
     servicesStage.resize(w, h);
   }
 
+  update(e, t, r, n, a) {
+    super.update(e, t, r, n, a);
+    servicesStage.isActive = true;
+  }
+
   show(e, t, r) {
     super.show(e, t, r);
     servicesStage.isActive = true;

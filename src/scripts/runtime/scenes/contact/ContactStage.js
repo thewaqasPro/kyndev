@@ -69,9 +69,6 @@ void main() {
 `;
 
 class ContactStage extends Stage3D {
-  defaultCameraPosition = new Vector3(0, 0, 14);
-  defaultLookAtPosition = new Vector3(0, 0, 0);
-
   orbMesh = null;
   orbGroup = new Object3D();
 
@@ -81,7 +78,27 @@ class ContactStage extends Stage3D {
   currentRipple = 0;
   time = 0;
 
+  constructor() {
+    super({
+      defaultCameraPosition: new Vector3(0, 0, 14),
+      defaultLookAtPosition: new Vector3(0, 0, 0),
+      properties: {
+        defaultCameraPosition: new Vector3(0, 0, 14),
+        defaultLookAtPosition: new Vector3(0, 0, 0),
+        useFinal: true,
+      },
+    });
+  }
+
+  syncProperties(e) {
+    if (this.properties?.defaultCameraPosition) {
+      this.properties.defaultCameraPosition.set(0, 0, 14);
+      this.properties.defaultLookAtPosition.set(0, 0, 0);
+    }
+  }
+
   preInit() {
+    if (this.orbGroup.children.length > 0) return;
     const geo = new SphereGeometry(2.8, 64, 64);
     const mat = new ShaderMaterial({
       vertexShader: mercuryVertexShader,
@@ -128,7 +145,6 @@ class ContactStage extends Stage3D {
 
   resize(w, h) {
     if (w < 812) {
-      // Scale down and center background for mobile
       this.orbGroup.position.set(0, 2.5, -4);
       this.orbGroup.scale.setScalar(0.7);
     } else {
@@ -154,7 +170,6 @@ class ContactStage extends Stage3D {
     }
 
     if (this.orbGroup) {
-      // Rotation and float
       this.orbGroup.rotation.y = this.time * 0.4 + this.mouseCurrent.x * 0.5;
       this.orbGroup.rotation.x = this.time * 0.2 + this.mouseCurrent.y * 0.3;
       this.orbGroup.position.y += Math.sin(this.time * 2.0) * 0.004;
@@ -163,5 +178,6 @@ class ContactStage extends Stage3D {
 }
 
 const contactStage = new ContactStage();
+globalThis.contactStage = contactStage;
 export { ContactStage, contactStage };
 export default contactStage;

@@ -2,9 +2,10 @@
 // src/pages/services.astro
 import Layout from '../layouts/Layout.astro';
 import ServicesHero from '../components/services/ServicesHero.astro';
+import ServicesCapabilitiesShowcase from '../components/services/ServicesCapabilitiesShowcase.astro';
 import ServicesList from '../components/services/ServicesList.astro';
 import ServicesProcess from '../components/services/ServicesProcess.astro';
-import Reel from '../components/home/Reel/Reel.astro';
+import ServicesPhilosophy from '../components/services/ServicesPhilosophy.astro';
 ---
 
 <Layout
@@ -16,9 +17,10 @@ import Reel from '../components/home/Reel/Reel.astro';
   scrollNavSubtitle="Next"
 >
   <div id="services" class="page">
-    <Reel />
     <ServicesHero />
+    <ServicesCapabilitiesShowcase />
     <ServicesList />
     <ServicesProcess />
+    <ServicesPhilosophy />
   </div>
 </Layout>
