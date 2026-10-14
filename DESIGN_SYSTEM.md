@@ -1,7 +1,6 @@
 # KYNDEV Live Front-End Design System Specification
 
 > **Source of Truth**: Extracted strictly from the live front-end website (`src/pages/index.astro`, `src/pages/about.astro`, `src/pages/projects/*`, `src/layouts/Layout.astro`, `src/styles/kyndev.css`, and `src/components/*`).  
-> **Exclusions**: Purely isolated from experimental `v2` and `v3` codebases.
 
 ---
 

@@ -7,9 +7,7 @@
 
 export class HeaderController {
   private domContainer: HTMLElement | null = null;
-  private domMenuContainer: HTMLElement | null = null;
   private domMenuBtn: HTMLElement | null = null;
-  private domSoundBtn: HTMLElement | null = null;
   private domContactBtn: HTMLElement | null = null;
   private domMenuLinks: NodeListOf<Element> | null = null;
   public isMenuOpened: boolean = false;
@@ -21,10 +19,6 @@ export class HeaderController {
     } else {
       this.openMenu();
     }
-  };
-
-  private onSoundClick = (): void => {
-    this.toggleSound();
   };
 
   private onContactClick = (): void => {
@@ -41,9 +35,7 @@ export class HeaderController {
     this.domContainer = document.getElementById('header');
     if (!this.domContainer) return;
 
-    this.domMenuContainer = document.getElementById('header-menu');
     this.domMenuBtn = document.getElementById('header-right-menu-btn');
-    this.domSoundBtn = document.getElementById('header-right-sound-btn');
     this.domContactBtn = document.querySelector('.header-menu-link[data-scroll-to="contact"]');
     this.domMenuLinks = document.querySelectorAll('.header-menu-link');
 
@@ -55,7 +47,7 @@ export class HeaderController {
     if (this.domMenuBtn) {
       this.domMenuBtn.addEventListener('click', this.onMenuClick);
     }
-    // domSoundBtn click is handled centrally by runtime Header controller
+    // Sound button click is handled centrally by the WebAudio runtime Header controller
     if (this.domContactBtn) {
       this.domContactBtn.addEventListener('click', this.onContactClick);
     }
@@ -74,6 +66,7 @@ export class HeaderController {
     if (this.domContactBtn) {
       this.domContactBtn.removeEventListener('click', this.onContactClick);
     }
+
     if (this.domMenuLinks) {
       this.domMenuLinks.forEach((link) => {
         link.removeEventListener('click', this.onMenuLinkClick);
@@ -119,9 +112,6 @@ export class HeaderController {
     if (this.domContainer) {
       this.domContainer.classList.add('--menu-opened');
     }
-    if (this.domMenuContainer) {
-      this.domMenuContainer.classList.add('--opened');
-    }
   }
 
   /**
@@ -132,19 +122,14 @@ export class HeaderController {
     if (this.domContainer) {
       this.domContainer.classList.remove('--menu-opened');
     }
-    if (this.domMenuContainer) {
-      this.domMenuContainer.classList.remove('--opened');
-    }
   }
 }
 
-// Global Singleton Instance
-let headerControllerInstance: HeaderController | null = null;
-
-export function initHeader(): HeaderController {
-  if (!headerControllerInstance) {
-    headerControllerInstance = new HeaderController();
+export function initHeader(): HeaderController | undefined {
+  if (typeof window === 'undefined') return;
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new HeaderController());
+  } else {
+    return new HeaderController();
   }
-  headerControllerInstance.init();
-  return headerControllerInstance;
 }
