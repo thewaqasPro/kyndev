@@ -2759,6 +2759,7 @@ class GoalSectionRanges {
   _debugTimelineItems = [];
   _debugTimelineIndicator;
   constructor() {
+    this.totalTunnelWeight = 0;
     for (let t = 0; t < this.itemList.length; t++) {
       let r = this.itemList[t];
       ((this.items[r.id] = r),
@@ -2770,6 +2771,7 @@ class GoalSectionRanges {
     ((this.domContainer = (c.querySelector && c.querySelector("#home-goal")) || document.getElementById("home-goal")),
       (this.domImgIn = (c.querySelector && c.querySelector("#home-goal-image-in")) || document.getElementById("home-goal-image-in")),
       (this.domImgOut = (c.querySelector && c.querySelector("#home-goal-image-out")) || document.getElementById("home-goal-image-out")));
+    this.totalTunnelWeight = 0;
     for (let t = 0; t < this.itemList.length; t++) {
       let r = this.itemList[t];
       ((this.items[r.id] = r),
@@ -2822,10 +2824,10 @@ class GoalSectionRanges {
     let c = r.bottom - this.baseY - (t + n.height) * 0.5 - (t + a.height) * 0.5;
     ((this.items.blackFrameShow.pixelCount = (t + n.height) * 0.5),
       (this.items.astronautDrop.pixelCount = (t + a.height) * 0.5 + t));
-    let u =
-      scrollManager.getDomRange(footerSection.domContainer).bottom - r.bottom;
-    ((this.items.astronautWait.pixelCount =
-      u - 0 * this.items.astronautDrop.pixelCount),
+    let footerDom = (typeof footerSection !== "undefined" && footerSection.domContainer) || document.getElementById("footer-section");
+    let footerBottom = footerDom ? scrollManager.getDomRange(footerDom).bottom : r.bottom + t * 4.5;
+    let u = Math.max(t * 3.5, footerBottom - r.bottom);
+    ((this.items.astronautWait.pixelCount = u),
       (this.totalPixelCount = 0));
     for (let f = 0; f < this.itemList.length; f++) {
       let p = this.itemList[f];

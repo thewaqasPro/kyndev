@@ -2,7 +2,7 @@
 
 #home-goal {
   font-size: clamp(0.875rem, 1vw, 2rem);
-  padding-bottom: calc(var(--vh, 1vh) * 4200);
+  padding-bottom: calc(var(--vh, 1vh) * 1600);
 }
 
 html.is-black-bg #home-goal {

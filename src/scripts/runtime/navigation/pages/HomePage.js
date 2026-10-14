@@ -1149,7 +1149,7 @@ class HomePage extends Page {
   id = "home";
   hasEndVisual = !1;
   updateAudio = !1;
-  endSectionActiveThreshold = 2.5;
+  endSectionActiveThreshold = 1.2;
   preInit(r) {
     let e = this.domContainer || (r && r.dom) || document.getElementById("page-container-inner") || document.body;
     this.domContainer = e;
