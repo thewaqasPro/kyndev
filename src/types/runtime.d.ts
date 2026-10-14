@@ -30,7 +30,7 @@ export interface ScrollManager {
   scrollToPixel?: (pixel: number) => void;
   scrollPixel?: number;
   y?: number;
-  isActive?: boolean;
+  isActive?: boolean | null;
   syncDom?: () => void;
   [key: string]: unknown;
 }

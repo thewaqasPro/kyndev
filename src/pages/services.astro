@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import ServicesHero from '../components/services/ServicesHero.astro';
 import ServicesList from '../components/services/ServicesList.astro';
 import ServicesProcess from '../components/services/ServicesProcess.astro';
+import Reel from '../components/home/Reel/Reel.astro';
 ---
 
 <Layout
@@ -15,6 +16,7 @@ import ServicesProcess from '../components/services/ServicesProcess.astro';
   scrollNavSubtitle="Next"
 >
   <div id="services" class="page">
+    <Reel />
     <ServicesHero />
     <ServicesList />
     <ServicesProcess />
