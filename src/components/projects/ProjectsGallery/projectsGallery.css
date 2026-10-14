@@ -35,7 +35,8 @@
   position: relative;
   display: inline-block;
   margin: 0;
-  line-height: 1em;
+  line-height: 1.05em;
+  padding-bottom: 0.05em;
   overflow: hidden;
   left: -1vw;
 }

@@ -27,8 +27,8 @@
 }
 
 .project-item-footer {
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  width: 100%;
   padding: 1rem 0;
 }
 
@@ -41,17 +41,56 @@
 }
 
 .project-item-line-2 {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  font-size: 1.35rem;
   font-weight: 500;
+  height: 1.35em;
+  line-height: 1.35em;
+  left: -0.06em;
   margin-top: 0.25rem;
+  will-change: transform;
+}
+
+@media (min-aspect-ratio: 21/9) {
+  .project-item-line-2 {
+    font-size: 1.2vw;
+  }
+}
+
+@media (max-width: 812px) {
+  .project-item-line-2 {
+    font-size: 1.5rem;
+  }
 }
 
 .project-item-line-2-icon {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: currentColor;
+  display: inline-block;
+  position: absolute;
+  width: 0.8em;
+  height: 0.8em;
+  top: 0.275em;
+  left: -1em;
+  background-image: url(/assets/images/icons/arrow-right.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.project-item-line-2-inner {
+  position: relative;
+  bottom: 0;
+  overflow: hidden;
+  display: flex;
+  height: 100%;
+}
+
+.project-item-line-2-inner-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-item-line-2-inner-list span {
+  display: block;
+  height: 1.35em;
+  line-height: 1.35em;
 }

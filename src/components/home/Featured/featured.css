@@ -178,7 +178,8 @@
   position: relative;
   overflow: hidden;
   font-size: 3vw;
-  height: 1em;
+  height: 1.35em;
+  line-height: 1.35em;
   left: -0.06em;
   will-change: transform;
 }
@@ -200,7 +201,7 @@
   position: absolute;
   width: 0.8em;
   height: 0.8em;
-  top: 0.1em;
+  top: 0.275em;
   left: -1em;
   background-image: url(/assets/images/icons/arrow-right.svg);
   background-repeat: no-repeat;
@@ -209,9 +210,21 @@
 
 .project-item-line-2-inner {
   position: relative;
-  bottom: 0.2em;
+  bottom: 0;
   overflow: hidden;
   display: flex;
+  height: 100%;
+}
+
+.project-item-line-2-inner-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-item-line-2-inner-list span {
+  display: block;
+  height: 1.35em;
+  line-height: 1.35em;
 }
 
 /* Featured CTA Button */

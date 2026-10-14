@@ -168,8 +168,17 @@
 #project-details-title,
 #project-details-preview-title {
   font-size: 4.5em;
-  line-height: 0.95;
+  line-height: 1.15;
   margin: 0;
+  padding: 0.05em 0;
+}
+
+@media (max-width: 812px) {
+  #project-details-title,
+  #project-details-preview-title {
+    font-size: clamp(2.2rem, 9vw, 3.5rem);
+    line-height: 1.15;
+  }
 }
 #project-details-left {
   float: left;
