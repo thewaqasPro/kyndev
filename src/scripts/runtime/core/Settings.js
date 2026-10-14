@@ -37,6 +37,7 @@ class Settings {
   OPEN_CONTACT = !1;
   TEST_BALLOONS = !1;
   BALLOON_COLOR = "";
+  BALLOON_SCALE = 0.85;
   USE_AUDIO = browser$1.isSupportOgg && !browser$1.isMobile;
   constructor() {
     if (window.URLSearchParams) {

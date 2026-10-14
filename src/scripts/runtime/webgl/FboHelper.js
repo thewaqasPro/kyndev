@@ -140,7 +140,7 @@ class FboHelper {
       this._scene &&
       this._camera &&
       ((this._tri.material = e),
-      t && this.renderer.setRenderTarget(t),
+      this.renderer.setRenderTarget(t || null),
       this.renderer.render(this._scene, this._camera));
   }
   renderGeometry(e, t, r) {

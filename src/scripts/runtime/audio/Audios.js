@@ -239,14 +239,22 @@ class Audios {
       }),
       globalAudios.init());
   }
+  _lastToggleTime = 0;
   on() {
     this.isActive = !0;
+    this._applyState();
   }
   off() {
     this.isActive = !1;
+    this._applyState();
   }
   toggle() {
+    const now = Date.now();
+    if (now - this._lastToggleTime < 150) return this.isActive;
+    this._lastToggleTime = now;
     this.isActive = !this.isActive;
+    this._applyState();
+    return this.isActive;
   }
   pause() {
     this.wasActive = this.isActive;
@@ -256,18 +264,67 @@ class Audios {
     SKIP_AUDIO ||
       (this.listener ? e(this.listener) : this._onBodyClicked.add(e));
   }
+  _ensureListener() {
+    if (!this.listener && !SKIP_AUDIO) {
+      try {
+        if (this._boundOnBodyClick) {
+          input.onDowned.remove(this._boundOnBodyClick);
+        }
+        this.listener = new AudioListener();
+        this._onBodyClicked.dispatch(this.listener);
+        if (properties.camera) {
+          properties.camera.add(this.listener);
+        }
+      } catch (err) {
+        console.warn("AudioListener init error:", err);
+      }
+    }
+  }
+  _applyState() {
+    this._ensureListener();
+    if (this.listener?.context && this.listener.context.state === "suspended" && this.isActive) {
+      this.listener.context.resume().catch(() => {});
+    }
+    if (!this.isActive) {
+      this.volume = 0;
+      this.listener?.setMasterVolume(0);
+      for (let t in this.items) {
+        let item = this.items[t];
+        if (item.elem) {
+          item.elem.muted = true;
+          item.elem.volume = 0;
+        }
+      }
+      for (let g in this.groups) {
+        this.groups[g].update(0);
+      }
+    } else {
+      this.volume = 1;
+      this.listener?.setMasterVolume(1);
+      for (let t in this.items) {
+        let item = this.items[t];
+        if (item.elem) {
+          item.elem.muted = false;
+          item.elem.volume = item.volume;
+        }
+      }
+      for (let g in this.groups) {
+        this.groups[g].update(1);
+      }
+      if (this.currBgMusicId && this.items[this.currBgMusicId]) {
+        this.items[this.currBgMusicId].play();
+      }
+    }
+    const btn = document.getElementById("header-right-sound-btn");
+    if (btn) {
+      btn.classList.toggle("--is-muted", !this.isActive);
+      btn.setAttribute("aria-label", this.isActive ? "Mute sound" : "Unmute sound");
+      btn.setAttribute("aria-pressed", this.isActive ? "true" : "false");
+    }
+  }
   _onBodyClick() {
     if (SKIP_AUDIO) return;
-    try {
-      input.onDowned.remove(this._boundOnBodyClick);
-      this.listener = new AudioListener();
-      this._onBodyClicked.dispatch(this.listener);
-      if (properties.camera) {
-        properties.camera.add(this.listener);
-      }
-    } catch (err) {
-      console.warn("AudioListener initialization deferred or not supported:", err);
-    }
+    this._ensureListener();
   }
   addHoverClickEvents(e) {
     if (!e) return;
@@ -286,26 +343,33 @@ class Audios {
     });
   }
   countPlay(e) {
-    if (SKIP_AUDIO) return;
+    if (SKIP_AUDIO || !this.isActive) return;
     let t = this._counts[e],
       r = this._maxes[e];
     if (r === undefined) return;
     ((t = this._counts[e] = (t + 1) % r), this.items[e + "_" + t]?.play());
   }
   fadeBgMusic(e, t = 1, r = void 0) {
-    SKIP_AUDIO ||
-      (this.currBgMusicId !== e &&
-        ((this.prevBgMusicId = this.currBgMusicId),
-        (this.currBgMusicId = e),
-        r === void 0 && (r = t),
-        this.items[this.prevBgMusicId]?.setFadeOut(r),
-        this.items[this.currBgMusicId]?.setFadeIn(t)));
+    if (SKIP_AUDIO) return;
+    if (this.currBgMusicId !== e) {
+      this.prevBgMusicId = this.currBgMusicId;
+      this.currBgMusicId = e;
+      r === void 0 && (r = t);
+      this.items[this.prevBgMusicId]?.setFadeOut(r);
+      if (this.isActive) {
+        this.items[this.currBgMusicId]?.setFadeIn(t);
+      }
+    }
   }
   update(e) {
-    if (!SKIP_AUDIO && (globalAudios.update(e), this.listener)) {
-      this.volume = math.saturate(this.volume + (this.isActive ? 1 : -1) * e);
-      for (let t in this.items) this.items[t].update(e);
-      for (let t in this.groups) this.groups[t].update(this.volume);
+    if (!SKIP_AUDIO) {
+      globalAudios.update(e);
+      if (this.listener) {
+        this.volume = math.saturate(this.volume + (this.isActive ? 1 : -1) * e);
+        this.listener.setMasterVolume(this.isActive ? this.volume : 0);
+        for (let t in this.items) this.items[t].update(e);
+        for (let t in this.groups) this.groups[t].update(this.volume);
+      }
     }
   }
 }

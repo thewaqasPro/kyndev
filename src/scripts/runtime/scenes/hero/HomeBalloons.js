@@ -1,4 +1,4 @@
-import Stage3D from "../../webgl/Stage3D.js";
+import { Stage3D, Visuals, visuals } from "../../webgl/Stage3D.js";
 /**
  * 3D Hero Scene: Jacks Rigid-body Physics Simulation & Dynamic Balloons
  */
@@ -746,12 +746,13 @@ class HomeBalloons extends Stage3D {
           sss: p,
           isSemitransparent: g,
           isRough: v,
-          radius: _,
+          radius: _rawRadius,
           density: T,
           friction: M,
           restitution: S,
           isBlackWhite: b,
         } = a,
+        _ = _rawRadius * (settings.BALLOON_SCALE || 0.85),
         C = this.geometry,
         w = new Vector4(),
         R = Object.assign(
@@ -1082,39 +1083,7 @@ class HomeBalloons extends Stage3D {
 }
 const homeBalloons = new HomeBalloons();
 globalThis.homeBalloons = homeBalloons;
-class Visuals {
-  defaultStage3D = new Stage3D();
-  currentStage3D = null;
-  stage3DList = [];
-  preInit() {}
-  init() {}
-  start() {}
-  resize(e, t) {}
-  deactivateAll() {
-    for (let e = 0; e < this.stage3DList.length; e++) {
-      let t = this.stage3DList[e];
-      t.isActive = !1;
-    }
-  }
-  syncProperties(e) {
-    this.currentStage3D = this.defaultStage3D;
-    for (let t = 0; t < this.stage3DList.length; t++) {
-      let r = this.stage3DList[t];
-      if (r.isActive === !0) {
-        ((this.currentStage3D = r), r.syncProperties(e));
-        for (let n in r.properties) properties[n] = r.properties[n];
-      } else r.isActive = !1;
-    }
-  }
-  update(e) {
-    (this.currentStage3D.update(e), (this.currentStage3D.visible = !0));
-    for (let t = 0; t < this.stage3DList.length; t++) {
-      let r = this.stage3DList[t];
-      r.wasActive = r.isActive;
-    }
-  }
-}
-const visuals = new Visuals(),
+const
   frameVert = `#define GLSLIFY 1
 attribute vec3 position;varying vec2 v_uv;uniform vec2 u_viewportResolution;uniform vec2 u_domXY;uniform vec2 u_domWH;void main(){v_uv=position.xy*0.5+0.5;v_uv.y=1.0-v_uv.y;v_uv=(v_uv*u_viewportResolution-u_domXY-u_domWH*0.5);v_uv=(v_uv+u_domWH*0.5)/u_domWH;gl_Position=vec4(position,1.0);}`,
   frameFrag = `#define GLSLIFY 1
@@ -1850,6 +1819,7 @@ globalThis.visuals = visuals;
 export {
   SplitType,
   HomeBalloonsBackground,
+  homeBalloonsBackground,
   HomeBalloonsBody,
   HomeBalloonsPhysics,
   HomeBalloons,

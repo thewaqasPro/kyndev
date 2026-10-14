@@ -79,6 +79,9 @@ export * from './ui/DomHelper.js';
 export * from './ui/FooterSection.js';
 export * from './ui/UI.js';
 
+// Independent Section Controllers Subsystem
+export * from "./sections/index.js";
+
 // Navigation & Pages Subsystem
 export * from './navigation/ScrollManager.js';
 export * from './navigation/RouteManager.js';
@@ -228,8 +231,10 @@ function update(o) {
     input.postUpdate(o));
 }
 
+let _lastLoopTime = performance.now();
 function loop() {
   window.requestAnimationFrame(loop);
+  _lastLoopTime = performance.now();
   let o = performance.now(),
     e = (o - dateTime) / 1e3;
   ((dateTime = o),
@@ -240,6 +245,8 @@ function loop() {
     update(e),
     (_needsResize = !1));
 }
+
+
 
 globalThis.preRun = preRun;
 globalThis.run = run;

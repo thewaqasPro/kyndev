@@ -3,6 +3,40 @@
  */
 import * as THREE from "../../three.js";
 import domHelper from "../../ui/DomHelper.js";
+import fboHelper from "../../webgl/FboHelper.js";
+import properties from "../../core/Properties.js";
+import math from "../../core/MathUtils.js";
+import ease from "../../core/Ease.js";
+import input from "../../core/Input.js";
+import routeManager from "../../navigation/RouteManager.js";
+import header from "../../ui/Header.js";
+import { ScrollPane } from "../../navigation/ScrollManager.js";
+import { UfxMesh } from "../../webgl/geometry/UfxMesh.js";
+import videoOverlay from "../../ui/VideoOverlay.js";
+import pagesManager from "../../navigation/PageManager.js";
+import projectPage from "../../navigation/pages/ProjectPage.js";
+
+const {
+  Scene,
+  Camera,
+  PerspectiveCamera,
+  Object3D,
+  Vector2,
+  Vector3,
+  Color,
+  PlaneGeometry,
+  Mesh,
+  RawShaderMaterial,
+  ShaderMaterial,
+  Texture,
+  DoubleSide,
+  BufferGeometry,
+  BufferAttribute,
+  LinearFilter,
+  NearestFilter,
+  ClampToEdgeWrapping
+} = THREE;
+
 const vertexShader = `#define GLSLIFY 1
 attribute float branchRatio;attribute vec3 branchSplinePos;attribute vec3 leafAxis;attribute float leafRatio;attribute float meshId;uniform float u_time;uniform float u_delay;uniform vec3 u_bbMin;uniform vec3 u_bbMax;uniform float u_angleForce;varying vec3 v_position;vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}float mod289(float x){return x-floor(x*(1.0/289.0))*289.0;}vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}float permute(float x){return mod289(((x*34.0)+1.0)*x);}vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}float taylorInvSqrt(float r){return 1.79284291400159-0.85373472095314*r;}vec4 grad4(float j,vec4 ip){const vec4 ones=vec4(1.0,1.0,1.0,-1.0);vec4 p,s;p.xyz=floor(fract(vec3(j)*ip.xyz)*7.0)*ip.z-1.0;p.w=1.5-dot(abs(p.xyz),ones.xyz);s=vec4(lessThan(p,vec4(0.0)));p.xyz=p.xyz+(s.xyz*2.0-1.0)*s.www;return p;}
 #define F4 0.309016994374947451
@@ -274,502 +308,8 @@ class ProjectDetailsScreen {
   }
 }
 const projectDetailsScreen = new ProjectDetailsScreen();
-class Route {
-  constructor(e) {
-    ((this.path = e),
-      (this.pathNodes = e ? e.split("/") : []),
-      (this.target = null),
-      (this.title = ""),
-      (this.dom = null),
-      (this.scrollNavPath = ""),
-      (this.scrollNavText = ""),
-      (this.hasContentPreloaded = !1),
-      (this.content = {}));
-  }
-  setTitleDom(e, t, r, n) {
-    ((this.title = e),
-      (this.dom = t),
-      (this.scrollNavPath = r),
-      (this.scrollNavText = n));
-  }
-  setTarget(e) {
-    let t = null;
-    for (let r = 0; r < e.length; r++) {
-      let n = e[r];
-      if (n.regExp.test(this.path)) {
-        t = n;
-        break;
-      }
-    }
-    (t ||
-      (console.error("route not found for path: " + this.path),
-      (window.location.href = window.location.origin)),
-      (this.target = t.target));
-  }
-}
-let loc = window.location,
-  ORIGIN = window.location.origin,
-  URL_PREFIX_REGEX = new RegExp("^" + ORIGIN.replace(/\//g, "\\/"));
-class RouteManager {
-  routes = {};
-  matchList = [];
-  currPath = null;
-  _pendingPath = null;
-  queryStr;
-  onRouteChanged = new MinSignal$2();
-  get currRoute() {
-    return this.routes[this.currPath];
-  }
-  init() {
-    ((this.queryStr = loc.href.split("?")[1] || ""),
-      window.addEventListener("popstate", this._onStatePop.bind(this)),
-      this.setUrl());
-  }
-  addPath(e, t) {
-    this.matchList.push({
-      regExp: e instanceof RegExp ? e : new RegExp("^" + e + "$"),
-      target: t,
-    });
-  }
-  _createRoute(e) {
-    let t = (this.routes[e] = new Route(e));
-    return (t.setTarget(this.matchList), t);
-  }
-  _fetchHtml(e) {
-    let t = this.routes[e];
-    if (t && t.dom) {
-      this._onDomReady(t);
-      return;
-    }
-    let route = t || this._createRoute(e);
-    if (route._isFetching) return;
-    route._isFetching = true;
-    let url = "/" + (e ? e.replace(/^\/|\/$/g, "") + "/" : "");
-    properties.loader.load(url, {
-      type: "text",
-      onLoad: (html) => {
-        route._isFetching = false;
-        this._initDom(route, html);
-      },
-      onError: () => {
-        route._isFetching = false;
-        window.location.href = url;
-      },
-    });
-  }
-  _initDom(e, t) {
-    let r = document,
-      n = r.title;
-    if (t) {
-      r = r.implementation.createHTMLDocument();
-      let headMatch = /<head[^>]*>((.|[\n\r])*)<\/head>/im.exec(t);
-      if (headMatch) {
-        r.head.innerHTML = headMatch[1];
-        let links = r.head.querySelectorAll('link[rel="stylesheet"]');
-        links.forEach((link) => {
-          let href = link.getAttribute("href");
-          if (href && !document.querySelector(`link[href="${href}"]`)) {
-            let newLink = document.createElement("link");
-            newLink.rel = "stylesheet";
-            newLink.href = href;
-            document.head.appendChild(newLink);
-          }
-        });
-        let styles = r.head.querySelectorAll("style");
-        styles.forEach((style) => {
-          let css = style.textContent;
-          if (css && !Array.from(document.querySelectorAll("style")).some((s) => s.textContent === css)) {
-            let newStyle = document.createElement("style");
-            newStyle.textContent = css;
-            document.head.appendChild(newStyle);
-          }
-        });
-      }
-      let bodyMatch = /<body[^>]*>((.|[\n\r])*)<\/body>/im.exec(t);
-      if (bodyMatch) {
-        r.body.innerHTML = bodyMatch[1];
-      }
-      let u = /<title[^>]*>((.|[\n\r])*)<\/title>/im.exec(t);
-      n = u ? u[1] : "";
-    }
-    let a = r.getElementById("scroll-nav-section"),
-      l,
-      c;
-    (a &&
-      ((l = a.dataset.path),
-      (c = r.getElementById("scroll-nav-text").innerHTML)),
-      e.setTitleDom(n, r.querySelector(".page"), l, c),
-      a && a.removeAttribute("data-path"),
-      this._attachEvents(t ? e.dom : r.documentElement),
-      this._onDomReady(e));
-  }
-  _attachEvents(e) {
-    let t = e.querySelectorAll("a");
-    for (let r = 0, n = t.length; r < n; r++) {
-      let a = t[r];
-      if (!a.__hasClickParsed) {
-        a.__hasClickParsed = !0;
-        let l =
-          a.href.indexOf(window.location.origin) === 0 ||
-          a.href.indexOf("/") === 0;
-        (a.dataset.linkType && (l = a.dataset.linkType === "internal"),
-          l
-            ? (a.addEventListener("mouseenter", (c) => {
-                this.preFetch(this.parseUrl(a.href));
-              }),
-              a.addEventListener(
-                "click",
-                this._onInternalLinkClick.bind(this, a),
-              ))
-            : a.addEventListener(
-                "click",
-                this._onRegularLinkClick.bind(this, a),
-              ));
-      }
-    }
-  }
-  _onRegularLinkClick(e, t) {
-    let r = e.href;
-    if (r.indexOf("https://player.vimeo.com/video/") === 0) {
-      t.preventDefault();
-      let n = r.split("/").pop();
-      videoOverlay.initAndPlayVideo(n, !0);
-    }
-  }
-  _onInternalLinkClick(e, t) {
-    t.preventDefault();
-    let r = !0;
-    (e._onPreClick && (r = e._onPreClick() !== !1), r && this.setUrl(e.href));
-  }
-  _onDomReady(e) {
-    this._pendingPath == e.path &&
-      ((this._pendingPath = null), this.onRouteChanged.dispatch(e));
-  }
-  parseUrl(e = loc.href) {
-    let t = e.replace(URL_PREFIX_REGEX, ""),
-      r = t.split("#");
-    return (r[1], (r = r[0].split("?")), r[1], (t = this.parsePath(r[0])), t);
-  }
-  parsePath(e) {
-    return ((e = e.replace(/^\/|\/$/g, "")), e);
-  }
-  setUrl(e = loc.href) {
-    let t = this.parseUrl(e);
-    this.setPath(t);
-  }
-  setPath(e) {
-    ((e = this.parsePath(e)),
-      e !== this.currPath &&
-        (history.pushState(
-          null,
-          null,
-          (e || "/") + (this.queryStr ? "?" + this.queryStr : ""),
-        ),
-        this._onStatePop()));
-  }
-  preFetch(e) {
-    ((e = this.parsePath(e)), this._fetchHtml(e));
-  }
-  _onStatePop(e) {
-    e && e.preventDefault();
-    let t = this.parseUrl();
-    t !== this.currPath &&
-      ((this.currPath = t),
-      (this._pendingPath = t),
-      properties.hasInitialized
-        ? this._fetchHtml(t)
-        : this._initDom(this._createRoute(t)));
-  }
-}
-const routeManager = new RouteManager();
-let _c1$1 = new Color(),
-  _c2$1 = new Color();
-class Header {
-  sectionId = ["home", "about", "project", "who", "end"];
-  isActive = !1;
-  ratio = 0;
-  soundBtnTime = 0;
-  soundBtnSize = 0;
-  soundBtnHoverRatio = 0;
-  soundBtnHoverAngle = 0;
-  isSoundBtnHover = !1;
-  forceWhite = !1;
-  menu = { opened: !1, ratio: 0 };
-  headerColor = "transparent";
-  headerTextColor = "#000";
-  preInit() {
-    ((this.domContainer = document.getElementById("header")),
-      (this.domHeaderContainer = document.getElementById("header-menu")),
-      (this.domLogoSvg = document.querySelector("#header-logo svg")),
-      (this.domBackground = document.getElementById("header-background")),
-      (this.domRight = document.getElementById("header-right")),
-      (this.domRightSoundBtn = document.getElementById(
-        "header-right-sound-btn",
-      )),
-      (this.domRightSoundBtnCanvas =
-        this.domRightSoundBtn.querySelector("canvas")),
-      (this.domRightSoundBtnCtx = this.domRightSoundBtnCanvas.getContext("2d")),
-      (this.domRightTalkBtn = document.getElementById("header-right-talk-btn")),
-      (this.domRightTalkBtnContainer = document.getElementById(
-        "header-right-talk-container",
-      )),
-      (this.domRightTalkPlaceholder = document.getElementById(
-        "header-right-talk-btn-placeholder",
-      )),
-      (this.domRightMenuBtn = document.getElementById("header-right-menu-btn")),
-      (this.domMenuLinks = Array.from(
-        document.querySelectorAll("#header-menu-links .header-menu-link"),
-      )),
-      (this.domMenuLinkContact = document.querySelector(
-        '.header-menu-link[data-scroll-to="contact"]',
-      )),
-      (this.domMenuTalk = document.getElementById("header-menu-talk")),
-      (this.domMenuNewsletterForm = document.getElementById(
-        "header-menu-newsletter-form",
-      )),
-      (this.domMenuNewsletterButton = document.getElementById(
-        "header-menu-newsletter-input-arrow",
-      )),
-      (this.domMenuNewsletterMessage = document.getElementById(
-        "header-menu-newsletter-feedback-message",
-      )),
-      (this.formManager = new NewletterForm(
-        this.domMenuNewsletterForm,
-        this.domMenuNewsletterButton,
-        this.domMenuNewsletterMessage,
-      )),
-      (this.containers = [
-        document.getElementById("header-menu-links"),
-        document.getElementById("header-menu-newsletter"),
-        this.domMenuTalk,
-        document.getElementById("header-menu-labs"),
-      ]),
-      routeManager.onRouteChanged.add(this._onRouteChanged, this),
-      pagesManager.onScrollTargetChanged.add(
-        this._onPageScrollTargetChange,
-        this,
-      ),
-      (document.querySelector("#header-logo")._onPreClick = () => {
-        if (routeManager.currRoute.target == homePage)
-          return (scrollManager.scrollToPixel(0), !1);
-      }),
-      pagesManager.onIdled.add(() => {
-        ((this.headerColor = window
-          .getComputedStyle(properties.domRoot, null)
-          .getPropertyValue("--header-color")),
-          (this.headerTextColor = window.getComputedStyle(
-            this.domRightMenuBtn,
-          ).color),
-          (this.headerTextColorHover = window
-            .getComputedStyle(properties.domRoot, null)
-            .getPropertyValue("--project-details-btn-text-hover")));
-      }));
-  }
-  init() {
-    (settings.USE_AUDIO || (this.domRightSoundBtn.style.visibility = "hidden"),
-      input.onClicked.add(() => {
-        !input.hasThroughElem(this.domRightMenuBtn, "click") &&
-          !input.hasThroughElem(this.domHeaderContainer, "click") &&
-          this._enableMenu(!1);
-      }),
-      this.domRightSoundBtn.addEventListener("mouseenter", (e) => {
-        let t = this.domRightSoundBtn.getBoundingClientRect(),
-          r = e.clientX - t.left - t.width / 2,
-          n = e.clientY - t.top - t.height / 2;
-        ((this.soundBtnHoverAngle = Math.atan2(n, r) - Math.PI / 2),
-          (this.isSoundBtnHover = !0));
-      }),
-      this.domRightSoundBtn.addEventListener("mouseleave", () => {
-        this.isSoundBtnHover = !1;
-      }),
-      this.domRightSoundBtn.addEventListener(
-        "click",
-        this._onDomRightSoundBtn.bind(this),
-      ),
-      this.domRightMenuBtn.addEventListener(
-        "click",
-        this._domRightMenuBtnClick.bind(this),
-      ),
-      this.domMenuLinkContact &&
-        this.domMenuLinkContact.addEventListener(
-          "click",
-          this._onDomMenuLinkContact.bind(this),
-        ),
-      this.containers.filter(Boolean).forEach((e, t) => {
-        (e.style.setProperty("--open-delay", t / 50 + "s"),
-          e.style.setProperty(
-            "--close-delay",
-            Math.abs(t - this.containers.length) / 50 + "s",
-          ));
-      }));
-  }
-  show() {
-    this.isActive = !0;
-  }
-  hideTalkBtn() {}
-  changeSection(e) {
-    scrollManager.scrollTo(e);
-  }
-  _onDomRightSoundBtn() {
-    audios.toggle();
-  }
-  _onRouteChanged() {
-    this._enableMenu(!1);
-  }
-  _domRightMenuBtnClick() {
-    this._enableMenu(!this.menu.opened);
-  }
-  _onDomMenuLinkContact() {
-    routeManager.currRoute.pathNodes[0] === "projects" &&
-    routeManager.currRoute.pathNodes[1]
-      ? ((properties.isContactFromProjectPage = !0),
-        document.querySelector("[data-page='home']").click())
-      : (scrollManager.scrollTo("footer-section"), this._enableMenu(!1));
-  }
-  _enableMenu(e) {
-    ((this.menu.opened = e),
-      this.domContainer.classList.toggle("--menu-opened", e),
-      this.domHeaderContainer.classList.toggle("--opened", e),
-      this.domBackground.classList.toggle("--opened", e),
-      this.domRightMenuBtn.classList.toggle("--opened", e),
-      e
-        ? ((this.domBackground.style.opacity =
-            properties.viewportWidth >= 1e3 ? 0.2 : 1),
-          (this.domHeaderContainer.style.pointerEvents = "auto"))
-        : ((this.domBackground.style.opacity = 0),
-          (this.domHeaderContainer.style.pointerEvents = "none")));
-  }
-  _domRightMenuListMouseenter() {
-    this.menu.hover = !0;
-  }
-  _domRightMenuListMouseleave() {
-    this.menu.hover = !1;
-  }
-  _onWindowClick(e) {
-    e.target.closest("#header-menu") ||
-      e.target.closest("#header-right-menu-btn") ||
-      this._enableMenu(!1);
-  }
-  _onPageScrollTargetChange(e) {
-    const t = this.domMenuLinks.filter((n) =>
-        n.classList.contains("--active"),
-      )[0],
-      r = this.domMenuLinks.filter((n) => n.dataset.page === e.id)[0];
-    (t && t.classList.remove("--active"), r && r.classList.add("--active"));
-  }
-  resize(e, t) {
-    let r = this.domRightTalkBtn.getBoundingClientRect(),
-      n = this.domRightTalkPlaceholder.getBoundingClientRect(),
-      a = this.domRightSoundBtn.getBoundingClientRect();
-    ((this.soundBtnSize = a.width),
-      (this.domRightSoundBtnCanvas.width = Math.round(
-        this.soundBtnSize * (browser$1.devicePixelRatio > 1 ? 2 : 1),
-      )),
-      (this.domRightSoundBtnCanvas.height = Math.round(
-        this.soundBtnSize * (browser$1.devicePixelRatio > 1 ? 2 : 1),
-      )),
-      (this.domRightTalkBtn._width = r.width),
-      (this.domRightTalkBtn._height = r.height),
-      (this.domRightTalkBtn._placeholderWidth = n.width),
-      (this.domRightTalkBtn._toWidth = r.height),
-      (this.domRightTalkBtn._deltaX =
-        n.left -
-        properties.viewportWidth * 0.5 +
-        parseFloat(getComputedStyle(this.domRightTalkBtn).fontSize) *
-          3.2 *
-          0.5));
-  }
-  updateSoundWave(e) {
-    let t = (this.soundBtnHoverRatio = math.saturate(
-      this.soundBtnHoverRatio + (this.isSoundBtnHover ? e : -e) / 0.3,
-    ));
-    this.soundBtnTime += e * 0.6 * (1 + t * 0.5);
-    let r = this.soundBtnSize,
-      n = this.domRightSoundBtnCtx,
-      a = browser$1.devicePixelRatio > 1 ? 2 : 1;
-    if (
-      (n.save(),
-      n.scale(a, a),
-      n.clearRect(0, 0, r, r),
-      n.translate(r / 2, r / 2),
-      t < 1 &&
-        (n.beginPath(),
-        n.arc(0, 0, r / 2, 0, Math.PI * 2),
-        _c1$1.setStyle("#E4E6EF"),
-        _c2$1.setStyle("#fff"),
-        (n.fillStyle = _c1$1
-          .lerp(_c2$1, Math.max(this.menu.ratio, +this.forceWhite))
-          .getStyle()),
-        n.fill(),
-        n.closePath()),
-      t > 0)
-    ) {
-      (n.save(), t < 1 && (n.globalCompositeOperation = "source-atop"));
-      let f = ease.cubicInOut(t);
-      (n.rotate(this.soundBtnHoverAngle),
-        n.translate(0, math.fit(t, 0, 1, r * 0.75, 0, ease.cubicInOut)),
-        n.scale(f, f),
-        n.beginPath(),
-        n.arc(0, 0, r / 2, 0, Math.PI * 2),
-        (n.fillStyle = this.headerColor),
-        n.fill(),
-        n.closePath(),
-        n.restore());
-    }
-    (_c1$1.setStyle(this.headerTextColor),
-      _c2$1.setStyle(this.headerTextColorHover),
-      (n.strokeStyle = _c1$1.lerp(_c2$1, t).getStyle()),
-      (n.lineWidth = r * 0.05),
-      (n.lineCap = "round"),
-      n.beginPath());
-    let l = 32,
-      c = r * 0.4,
-      u = r * 0.28 * audios.volume;
-    for (let f = 0; f < l + 1; f++) {
-      let p = -c / 2 + (c * f) / l,
-        g =
-          ((Math.sin(this.soundBtnTime * 8 + (f / l) * 7) * u) / 2) *
-          math.fit(Math.abs(f / l - 0.5), 0.5, 0.25, 0.3, 1, ease.sineInOut);
-      f == 0 ? n.moveTo(p, g) : n.lineTo(p, g);
-    }
-    (n.stroke(), n.closePath(), n.restore());
-  }
-  update(e) {
-    ((this.menu.ratio = math.saturate(
-      this.menu.ratio + (this.menu.opened ? e : -e),
-    )),
-      (this.ratio = math.clamp(this.ratio + (this.isActive ? e : -e), 0, 2)));
-    const t = math.fit(this.ratio, 0.9, 1.7, 0, 1),
-      r = math.fit(t, 0, 1, 4, 0, ease.lusion);
-    if (
-      ((this.domRightSoundBtn.style.transform = `translate3d(0, ${r}em, 0)`),
-      (this.domRightTalkBtn.style.display = "none"),
-      properties.useMobileLayout || this.updateSoundWave(e),
-      properties.useMobileLayout)
-    )
-      ((this.domRightTalkBtnContainer.style.opacity = 0),
-        (this.domRightTalkBtn.style.transform = "none"));
-    else {
-      let l = math.fit(this.ratio, 1, 1.8, 0, 1),
-        c = math.fit(l, 0, 1, 4, 0, ease.lusion);
-      ((this.domRightTalkBtnContainer.style.opacity = 1),
-        (this.domRightTalkBtn.style.display = "block"),
-        (this.domRightTalkBtn.style.pointerEvents = "auto"),
-        (this.domRightTalkBtn.style.opacity = 1),
-        (this.domRightTalkBtn.style.transform = `translate3d(0, ${c}em, 0)`));
-    }
-    let n = math.fit(this.ratio, 1.1, 1.9, 0, 1),
-      a = math.fit(n, 0, 1, 4, 0, ease.lusion);
-    this.domRightMenuBtn.style.transform = `translate3d(0, ${a}em, 0)`;
-  }
-  _hexToRgb(e) {
-    const t = parseInt(e.substring(1, 3), 16) || 0,
-      r = parseInt(e.substring(3, 5), 16) || 0,
-      n = parseInt(e.substring(5, 7), 16) || 0;
-    return [t, r, n];
-  }
-}
-const header = new Header();
+let _c1$1 = new Color(), _c2$1 = new Color();
+
 class ProjectDetailsData {
   id = "";
   title = "";
@@ -1695,6 +1235,10 @@ const projectDetailsSection = new ProjectDetailsSection();
 
 globalThis.vert$b = vert$b;
 globalThis.frag$f = frag$f;
+globalThis.ProjectDetailsData = ProjectDetailsData;
+globalThis.ProjectDetailsItem = ProjectDetailsItem;
+globalThis.ProjectDetailsItems = ProjectDetailsItems;
+globalThis.ProjectDetailsSection = ProjectDetailsSection;
 globalThis.projectDetailsScreen = projectDetailsScreen;
 globalThis.projectDetailsSection = projectDetailsSection;
 

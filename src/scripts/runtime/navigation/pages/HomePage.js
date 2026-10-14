@@ -26,22 +26,31 @@ class HomeHeroSection {
   domContainer;
   domHomeTitle;
   sectionDomRange;
-  preInit(e) {
-    ((this.domContainer = e.querySelector("#home-hero")),
-      (this.domVisualContainer = e.querySelector(
+  hostPage = null;
+  _hasBoundClick = !1;
+  preInit(e, hostPage) {
+    this.hostPage = hostPage || window.pagesManager?.currRoute?.target || window.homePage;
+    let container = e || document;
+    ((this.domContainer = container.querySelector("#home-hero")),
+      (this.domVisualContainer = container.querySelector(
         "#home-hero-visual-container",
       )),
-      (this.domHomeTitle = e.querySelector("#home-hero-title")),
-      (this.domHomeScroll = e.querySelector("#home-hero-scroll")),
+      (this.domHomeTitle = container.querySelector("#home-hero-title")),
+      (this.domHomeScroll = container.querySelector("#home-hero-scroll")),
       (this.domHomeCrosses = Array.from(
-        e.querySelectorAll(".home-hero-scroll-container-cross"),
-      )),
-      (this.domHomeScroll = e.querySelector("#home-hero-scroll")),
-      (this.domHomeScroll._animating = !1),
-      (this.domHomeScroll._time = 0),
-      visuals.stage3DList.push(homeBalloons),
-      homeBalloons.preInit(),
-      (this.frameMesh = new Mesh(
+        container.querySelectorAll(".home-hero-scroll-container-cross"),
+      )));
+    if (!this.domContainer) return;
+    if (this.domHomeScroll) {
+      this.domHomeScroll._animating = !1;
+      this.domHomeScroll._time = 0;
+    }
+    if (!visuals.stage3DList.includes(homeBalloons)) {
+      visuals.stage3DList.push(homeBalloons);
+    }
+    homeBalloons.preInit();
+    if (!this.frameMesh) {
+      this.frameMesh = new Mesh(
         fboHelper.triGeom,
         fboHelper.createRawShaderMaterial({
           uniforms: Object.assign({
@@ -61,19 +70,27 @@ class HomeHeroSection {
           transparent: !0,
           side: 2,
         }),
-      )),
-      (this.frameMesh.material.extensions.derivatives = !0),
-      homePage.preUfxContainer.add(this.frameMesh),
-      (this.frameMesh.visible = !1),
-      (this.frameMesh.renderOrder = -1e3));
+      );
+      this.frameMesh.material.extensions.derivatives = !0;
+      this.frameMesh.visible = !1;
+      this.frameMesh.renderOrder = -1e3;
+    }
+    const targetContainer = (this.hostPage && this.hostPage.preUfxContainer) || (window.homePage && window.homePage.preUfxContainer);
+    if (targetContainer && this.frameMesh) {
+      targetContainer.add(this.frameMesh);
+    }
   }
   init() {
-    (input.onClicked.add(() => {
-      input.hasThroughElem(this.domVisualContainer, "click") &&
-        (audios.countPlay("click"),
-        homeBalloons.changeHomeHeroColorSignal.dispatch());
-    }),
-      homeBalloons.init());
+    if (!this._hasBoundClick) {
+      this._hasBoundClick = !0;
+      input.onClicked.add(() => {
+        if (this.domVisualContainer && input.hasThroughElem(this.domVisualContainer, "click")) {
+          audios.countPlay("click");
+          homeBalloons.changeHomeHeroColorSignal.dispatch();
+        }
+      });
+    }
+    homeBalloons.init();
   }
   initEvent() {
     window.addEventListener("wheel", this._onWheel.bind(this), { once: !0 });
@@ -96,7 +113,7 @@ class HomeHeroSection {
   _updateUi(e) {
     (scrollManager.scrollPixel,
       math.fit(this.sectionDomRange.ratio, 0.3, 0.7, 0, 1, ease.cubcInOut));
-    let t = Math.max(0, homePage.time - 1);
+    let t = Math.max(0, (this.hostPage || window.homePage).time - 1);
     for (let r = 0; r < this.domHomeTitle._words.length; r++) {
       let n = this.domHomeTitle._words[r],
         a = t - r / 20;
@@ -156,14 +173,19 @@ class HomeHeroSection {
     this._reset();
   }
   _reset() {
-    ((this.domHomeScroll._animating = !1), (this.domHomeScroll._time = 0));
-    for (let e = 0; e < this.domHomeTitle._words.length; e++) {
-      let t = this.domHomeTitle._words[e];
-      t.style.transform = "translate3d(0, 100%, 0)";
+    if (this.domHomeScroll) {
+      this.domHomeScroll._animating = !1;
+      this.domHomeScroll._time = 0;
+    }
+    if (this.domHomeTitle && this.domHomeTitle._words) {
+      for (let e = 0; e < this.domHomeTitle._words.length; e++) {
+        let t = this.domHomeTitle._words[e];
+        if (t && t.style) t.style.transform = "translate3d(0, 100%, 0)";
+      }
     }
   }
 }
-const homeHeroSection = new HomeHeroSection();
+const homeHeroSection = window.homeHeroSection || new HomeHeroSection();
 window.homeHeroSection = homeHeroSection;
 window.homeBalloons = homeBalloons;
 window.homeBalloonsPhysics = homeBalloonsPhysics;
@@ -203,101 +225,132 @@ class HomeReelSection {
   _needsReset = !0;
   isVerticalVideo = !1;
   showVideoPlaceholderButton = !1;
-  preInit(e) {
-    ((this.domContainer = e.querySelector("#home-reel")),
-      (this.domTitle = e.querySelector("#home-reel-title")),
-      (this.domTitle._time = 0),
-      (this.domTitle._animating = !1),
-      (this.domTitleInner = e.querySelector("#home-reel-title-inner")),
-      (this.domTitleLine1 = e.querySelector("#home-reel-title-line-1")),
-      (this.domContent = e.querySelector("#home-reel-content")),
-      (this.domDescription = e.querySelector("#home-reel-desc")),
-      (this.domDescription._time = 0),
-      (this.domDescription._animating = !1),
-      (this.domBtn = e.querySelector("#home-reel-cta")),
-      (this.domBtn._ratio = 0),
-      (this.domBtn._animating = !1),
-      (this.domThumb = e.querySelector("#home-reel-thumb")),
-      (this.domReelContainer = e.querySelector("#home-reel-container")),
-      (this.domReelContainerInner = e.querySelector(
-        "#home-reel-container-inner",
-      )),
-      (this.domVideoContainer = e.querySelector("#home-reel-video-container")),
-      (this.domVideoContainerDecorationTop = e.querySelector(
-        "#home-reel-video-container-top",
-      )),
-      (this.domVideoContainerDecorationTop._crosses = Array.from(
+  hostPage = null;
+  _hasBoundClick = !1;
+  _hasBoundHide = !1;
+  _onVideoMeshMouseEnterBound = null;
+  _onVideoMeshMouseLeaveBound = null;
+  _onDomVideoButtonMouseenterBound = null;
+  _onDomVideoButtonMouseleaveBound = null;
+
+  preInit(e, hostPage) {
+    this.hostPage = hostPage || window.pagesManager?.currRoute?.target || window.homePage;
+    let container = e || document;
+    this.domContainer = container.querySelector("#home-reel");
+    if (!this.domContainer) return;
+
+    this.domTitle = container.querySelector("#home-reel-title");
+    if (this.domTitle) {
+      this.domTitle._time = 0;
+      this.domTitle._animating = !1;
+    }
+    this.domTitleInner = container.querySelector("#home-reel-title-inner");
+    this.domTitleLine1 = container.querySelector("#home-reel-title-line-1");
+    this.domContent = container.querySelector("#home-reel-content");
+    this.domDescription = container.querySelector("#home-reel-desc");
+    if (this.domDescription) {
+      this.domDescription._time = 0;
+      this.domDescription._animating = !1;
+    }
+    this.domBtn = container.querySelector("#home-reel-cta");
+    if (this.domBtn) {
+      this.domBtn._ratio = 0;
+      this.domBtn._animating = !1;
+    }
+    this.domThumb = container.querySelector("#home-reel-thumb");
+    this.domReelContainer = container.querySelector("#home-reel-container");
+    this.domReelContainerInner = container.querySelector(
+      "#home-reel-container-inner",
+    );
+    this.domVideoContainer = container.querySelector("#home-reel-video-container");
+    this.domVideoContainerDecorationTop = container.querySelector(
+      "#home-reel-video-container-top",
+    );
+    if (this.domVideoContainerDecorationTop) {
+      this.domVideoContainerDecorationTop._crosses = Array.from(
         this.domVideoContainerDecorationTop.querySelectorAll(
           ".home-reel-video-container-cross",
         ),
-      )),
-      (this.domVideoContainerDecorationTop._svgWrapper =
+      );
+      this.domVideoContainerDecorationTop._svgWrapper =
         this.domVideoContainerDecorationTop.querySelector(
           ".home-reel-video-container-svg-wrapper",
-        )),
-      (this.domVideoContainerDecorationTop._svgs = Array.from(
+        );
+      this.domVideoContainerDecorationTop._svgs = Array.from(
         this.domVideoContainerDecorationTop.querySelectorAll("svg"),
-      )),
-      (this.domVideoContainerDecorationTop._animating = !1),
-      (this.domVideoContainerDecorationTop._time = 0),
-      (this.domVideoContainerDecorationBottom = e.querySelector(
-        "#home-reel-video-container-bottom",
-      )),
-      (this.domVideoContainerDecorationBottom._crosses = Array.from(
+      );
+      this.domVideoContainerDecorationTop._animating = !1;
+      this.domVideoContainerDecorationTop._time = 0;
+    }
+    this.domVideoContainerDecorationBottom = container.querySelector(
+      "#home-reel-video-container-bottom",
+    );
+    if (this.domVideoContainerDecorationBottom) {
+      this.domVideoContainerDecorationBottom._crosses = Array.from(
         this.domVideoContainerDecorationBottom.querySelectorAll(
           ".home-reel-video-container-cross",
         ),
-      )),
-      (this.domVideoContainerDecorationBottom._svgWrapper =
+      );
+      this.domVideoContainerDecorationBottom._svgWrapper =
         this.domVideoContainerDecorationBottom.querySelector(
           ".home-reel-video-container-svg-wrapper",
-        )),
-      (this.domVideoContainerDecorationBottom._svgs = Array.from(
+        );
+      this.domVideoContainerDecorationBottom._svgs = Array.from(
         this.domVideoContainerDecorationBottom.querySelectorAll("svg"),
-      )),
-      (this.domVideoContainerDecorationBottom._animating = !1),
-      (this.domVideoContainerDecorationBottom._time = 0),
-      (this.domVideoPlaceholder = e.querySelector(
-        "#home-reel-video-placeholder",
-      )),
-      (this.domVideoTitle = e.querySelector("#home-reel-video-title")),
-      (this.domVideoTitle._animating = !1),
-      (this.domVideoTitle._time = 0),
-      (this.domVideoTitle._showAnimating = !1),
-      (this.domVideoTitle._showTime = 0),
-      (this.domVideoContainerDecoration = e.querySelector(
-        "#home-reel-video-container-decoration",
-      )),
-      (this.domTopContainer = e.querySelector(
-        "#home-reel-decoration-top-container",
-      )),
-      (this.domBottomContainer = e.querySelector(
-        "#home-reel-decoration-bottom-container",
-      )),
-      (this.domVideoButton = e.querySelector("#home-reel-video-watch-btn")),
-      (this.domVideoButton._active = !1),
-      (this.domVideoButton._ratio = 0),
-      (this.domVideoButton._time = 0),
-      (this.domVideoButton._hover = !1),
-      (this.domVideoButton._hoverRatio = 0),
-      (this.domVideoButton._hoverRatio2 = 0),
-      (this.domVideoButton._hoverRatio3 = 0),
-      (this.domVideoButton._hoverTime = 0),
-      (this.isVerticalVideo = properties.viewportWidth <= 560),
-      (this.video = document.createElement("video")),
-      (this.video.muted = !0),
-      (this.video.playsinline = !0),
-      this.video.setAttribute("playsinline", ""),
+      );
+      this.domVideoContainerDecorationBottom._animating = !1;
+      this.domVideoContainerDecorationBottom._time = 0;
+    }
+    this.domVideoPlaceholder = container.querySelector(
+      "#home-reel-video-placeholder",
+    );
+    this.domVideoTitle = container.querySelector("#home-reel-video-title");
+    if (this.domVideoTitle) {
+      this.domVideoTitle._animating = !1;
+      this.domVideoTitle._time = 0;
+      this.domVideoTitle._showAnimating = !1;
+      this.domVideoTitle._showTime = 0;
+    }
+    this.domVideoContainerDecoration = container.querySelector(
+      "#home-reel-video-container-decoration",
+    );
+    this.domTopContainer = container.querySelector(
+      "#home-reel-decoration-top-container",
+    );
+    this.domBottomContainer = container.querySelector(
+      "#home-reel-decoration-bottom-container",
+    );
+    this.domVideoButton = container.querySelector("#home-reel-video-watch-btn");
+    if (this.domVideoButton) {
+      this.domVideoButton._active = !1;
+      this.domVideoButton._ratio = 0;
+      this.domVideoButton._time = 0;
+      this.domVideoButton._hover = !1;
+      this.domVideoButton._hoverRatio = 0;
+      this.domVideoButton._hoverRatio2 = 0;
+      this.domVideoButton._hoverRatio3 = 0;
+      this.domVideoButton._hoverTime = 0;
+    }
+    this.isVerticalVideo = properties.viewportWidth <= 560;
+
+    if (!this.video) {
+      this.video = document.createElement("video");
+      this.video.muted = !0;
+      this.video.playsinline = !0;
+      this.video.setAttribute("playsinline", "");
       settings.LOCAL_TEXTURE_PATH !== settings.TEXTURE_PATH &&
-        (this.video.crossOrigin = "anonymous"),
-      (this.video.src =
+        (this.video.crossOrigin = "anonymous");
+      this.video.src =
         settings.TEXTURE_PATH +
-        (this.isVerticalVideo ? "reel/mobile.mp4" : "reel/desktop.mp4")),
-      (this.video.loop = !0),
-      this.video.load(),
-      (this.videoTexture = new VideoTexture(this.video)),
-      (this.ufxMeshThumb = new UfxMesh({ refDom: this.domThumb })),
-      (this.ufxMesh = new UfxMesh({
+        (this.isVerticalVideo ? "reel/mobile.mp4" : "reel/desktop.mp4");
+      this.video.loop = !0;
+      this.video.load();
+      this.videoTexture = new VideoTexture(this.video);
+    }
+
+    if (!this.ufxMesh) {
+      this.ufxMeshThumb = new UfxMesh({ refDom: this.domThumb });
+      this.ufxMesh = new UfxMesh({
         refDom: this.domReelContainerInner,
         segX: 32,
         segY: 32,
@@ -322,41 +375,76 @@ class HomeReelSection {
         depthTest: !1,
         depthWrite: !1,
         side: 2,
-      })),
-      (this.ufxMesh.renderOrder = 1e3),
-      homePage.preUfxContainer.add(this.ufxMesh),
-      videoOverlay.preInit(),
-      (this.lineVisual = new Line(0)),
-      this.lineVisual.preInit(),
-      this.domVideoPlaceholder.addEventListener(
-        "mouseenter",
-        this._onVideoMeshMouseEnter.bind(this),
-      ),
-      this.domVideoPlaceholder.addEventListener(
-        "mouseleave",
-        this._onVideoMeshMouseLeave.bind(this),
-      ),
-      this.domVideoButton.addEventListener(
-        "mouseenter",
-        this._onDomVideoButtonMouseenter.bind(this),
-      ),
-      this.domVideoButton.addEventListener(
-        "mouseleave",
-        this._onDomVideoButtonMouseleave.bind(this),
-      ),
+      });
+      this.ufxMesh.renderOrder = 1e3;
+    } else {
+      if (this.ufxMeshThumb) this.ufxMeshThumb.refDom = this.domThumb;
+      if (this.ufxMesh) this.ufxMesh.refDom = this.domReelContainerInner;
+    }
+
+    const targetContainer = (this.hostPage && this.hostPage.preUfxContainer) || (window.homePage && window.homePage.preUfxContainer);
+    if (targetContainer && this.ufxMesh) {
+      targetContainer.add(this.ufxMesh);
+    }
+
+    videoOverlay.preInit();
+    if (!this.lineVisual) {
+      this.lineVisual = new Line(0);
+      this.lineVisual.preInit();
+    }
+
+    if (this.domVideoPlaceholder) {
+      if (this._onVideoMeshMouseEnterBound) {
+        this.domVideoPlaceholder.removeEventListener("mouseenter", this._onVideoMeshMouseEnterBound);
+        this.domVideoPlaceholder.removeEventListener("mouseleave", this._onVideoMeshMouseLeaveBound);
+      }
+      this._onVideoMeshMouseEnterBound = this._onVideoMeshMouseEnter.bind(this);
+      this._onVideoMeshMouseLeaveBound = this._onVideoMeshMouseLeave.bind(this);
+      this.domVideoPlaceholder.addEventListener("mouseenter", this._onVideoMeshMouseEnterBound);
+      this.domVideoPlaceholder.addEventListener("mouseleave", this._onVideoMeshMouseLeaveBound);
+    }
+
+    if (this.domVideoButton) {
+      if (this._onDomVideoButtonMouseenterBound) {
+        this.domVideoButton.removeEventListener("mouseenter", this._onDomVideoButtonMouseenterBound);
+        this.domVideoButton.removeEventListener("mouseleave", this._onDomVideoButtonMouseleaveBound);
+        this.domVideoButton.removeEventListener("click", this._onDomVideoButtonClickBound);
+      }
+      this._onDomVideoButtonMouseenterBound = this._onDomVideoButtonMouseenter.bind(this);
+      this._onDomVideoButtonMouseleaveBound = this._onDomVideoButtonMouseleave.bind(this);
+      this._onDomVideoButtonClickBound = this._onDomVideoButtonClick.bind(this);
+      this.domVideoButton.addEventListener("mouseenter", this._onDomVideoButtonMouseenterBound);
+      this.domVideoButton.addEventListener("mouseleave", this._onDomVideoButtonMouseleaveBound);
+      this.domVideoButton.addEventListener("click", this._onDomVideoButtonClickBound);
+    }
+
+    if (!this._hasBoundClick) {
+      this._hasBoundClick = !0;
       input.onClicked.add(() => {
-        input.hasThroughElem(this.domVideoButton, "click") &&
+        if (this.domVideoButton && input.hasThroughElem(this.domVideoButton, "click")) {
           this._onDomVideoButtonClick();
-      }));
+        }
+      });
+    }
   }
   init() {
-    (this.lineVisual.init(),
-      (this.lineVisual.mesh.material.transparent = !0),
-      (this.lineVisual.circle.material.transparent = !0),
-      (this.lineVisual.mesh.renderOrder = 200),
-      (this.lineVisual.circle.renderOrder = 200),
-      videoOverlay.init(),
-      homePage.onHideStarted.add(this._onPageHideStarted.bind(this)));
+    if (this.lineVisual) {
+      this.lineVisual.init();
+      if (this.lineVisual.mesh) {
+        this.lineVisual.mesh.material.transparent = !0;
+        this.lineVisual.mesh.renderOrder = 200;
+      }
+      if (this.lineVisual.circle) {
+        this.lineVisual.circle.material.transparent = !0;
+        this.lineVisual.circle.renderOrder = 200;
+      }
+    }
+    videoOverlay.init();
+    const hideSignal = (this.hostPage && this.hostPage.onHideStarted) || (window.homePage && window.homePage.onHideStarted);
+    if (hideSignal && !this._hasBoundHide) {
+      this._hasBoundHide = !0;
+      hideSignal.add(this._onPageHideStarted.bind(this));
+    }
   }
   _onPageHideStarted() {
     (this.video.paused || this.video.pause(),
@@ -428,14 +516,15 @@ class HomeReelSection {
           ),
       u = scrollManager.getDomRange(this.domThumb),
       f = n ? l.isActive : u.showScreenOffset > 0 && l.hideScreenOffset < 1;
-    if (
-      (homePage.preUfxContainer.add(this.lineVisual.container),
-      homePage.preUfxContainer.add(this.lineVisual.container),
-      f
-        ? this.domVideoContainer.classList.add("--is-visible")
-        : this.domVideoContainer.classList.remove("--is-visible"),
-      f)
-    ) {
+    const targetC = (this.hostPage && this.hostPage.preUfxContainer) || (window.homePage && window.homePage.preUfxContainer);
+    if (targetC && this.lineVisual?.container) {
+      targetC.add(this.lineVisual.container);
+    }
+    if (this.domVideoContainer) {
+      if (f) this.domVideoContainer.classList.add("--is-visible");
+      else this.domVideoContainer.classList.remove("--is-visible");
+    }
+    if (f) {
       let p = u.top - (properties.viewportHeight - u.height) * 0.5,
         g = a.top - (properties.viewportHeight - a.height) * 0.5,
         v = Math.max(
@@ -814,6 +903,9 @@ class HomeReelSection {
     this.isUfxMeshHover = !1;
   }
   _splitText() {
+    this.domDescription?._splitted?.revert?.();
+    this.domTitle?._splitted?.revert?.();
+    this.domVideoTitle?._splitted?.revert?.();
     if (properties.viewportWidth >= 812) {
       ((this.domDescription._splitted = new SplitType(this.domDescription, {
         types: "words",
@@ -994,7 +1086,7 @@ class HomeFeaturedSection {
     } else this._needsReset = !0;
     this.projectItemList &&
       (((this.projectItemList.zoomRatio = math.fit(
-        homePage.activeRatio,
+        (this.hostPage || window.homePage).activeRatio,
         0,
         0.75,
         1,
@@ -1046,7 +1138,9 @@ class HomeFeaturedSection {
     }
   }
 }
-const homeFeaturedSection = new HomeFeaturedSection(),
+const homeFeaturedSection = window.homeFeaturedSection || new HomeFeaturedSection();
+window.homeFeaturedSection = homeFeaturedSection;
+const
   channelMixerFrag = `#define GLSLIFY 1
 uniform sampler2D u_texture;uniform vec4 u_channelMixerR;uniform vec4 u_channelMixerG;uniform vec4 u_channelMixerB;uniform vec4 u_channelMixerA;varying vec2 v_uv;void main(){vec4 color=texture2D(u_texture,v_uv);gl_FragColor=vec4(dot(color,u_channelMixerR),dot(color,u_channelMixerG),dot(color,u_channelMixerB),dot(color,u_channelMixerA));}`;
 
@@ -1059,90 +1153,72 @@ class HomePage extends Page {
   preInit(r) {
     let e = this.domContainer || (r && r.dom) || document.getElementById("page-container-inner") || document.body;
     this.domContainer = e;
-    (homeHeroSection.preInit(e),
-      homeReelSection.preInit(e),
-      homeFeaturedSection.preInit(e),
-      homeGoalSection.preInit(e));
+    super.preInit(r);
   }
   init() {
-    (homeHeroSection.init(),
-      homeReelSection.init(),
-      homeFeaturedSection.init(),
-      homeGoalSection.init(),
-      super.init());
+    super.init();
+  }
+  get featuredSection() {
+    return (
+      (this.activeSections &&
+        this.activeSections.find((s) => s === window.homeFeaturedSection || (s && s.projectItemList))) ||
+      window.homeFeaturedSection ||
+      homeFeaturedSection
+    );
+  }
+  get heroSection() {
+    return (
+      (this.activeSections &&
+        this.activeSections.find((s) => s === window.homeHeroSection)) ||
+      window.homeHeroSection ||
+      homeHeroSection
+    );
   }
   hasProject(e) {
-    return homeFeaturedSection.projectItemList ? homeFeaturedSection.projectItemList.hasProject(e) : !1;
+    const fs = this.featuredSection;
+    return fs && fs.projectItemList ? fs.projectItemList.hasProject(e) : !1;
   }
   show(e, t, r) {
+    const fs = this.featuredSection;
+    const hs = this.heroSection;
     ((this.useGenericTransition = !0),
       (this.updateAudio = !0),
-      homeFeaturedSection.projectItemList && (homeFeaturedSection.projectItemList.selectedId = null));
+      fs && fs.projectItemList && (fs.projectItemList.selectedId = null));
     let n = e && e.pathNodes ? e.pathNodes[1] : null;
     (e && e.target === projectPage && this.hasProject(n) && this.isFirstShown
       ? ((this.useGenericTransition = !1),
         (this.showDuration = 1.5),
         scrollManager.scrollToPixel(
-          (homeFeaturedSection.projectItemList?.getProjectItemTop(n) || 0) -
+          (fs?.projectItemList?.getProjectItemTop(n) || 0) -
             properties.viewportHeight * 0.25,
           !0,
         ),
-        homeFeaturedSection.projectItemList && (homeFeaturedSection.projectItemList.selectedId = n))
+        fs && fs.projectItemList && (fs.projectItemList.selectedId = n))
       : (this.showDuration = 1),
-      homeHeroSection.initEvent(),
+      hs && hs.initEvent && hs.initEvent(),
       homePageAudios.init(),
       super.show(e, t, r));
   }
   hide(e, t, r) {
+    const fs = this.featuredSection;
+    const hs = this.heroSection;
     ((this.updateAudio = !1),
       (this.useGenericTransition = !0),
-      homeFeaturedSection.projectItemList && (homeFeaturedSection.projectItemList.selectedId = null),
+      fs && fs.projectItemList && (fs.projectItemList.selectedId = null),
       t && t.target === projectPage && this.hasProject(t.pathNodes ? t.pathNodes[1] : null)
         ? ((this.useGenericTransition = !1),
           (this.hideDuration = 1.5),
-          homeFeaturedSection.projectItemList && (homeFeaturedSection.projectItemList.selectedId = t.pathNodes[1]))
+          fs && fs.projectItemList && (fs.projectItemList.selectedId = t.pathNodes[1]))
         : (this.hideDuration = 1),
-      homeHeroSection.hide(),
+      hs && hs.hide && hs.hide(),
       super.hide(e, t, r));
   }
   resize(e, t) {
-    (homeHeroSection.resize(e, t),
-      homeReelSection.resize(e, t),
-      homeFeaturedSection.resize(e, t),
-      homeGoalSection.resize(e, t));
+    super.resize(e, t);
   }
   update(e) {
     if (this.hasInitialized) {
-      if (
-        (super.update(e),
-        homeHeroSection.update(e),
-        homeReelSection.update(e),
-        homeFeaturedSection.update(e),
-        homeGoalSection.update(e),
-        pagesManager.scrollTargetPage == this)
-      ) {
-        let t = !0,
-          r = !1,
-          n = !1;
-        (scrollManager.getDomRange(homeGoalSection.domContainer).screenRatio ==
-        1
-          ? (properties.bgColor.setStyle(properties.blackColorHex),
-            (t = !1),
-            (r = !0))
-          : (properties.bgColor.setStyle(properties.offWhiteColorHex),
-            (t = !0),
-            (r = !1)),
-          homeGoalSection.uiBgColorNeedsOverride &&
-            ((n = !1),
-            homeGoalSection.isUIBgBlack
-              ? ((t = !1), (r = !0))
-              : ((t = !0), (r = !1))),
-          footerSection.getDomRange().ratio > -0.1 &&
-            ((t = !0), (r = !1), (n = !1)),
-          document.documentElement.classList.toggle("is-black-bg", r),
-          document.documentElement.classList.toggle("is-white-bg", t),
-          document.documentElement.classList.toggle("is-blue-bg", n));
-      }
+      super.update(e);
       this.updateAudio && homePageAudios.update(e);
     }
   }

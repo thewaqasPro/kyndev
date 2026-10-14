@@ -1,12 +1,12 @@
 /**
- * Fullscreen Route Transition Canvas & Safety Watchdog
+ * Transition Overlay Canvas & Pixelated Grid
  */
-import settings from "../core/Settings.js";
-import properties from "../core/Properties.js";
-import math from "../core/MathUtils.js";
-import ease from "../core/Ease.js";
-import taskManager from "../core/TaskManager.js";
-import { MinSignal$2 } from "../loaders/QuickLoader.js";
+import properties from '../core/Properties.js';
+import settings from '../core/Settings.js';
+import math from '../core/MathUtils.js';
+import ease from '../core/Ease.js';
+import taskManager from '../core/TaskManager.js';
+import { MinSignal$2 } from '../loaders/QuickLoader.js';
 
 const LOADING_RECTS = [
   1, 1, 1, 3, 2, 4, 2, 1, 6, 2, 1, 2, 7, 1, 1, 1, 7, 4, 1, 1, 8, 2, 1, 2, 11, 2,
@@ -14,9 +14,10 @@ const LOADING_RECTS = [
   1, 4, 26, 1, 1, 4, 27, 1, 1, 1, 28, 2, 1, 3, 32, 1, 1, 1, 33, 3, 1, 1, 31, 1,
   1, 3, 32, 4, 2, 1,
 ];
-globalThis.LOADING_RECTS = LOADING_RECTS;
 
 class TransitionOverlay {
+  canvas = null;
+  ctx = null;
   contentShowRatio = 0;
   contentHideRatio = 1;
   loadBarRatio = 0;
@@ -30,10 +31,18 @@ class TransitionOverlay {
   loadingTextAnimation = 0;
   onShowTextCompleted = new MinSignal$2();
   onHideTextCompleted = new MinSignal$2();
+  _safetyWatchdog = null;
+
   init() {
-    ((this.canvas = document.getElementById("transition-overlay")),
-      (this.ctx = this.canvas.getContext("2d")));
+    this.canvas = document.getElementById("transition-overlay");
+    if (this.canvas) {
+      this.ctx = this.canvas.getContext("2d");
+      if (this.activeRatio <= 0) {
+        this.canvas.style.display = "none";
+      }
+    }
   }
+
   resize(e, t) {
     if (!this.canvas) this.canvas = document.getElementById("transition-overlay");
     if (!this.canvas) return;
@@ -45,28 +54,20 @@ class TransitionOverlay {
       (this.canvas.style.height = t + "px"),
       (this.pixelWidth = ~~Math.min(42, properties.viewportWidth / 30)));
   }
+
   isReadyToHide() {}
+
   get activeRatio() {
     return Math.min(1 - this.contentShowRatio, this.contentHideRatio);
   }
+
   update(e) {
     if (this.activeRatio > 0) {
-      if (!this._safetyWatchdog) {
-        this._safetyWatchdog = setTimeout(() => {
-          this.contentShowRatio = 1;
-          this.contentHideRatio = 1;
-          this.showTextRatio = 1;
-          this.hideTextRatio = 1;
-          this.needsShowText = false;
-          this.needsHideText = false;
-          if (this.canvas) this.canvas.style.display = "none";
-          this.onShowTextCompleted.dispatch();
-          this.onHideTextCompleted.dispatch();
-          this._safetyWatchdog = null;
-        }, 1500);
-      }
+
+
       if (!this.ctx) this.init();
       if (!this.ctx) return;
+
       let t = properties.viewportWidth + 2,
         r = properties.viewportHeight + 2,
         n = this.pixelWidth,
@@ -74,24 +75,27 @@ class TransitionOverlay {
         l = this.lineTransformRatio,
         c = Math.sqrt(t * t + r * r) / n,
         u = this.ctx;
+
       (u.save(),
         u.scale(settings.DPR, settings.DPR),
         (u.fillStyle = "#000"),
         u.fillRect(0, 0, t, r));
+
       let f = ease.expoInOut(1 - this.activeRatio),
         p = (1 + f * c) * n;
+
       if (
         (u.translate(t * 0.5, r * 0.5),
         u.rotate(f * (this.contentShowRatio == 0 ? -1 : 1)),
         u.translate(n * f * c, -n * 0.5 * f * c),
         u.scale(p, p),
         l == 0)
-      )
+      ) {
         ((u.fillStyle = "#333"),
           u.fillRect(-2.5, -0.5, 5, 1),
           (u.fillStyle = "#fff"),
           u.fillRect(-2.5, -0.5, 5 * a, 1));
-      else {
+      } else {
         ((u.fillStyle = "#fff"),
           this.needsShowText &&
             ((this.showTextRatio = this.showTextRatio + e * 1.25),
@@ -109,10 +113,12 @@ class TransitionOverlay {
                 ((this.hideTextRatio = 1),
                 (this.needsHideText = !1),
                 this.onHideTextCompleted.dispatch()))));
+
         let g = this.showTextRatio,
           v = this.hideTextRatio,
           _ = math.fit(Math.min(g, 1 - v), 0, 0.5, 1, 0.2, ease.expoInOut),
           T = (ease.expoInOut(g) + ease.expoInOut(v)) * -15;
+
         if (g > 0 && v < 1) {
           (u.scale(_, _),
             u.translate(-l, 1.5 * l),
@@ -143,7 +149,7 @@ class TransitionOverlay {
               ));
           }
           (u.closePath(), u.fill(), u.restore());
-        } else
+        } else {
           (u.translate(-l, 1.5 * l),
             u.save(),
             u.translate(0.5, -0.5),
@@ -162,17 +168,24 @@ class TransitionOverlay {
             (u.globalAlpha = 1 - f),
             u.fillRect(0, 0, 2, 1),
             u.restore());
+        }
       }
-      (u.restore(), (this.canvas.style.display = "block"));
+      u.restore();
+      if (this.canvas && this.canvas.style.display !== "block") {
+        this.canvas.style.display = "block";
+      }
     } else {
-      if (this._safetyWatchdog) {
-        clearTimeout(this._safetyWatchdog);
-        this._safetyWatchdog = null;
+
+      if (this.canvas && this.canvas.style.display !== "none") {
+        this.canvas.style.display = "none";
+        if (this.ctx) {
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
       }
-      this.canvas.style.display = "none";
     }
   }
 }
+
 const transitionOverlay = new TransitionOverlay();
 globalThis.transitionOverlay = transitionOverlay;
 

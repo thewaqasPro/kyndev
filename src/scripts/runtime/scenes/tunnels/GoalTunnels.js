@@ -1084,7 +1084,8 @@ class CameraControls {
   init() {}
   resize(e, t) {}
   update(e) {
-    if (!this.camera) return;
+    if (!this._camera) this._camera = properties.camera;
+    if (!this._camera) return;
 
     let t = this._camera;
     (this.DEFAULT_CAMERA_POSITION.copy(properties.defaultCameraPosition),
@@ -1645,7 +1646,7 @@ class GoalTunnelAstronauts {
         : ((this.meshes[e] = f), (this.materials[e] = { white: l, black: u })));
   }
   _onBeforeRender(e, t, r) {
-    if (this.container.parent == homePage.preUfxContainer) {
+    if (this.container.parent && (this.container.parent == (homeGoalSection.hostPage || window.homePage)?.preUfxContainer || this.container.parent == window.homePage?.preUfxContainer)) {
       let n = cameraControls._camera;
       if (
         (_matrixWorld$1.copy(r.matrixWorld),
@@ -1674,7 +1675,7 @@ class GoalTunnelAstronauts {
     }
   }
   _onAfterRender(e, t, r) {
-    this.container.parent == homePage.preUfxContainer &&
+    (this.container.parent && (this.container.parent == (homeGoalSection.hostPage || window.homePage)?.preUfxContainer || this.container.parent == window.homePage?.preUfxContainer)) &&
       (r.matrixWorld.copy(_matrixWorld$1),
       r.matrixWorldInverse.copy(_matrixWorldInverse$1),
       r.projectionMatrix.copy(_projectionMatrix$1));
@@ -2248,7 +2249,7 @@ class GoalTunnelGlass {
       r.projectionMatrix.copy(n.projectionMatrix));
   }
   _onAfterRender(e, t, r) {
-    this.container.parent == homePage.preUfxContainer &&
+    (this.container.parent && (this.container.parent == (homeGoalSection.hostPage || window.homePage)?.preUfxContainer || this.container.parent == window.homePage?.preUfxContainer)) &&
       (r.matrixWorld.copy(_matrixWorld),
       r.matrixWorldInverse.copy(_matrixWorldInverse),
       r.projectionMatrix.copy(_projectionMatrix));
@@ -3192,7 +3193,7 @@ class GoalTunnels extends Stage3D {
       this.add(goalWhiteTunnelParticles.container),
       this.add(goalWhiteTunnelStickers.container),
       goalTunnelGlass.preInit(),
-      homePage.preUfxContainer.add(goalTunnelGlass.container));
+      ((homeGoalSection.hostPage || window.homePage)?.preUfxContainer || window.homePage?.preUfxContainer)?.add(goalTunnelGlass.container));
   }
   init() {
     (goalTunnelAstronauts.init(),
@@ -3383,7 +3384,7 @@ class GoalTunnels extends Stage3D {
         goalWhiteTunnel.update(this.tunnelDeltaTime),
         this.whiteTunnelRatio == 1 &&
           this.astronautDropRatio < 1 &&
-          homePage.preUfxContainer.add(goalTunnelAstronauts.container)),
+          ((homeGoalSection.hostPage || window.homePage)?.preUfxContainer || window.homePage?.preUfxContainer)?.add(goalTunnelAstronauts.container)),
       goalTunnelAstronauts.update(this.tunnelDeltaTime),
       goalTunnelGlass.update(e),
       goalTunnelsBackground.update(e),
@@ -3511,7 +3512,9 @@ class GoalSection {
   _needsReset = !0;
   sectionPaddingTop = 0;
   line = null;
-  preInit(e) {
+  hostPage = null;
+  preInit(e, hostPage) {
+    this.hostPage = hostPage || window.pagesManager?.currRoute?.target || window.homePage;
     let container = e || document;
     (homeGoalSectionRanges.init(e),
       (this.domContainer = container.querySelector ? (container.querySelector("#home-goal") || document.getElementById("home-goal")) : document.getElementById("home-goal")),
@@ -3523,8 +3526,9 @@ class GoalSection {
       (this.domImgIn = (container.querySelector && container.querySelector("#home-goal-image-in")) || document.getElementById("home-goal-image-in")),
       (this.domImgInInner = (container.querySelector && container.querySelector("#home-goal-image-in-inner")) || document.getElementById("home-goal-image-in-inner")),
       (this.domImgOut = (container.querySelector && container.querySelector("#home-goal-image-out")) || document.getElementById("home-goal-image-out")),
-      (this.domImgOutInner = (container.querySelector && container.querySelector("#home-goal-image-out-inner")) || document.getElementById("home-goal-image-out-inner")),
-      (this.frameBgMesh = new UfxMesh({
+      (this.domImgOutInner = (container.querySelector && container.querySelector("#home-goal-image-out-inner")) || document.getElementById("home-goal-image-out-inner")));
+    if (!this.frameBgMesh) {
+      this.frameBgMesh = new UfxMesh({
         geometry: fboHelper.triGeom,
         material: fboHelper.createRawShaderMaterial({
           uniforms: {
@@ -3554,15 +3558,23 @@ class GoalSection {
           transparent: !0,
           blending: NormalBlending,
         }),
-      })),
-      (this.frameBgMesh.renderOrder = -1),
-      homePage.preUfxContainer.add(this.frameBgMesh),
-      (this.frameBgMesh.visible = !1),
-      homeGoalSectionTunnelTitle.init(e),
-      visuals.stage3DList.push(goalTunnels),
-      goalTunnels.preInit(),
-      (this.lineVisual = new Line(1)),
-      this.lineVisual.preInit());
+      });
+      this.frameBgMesh.renderOrder = -1;
+      this.frameBgMesh.visible = !1;
+    }
+    const targetPreUfx = (this.hostPage && this.hostPage.preUfxContainer) || (window.homePage && window.homePage.preUfxContainer);
+    if (targetPreUfx && this.frameBgMesh) {
+      targetPreUfx.add(this.frameBgMesh);
+    }
+    homeGoalSectionTunnelTitle.init(e);
+    if (!visuals.stage3DList.includes(goalTunnels)) {
+      visuals.stage3DList.push(goalTunnels);
+    }
+    goalTunnels.preInit();
+    if (!this.lineVisual) {
+      this.lineVisual = new Line(1);
+      this.lineVisual.preInit();
+    }
   }
   init() {
     ((this._placeholderTexture1 = properties.loader.load(
@@ -3575,7 +3587,7 @@ class GoalSection {
       ).content),
       goalTunnels.init(),
       this.lineVisual && this.lineVisual.init(),
-      this.lineVisual && homePage.postUfxContainer.add(this.lineVisual.container));
+      this.lineVisual && ((this.hostPage && this.hostPage.postUfxContainer) || (window.homePage && window.homePage.postUfxContainer))?.add(this.lineVisual.container));
   }
   show() {}
   hide() {}

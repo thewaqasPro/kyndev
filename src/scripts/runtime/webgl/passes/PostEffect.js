@@ -3,7 +3,7 @@ import fboHelper from "../FboHelper.js";
 import math from "../../core/MathUtils.js";
 import properties from "../../core/Properties.js";
 
-const { Scene, Camera, Matrix4, Quaternion, Vector3 } = THREE;
+const { Scene, Camera, PerspectiveCamera, Object3D, Matrix4, Quaternion, Vector3 } = THREE;
 
 /**
  * Base Post-processing Effect Pass
@@ -33,29 +33,41 @@ class PostEffect {
   resize(e, t) {
     this.needsResize = !1;
   }
-  render(e) {}
+  render(e, t = !1) {
+    (this.material && this.material.uniforms && this.material.uniforms.u_texture &&
+      (this.material.uniforms.u_texture.value = e.fromTexture),
+      fboHelper.render(this.material, t ? null : e.toRenderTarget),
+      e.swap());
+  }
 }
+
 class Ufx extends PostEffect {
   scene = new Scene();
-  camera = new Camera();
-  renderOrder = 0;
-  prevRatio = 0;
-  ratio = 0;
-  ratioDelta = 0;
-  ratioEased = 0;
-  smoothDuration = 0;
-  _smoothTimer = 0;
-  constructor() {
-    super();
+  camera = new PerspectiveCamera(60, 1);
+  frameIdx = -1;
+  sectionLayer = new Object3D();
+  projectDetailsLayer = new Object3D();
+  sharedUniforms = { u_fromTexture: { value: null } };
+  init() {}
+  setPostprocessing(e) {
+    let t = this.camera,
+      r = properties.viewportWidth,
+      n = properties.viewportHeight;
+    (t.position.set(r / 2, -n / 2, n / (2 * Math.tan((t.fov * Math.PI) / 360))),
+      (t.aspect = r / n),
+      (t.far = t.position.z * 2),
+      (t.near = t.far / 1e3),
+      t.updateProjectionMatrix());
   }
-  init() {
-    this.scene.matrixAutoUpdate = !1;
-  }
-  render(e, t) {
+  render(e, t = !1) {
     let r = fboHelper.getColorState(),
-      n = fboHelper.renderer;
-    (n.setRenderTarget(e.toRenderTarget),
-      fboHelper.clearColor(0, 0, 0, 0),
+      n = properties.renderer;
+    (fboHelper.copy(e.fromTexture, e.sceneRenderTarget),
+      n.setRenderTarget(e.sceneRenderTarget),
+      (fboHelper.renderer.autoClear = !1),
+      (fboHelper.renderer.autoClearColor = !1),
+      (fboHelper.renderer.autoClearStencil = !0),
+      (fboHelper.renderer.autoClearDepth = !0),
       fboHelper.renderer.clear(!1, !0, !0),
       n.render(this.scene, this.camera),
       n.setRenderTarget(null));
@@ -63,6 +75,7 @@ class Ufx extends PostEffect {
     (fboHelper.copy(e.sceneTexture, a), fboHelper.setColorState(r), e.swap());
   }
 }
+
 class PreUfx extends Ufx {
   renderOrder = 50;
 }

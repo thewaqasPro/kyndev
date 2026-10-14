@@ -55,9 +55,7 @@ export class HeaderController {
     if (this.domMenuBtn) {
       this.domMenuBtn.addEventListener('click', this.onMenuClick);
     }
-    if (this.domSoundBtn) {
-      this.domSoundBtn.addEventListener('click', this.onSoundClick);
-    }
+    // domSoundBtn click is handled centrally by runtime Header controller
     if (this.domContactBtn) {
       this.domContactBtn.addEventListener('click', this.onContactClick);
     }
@@ -72,9 +70,7 @@ export class HeaderController {
     if (this.domMenuBtn) {
       this.domMenuBtn.removeEventListener('click', this.onMenuClick);
     }
-    if (this.domSoundBtn) {
-      this.domSoundBtn.removeEventListener('click', this.onSoundClick);
-    }
+
     if (this.domContactBtn) {
       this.domContactBtn.removeEventListener('click', this.onContactClick);
     }

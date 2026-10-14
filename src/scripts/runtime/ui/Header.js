@@ -134,7 +134,8 @@ class Header {
   changeSection(e) {
     scrollManager.scrollTo(e);
   }
-  _onDomRightSoundBtn() {
+  _onDomRightSoundBtn(e) {
+    e?.stopPropagation();
     audios.toggle();
   }
   _onRouteChanged() {
@@ -250,7 +251,7 @@ class Header {
       n.beginPath());
     let l = 32,
       c = r * 0.4,
-      u = r * 0.28 * audios.volume;
+      u = r * 0.28 * (audios.isActive ? audios.volume : 0);
     for (let f = 0; f < l + 1; f++) {
       let p = -c / 2 + (c * f) / l,
         g =
@@ -258,7 +259,16 @@ class Header {
           math.fit(Math.abs(f / l - 0.5), 0.5, 0.25, 0.3, 1, ease.sineInOut);
       f == 0 ? n.moveTo(p, g) : n.lineTo(p, g);
     }
-    (n.stroke(), n.closePath(), n.restore());
+    (n.stroke(), n.closePath());
+    if (!audios.isActive || audios.volume < 0.05) {
+      n.beginPath();
+      let s = c * 0.36;
+      n.moveTo(-s, s * 0.85);
+      n.lineTo(s, -s * 0.85);
+      n.stroke();
+      n.closePath();
+    }
+    n.restore();
   }
   update(e) {
     if (!this.domRightSoundBtn) return;

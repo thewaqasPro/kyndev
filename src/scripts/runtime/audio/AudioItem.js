@@ -97,6 +97,10 @@ class AudioItem {
   }
   setFinalVolume(e) {
     this.audioObject?.setVolume(e * this.volume);
+    if (this.elem) {
+      this.elem.volume = Math.max(0, Math.min(1, e * this.volume));
+      this.elem.muted = (e === 0 || (typeof window !== "undefined" && window.audios && !window.audios.isActive));
+    }
   }
   activateFilter() {
     if (this.needsFilter && this.biquadFilter) {
@@ -145,12 +149,14 @@ class AudioItem {
     (this._originalOnEnd && this._originalOnEnd(), this.onEnded.dispatch(this));
   }
   play() {
+    if (typeof window !== "undefined" && window.audios && !window.audios.isActive && this.isSfx) return;
     (this.isSfx || (this.autoplay = !0),
       this.audioObject &&
         !this.audioObject.isPlaying &&
         (this.elem
           ? (this.elem.play(),
             (this.elem.currentTime = 0.01),
+            (this.elem.muted = typeof window !== "undefined" && window.audios ? !window.audios.isActive : false),
             (this.audioObject.isPlaying = !0))
           : this.audioObject.play(),
         this.onPlayed.dispatch(this)));

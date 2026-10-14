@@ -72,23 +72,25 @@ class PageManager {
     else if (this.currRoute !== e) {
       ((this.prevRoute = this.currRoute), (this.currRoute = e));
       let t = this.currRoute.target;
-      if (
-        (t.domContainer ||
-          ((t.domContainer = this.currRoute.dom),
-          this._log("preInit: " + this.currRoute.path),
-          t.preInit(this.currRoute),
-          properties.hasInitialized &&
-            !t.bypassShowingLoading &&
-            (this._needsShowLoading = !0)),
-        properties.hasInitialized
-          ? (this._hasPreloaded = !1)
-          : ((this.scrollTargetPage = t),
-            this.onScrollTargetChanged.dispatch(t)),
-        this.currRoute.hasContentPreloaded ||
-          (this._log("preInitContent: " + this.currRoute.path),
-          t.preInitContent(this.currRoute)),
-        properties.hasInitialized)
-      ) {
+      if (!t.domContainer) {
+        t.domContainer = this.currRoute.dom || t.domContainer;
+        this._log("preInit: " + this.currRoute.path);
+        t.preInit(this.currRoute);
+        if (properties.hasInitialized && !t.bypassShowingLoading) {
+          this._needsShowLoading = true;
+        }
+      }
+      if (properties.hasInitialized) {
+        this._hasPreloaded = false;
+      } else {
+        this.scrollTargetPage = t;
+        this.onScrollTargetChanged.dispatch(t);
+      }
+      if (!this.currRoute.hasContentPreloaded) {
+        this._log("preInitContent: " + this.currRoute.path);
+        t.preInitContent(this.currRoute);
+      }
+      if (properties.hasInitialized) {
         ((transitionOverlay.showTextRatio = 0),
           (transitionOverlay.waitTextRatio = 0),
           (transitionOverlay.hideTextRatio = 0),
@@ -172,6 +174,9 @@ class PageManager {
   _showPage() {
     ((this._isShowing = !0), (this._needsShowLoading = !1));
     let e = this.currRoute.target;
+    if (!this.domContainerInner || !this.domContainerInner.isConnected) {
+      this.domContainerInner = document.getElementById("page-container-inner") || document.getElementById("page-container") || document.body;
+    }
     ((e.isActive = !0),
       properties.hasInitialized &&
         e !== this.prevRoute.target &&
@@ -194,21 +199,33 @@ class PageManager {
       e.useGenericTransition && audios.countPlay("page"));
   }
   _onShowComplete() {
-    if (
-      ((transitionOverlay.contentShowRatio = 1),
-      (this._isShowing = !1),
-      (this.isFirstRoute = !1),
-      (this.currRoute.target.isFirstShown = !0),
-      this.currRoute.target.onShowCompleted.dispatch(),
-      this._log("==============="),
-      this._pendingRoute)
-    ) {
+    transitionOverlay.contentShowRatio = 1;
+    if (transitionOverlay.canvas) {
+      transitionOverlay.canvas.style.display = "none";
+      if (transitionOverlay.ctx) {
+        transitionOverlay.ctx.clearRect(
+          0,
+          0,
+          transitionOverlay.canvas.width,
+          transitionOverlay.canvas.height,
+        );
+      }
+    }
+    this._isShowing = !1;
+    this.isFirstRoute = !1;
+    this.currRoute.target.isFirstShown = !0;
+    this.currRoute.target.onShowCompleted.dispatch();
+    this._log("===============");
+    if (this._pendingRoute) {
       let e = this._pendingRoute;
       ((this._pendingRoute = null), this._onRouteChanged(e));
-    } else this.onIdled.dispatch();
-    properties.isContactFromProjectPage &&
-      ((properties.isContactFromProjectPage = !1),
-      scrollManager.scrollTo("footer-section", 0, !1));
+    } else {
+      this.onIdled.dispatch();
+    }
+    if (properties.isContactFromProjectPage) {
+      properties.isContactFromProjectPage = !1;
+      scrollManager.scrollTo("footer-section", 0, !1);
+    }
   }
   update(e) {
     if (

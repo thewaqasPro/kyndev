@@ -2,6 +2,9 @@
  * High Dynamic Range OpenEXR (.exr) Loader
  */
 import * as THREE from "../../three.js";
+import { unzlibSync } from "three/examples/jsm/libs/fflate.module.js";
+
+globalThis.unzlibSync = unzlibSync;
 class EXRLoader extends DataTextureLoader {
   constructor(e) {
     (super(e), (this.type = HalfFloatType));

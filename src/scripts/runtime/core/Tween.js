@@ -5,15 +5,18 @@ import math from './MathUtils.js';
 
 let instances = [];
 class Tween {
+  defaultOnComplete = null;
+  onComplete = null;
   constructor(e, t = null) {
-    ((this.target = e),
-      (this.fromProperties = {}),
-      (this.toProperties = {}),
-      (this.onComplete = t),
-      (this.t = 0),
-      (this.duration = 0),
-      (this.autoUpdate = !0),
-      instances.push(this));
+    this.target = e;
+    this.defaultOnComplete = t;
+    this.onComplete = t;
+    this.fromProperties = {};
+    this.toProperties = {};
+    this.t = 0;
+    this.duration = 0;
+    this.autoUpdate = true;
+    instances.push(this);
   }
   static autoUpdate(e) {
     for (let t = 0; t < instances.length; t++) {
@@ -22,7 +25,11 @@ class Tween {
     }
   }
   restart() {
-    ((this.isActive = !0), (this.t = 0));
+    this.isActive = true;
+    this.t = 0;
+    if (!this.onComplete && this.defaultOnComplete) {
+      this.onComplete = this.defaultOnComplete;
+    }
   }
   kill() {
     this.t = this.duration;
@@ -33,12 +40,12 @@ class Tween {
     this.fromTo(e, n, t, r);
   }
   fromTo(e, t, r, n) {
-    ((this.duration = e),
-      (this.ease = n),
-      (this.fromProperties = t),
-      (this.toProperties = r),
-      this.restart(),
-      this.update(0, this.duration == 0));
+    this.duration = e;
+    this.ease = n;
+    this.fromProperties = t;
+    this.toProperties = r;
+    this.restart();
+    this.update(0, this.duration == 0);
   }
   update(e = 0, t = !1) {
     if (this.t < this.duration || t) {
@@ -51,7 +58,11 @@ class Tween {
           this.toProperties[n],
           r,
         );
-      this.t == this.duration && this.onComplete && this.onComplete();
+      if (this.t >= this.duration) {
+        let cb = this.onComplete;
+        this.onComplete = this.defaultOnComplete;
+        cb && cb();
+      }
     }
   }
 }
