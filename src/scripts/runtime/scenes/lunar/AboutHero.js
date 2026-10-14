@@ -1994,7 +1994,7 @@ class AboutWhoLogo {
   toMesh;
   containerWidth = 0;
   hideRatio = 0;
-  enabled = true;
+  enabled = false;
 
   preInit(e) {
     if (!this.enabled) return;

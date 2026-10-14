@@ -42,11 +42,13 @@ globalThis.titleFrag = titleFrag;
 class WhoSubsectionWeAre {
   domContainer;
   domScroll;
+  domMainLogo;
   domLeftTexts;
   logoHideRatio = 0;
   preInit(e) {
     ((this.domContainer = e.querySelector("#about-who-subsection-we-are")),
       (this.domScroll = e.querySelector("#about-who-title-main-scroll")),
+      (this.domMainLogo = e.querySelector("#about-who-title-main-logo")),
       (this.domLeftTexts = e.querySelectorAll(
         "#about-who-title-left-1, #about-who-title-left-2 svg, #about-who-title-left-3, #about-who-title-left-4 span",
       )),
@@ -83,7 +85,7 @@ class WhoSubsectionWeAre {
           T = math.fit(this.logoHideRatio, _ * 0.2, _ * 0.2 + 0.8, 0, 1),
           M = math.fit(r, 0, _ * 0.5 + 0.3, 0, -10, ease.cubicOut);
         ((g._pageScrollOffsetXRatio = M),
-          properties.useMobileLayout || p != 1
+          properties.useMobileLayout || p != 1 || !aboutWhoLogo.enabled
             ? ((T = math.fit(T, 0.35, 1, 0, 1, ease.cubicOut)),
               (g.style.opacity = T),
               (g.style.transform =
@@ -107,6 +109,11 @@ class WhoSubsectionWeAre {
         ((g.style.opacity = _),
           (g.style.transform =
             "translate3d(" + ((1 - _) * 1 + T) * u + "px, 0, 0)"));
+      }
+      if (this.domMainLogo && !aboutWhoLogo.enabled) {
+        let fMain = math.fit(this.logoHideRatio, 0, 0.35, 1, 0, ease.cubicInOut);
+        this.domMainLogo.style.opacity = fMain;
+        this.domMainLogo.style.transform = "translate3d(0, " + (1 - fMain) * -50 + "px, 0)";
       }
       let f = math.fit(this.logoHideRatio, 0, 0.35, 1, 0, ease.cubicInOut);
       ((this.domScroll.style.opacity = f),

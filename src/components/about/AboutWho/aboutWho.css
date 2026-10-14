@@ -191,7 +191,7 @@
   margin-left: 0.075em;
   height: 0.71em;
   line-height: 1em;
-  visibility: hidden;
+  visibility: visible;
 }
 #about-who-title-left-2 svg {
   position: relative;
