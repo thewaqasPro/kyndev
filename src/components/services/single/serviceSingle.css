@@ -1,0 +1,447 @@
+/* src/components/services/single/serviceSingle.css */
+
+.service-single-container {
+  position: relative;
+  width: 100%;
+  color: var(--color-white, #fff);
+  background: #000;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   1. HERO SECTION
+   ========================================================================== */
+.service-hero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: calc(var(--base-padding-y) * 2.5) var(--base-padding-x) var(--base-padding-y);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.service-hero-ambient {
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  width: 55vw;
+  height: 55vw;
+  max-width: 800px;
+  max-height: 800px;
+  background: radial-gradient(circle, rgba(26, 47, 251, 0.22) 0%, rgba(136, 50, 247, 0.12) 40%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.service-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+}
+
+.service-hero-badge-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.service-hero-num {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  color: var(--color-green, #c1ff00);
+}
+
+.service-hero-badge {
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+.service-hero-title {
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin: 0 0 1.5rem 0;
+  text-transform: uppercase;
+}
+
+.service-hero-headline {
+  font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 850px;
+  margin: 0 0 3rem 0;
+}
+
+.service-hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.service-metric-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.service-metric-value {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 800;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--color-white, #fff);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.service-metric-label {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.4rem;
+}
+
+/* ==========================================================================
+   2. CAPABILITIES SECTION
+   ========================================================================== */
+.service-capabilities {
+  position: relative;
+  padding: calc(var(--base-padding-y) * 2) var(--base-padding-x);
+}
+
+.service-section-header {
+  margin-bottom: calc(var(--base-padding-y) * 1.5);
+}
+
+.service-section-tag {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.85rem;
+  color: var(--color-green, #c1ff00);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.service-section-title {
+  font-size: clamp(2rem, 4vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.service-capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .service-capabilities-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.service-capability-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--global-border-radius, 20px);
+  padding: 2.5rem;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, background 0.4s ease;
+  backdrop-filter: blur(12px);
+}
+
+.service-capability-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(26, 47, 251, 0.5);
+}
+
+.capability-card-num {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+
+.capability-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.01em;
+}
+
+.capability-card-desc {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+}
+
+.capability-card-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1.5rem;
+}
+
+.capability-card-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.capability-card-features li::before {
+  content: '→';
+  color: var(--color-blue, #1a2ffb);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   3. PROCESS SECTION
+   ========================================================================== */
+.service-process {
+  position: relative;
+  padding: calc(var(--base-padding-y) * 2) var(--base-padding-x);
+  background: #050508;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.service-process-timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: calc(var(--base-padding-y) * 1.5);
+}
+
+@media (max-width: 1100px) {
+  .service-process-timeline {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .service-process-timeline {
+    grid-template-columns: 1fr;
+  }
+}
+
+.service-process-step {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--global-border-radius, 20px);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.process-step-num {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.15);
+  margin-bottom: 1rem;
+}
+
+.process-step-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.01em;
+}
+
+.process-step-subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.process-deliverables-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.75rem;
+}
+
+.process-deliverables-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.process-deliverables-list li {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ==========================================================================
+   4. PROJECTS SPOTLIGHT
+   ========================================================================== */
+.service-spotlight {
+  position: relative;
+  padding: calc(var(--base-padding-y) * 2) var(--base-padding-x);
+}
+
+.service-spotlight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 950px) {
+  .service-spotlight-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.service-spotlight-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  border-radius: var(--global-border-radius, 20px);
+  overflow: hidden;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+}
+
+.service-spotlight-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.service-spotlight-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #151515;
+}
+
+.service-spotlight-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-spotlight-card:hover .service-spotlight-img {
+  transform: scale(1.05);
+}
+
+.service-spotlight-info {
+  padding: 1.5rem;
+}
+
+.service-spotlight-category {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-green, #c1ff00);
+  margin-bottom: 0.4rem;
+}
+
+.service-spotlight-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+/* ==========================================================================
+   5. NEXT SERVICE & CTA NAVIGATOR
+   ========================================================================== */
+.service-next-nav {
+  position: relative;
+  padding: calc(var(--base-padding-y) * 2.5) var(--base-padding-x);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.service-next-left {
+  max-width: 600px;
+}
+
+.service-next-sub {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.service-next-title-link {
+  display: inline-block;
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.service-next-title-link:hover {
+  color: var(--color-blue, #1a2ffb);
+  transform: translateX(10px);
+}
+
+.service-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 1.25rem 2.5rem;
+  border-radius: 999px;
+  background: var(--color-blue, #1a2ffb);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-cta-btn:hover {
+  transform: translateY(-2px);
+  background: #2b3ffb;
+  box-shadow: 0 10px 30px rgba(26, 47, 251, 0.4);
+}

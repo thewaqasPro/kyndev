@@ -1,0 +1,32 @@
+---
+// src/components/services/single/ServiceHero.astro
+import type { ServiceData } from '../../../data/servicesData';
+
+interface Props {
+  service: ServiceData;
+}
+
+const { service } = Astro.props;
+---
+
+<section class="service-hero">
+  <div class="service-hero-ambient"></div>
+  <div class="service-hero-content">
+    <div class="service-hero-badge-wrap">
+      <span class="service-hero-num">{service.number} //</span>
+      <span class="service-hero-badge">{service.category}</span>
+    </div>
+
+    <h1 class="service-hero-title">{service.title}</h1>
+    <p class="service-hero-headline">{service.headline}</p>
+
+    <div class="service-hero-metrics">
+      {service.heroMetrics.map((metric) => (
+        <div class="service-metric-item">
+          <span class="service-metric-value">{metric.value}</span>
+          <span class="service-metric-label">{metric.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

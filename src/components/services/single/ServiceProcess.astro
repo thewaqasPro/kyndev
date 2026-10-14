@@ -1,0 +1,33 @@
+---
+// src/components/services/single/ServiceProcess.astro
+import type { ServiceData } from '../../../data/servicesData';
+
+interface Props {
+  service: ServiceData;
+}
+
+const { service } = Astro.props;
+---
+
+<section class="service-process">
+  <div class="service-section-header">
+    <div class="service-section-tag">// Methodological Blueprint</div>
+    <h2 class="service-section-title">Execution Process</h2>
+  </div>
+
+  <div class="service-process-timeline">
+    {service.process.map((step) => (
+      <div class="service-process-step">
+        <div class="process-step-num">{step.step}</div>
+        <h3 class="process-step-name">{step.name}</h3>
+        <p class="process-step-subtitle">{step.subtitle}</p>
+        <div class="process-deliverables-title">Deliverables</div>
+        <ul class="process-deliverables-list">
+          {step.deliverables.map((item) => (
+            <li>• {item}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>

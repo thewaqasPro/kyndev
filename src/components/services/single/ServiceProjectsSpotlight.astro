@@ -1,0 +1,36 @@
+---
+// src/components/services/single/ServiceProjectsSpotlight.astro
+import type { ServiceData } from '../../../data/servicesData';
+
+interface Props {
+  service: ServiceData;
+}
+
+const { service } = Astro.props;
+---
+
+<section class="service-spotlight">
+  <div class="service-section-header">
+    <div class="service-section-tag">// Applied Work</div>
+    <h2 class="service-section-title">Case Studies in Action</h2>
+  </div>
+
+  <div class="service-spotlight-grid">
+    {service.relatedProjects.map((project) => (
+      <a href={`/projects/${project.slug}`} class="service-spotlight-card">
+        <div class="service-spotlight-img-wrap">
+          <img
+            src={project.image}
+            alt={project.title}
+            class="service-spotlight-img"
+            loading="lazy"
+          />
+        </div>
+        <div class="service-spotlight-info">
+          <div class="service-spotlight-category">{project.category}</div>
+          <h3 class="service-spotlight-title">{project.title}</h3>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>

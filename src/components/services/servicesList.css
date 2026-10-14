@@ -95,3 +95,36 @@
     padding: 24px;
   }
 }
+
+.services-list-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+.services-card-bottom {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.services-card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-blue);
+  padding-top: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.services-card-arrow {
+  font-size: 1.25rem;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.services-list-card:hover .services-card-arrow {
+  transform: translateX(6px);
+}

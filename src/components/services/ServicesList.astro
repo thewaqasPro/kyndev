@@ -1,70 +1,14 @@
 ---
 // src/components/services/ServicesList.astro
 import './servicesList.css';
+import { servicesData } from '../../data/servicesData';
 
-interface ServiceItem {
-  number: string;
-  category: string;
-  title: string;
-  description: string;
-  tags: string[];
-}
-
-const services: ServiceItem[] = [
-  {
-    number: '01',
-    category: 'Engineering',
-    title: 'Web Development',
-    description:
-      'Build a high-performing digital foundation with our web development services—crafted to engage, convert, and grow your brand through thoughtful design, custom functionality, and seamless user experience.',
-    tags: ['Custom Architecture', 'Full-Stack Apps', 'WebGL & Three.js', 'API Integration', 'Performance Tuning'],
-  },
-  {
-    number: '02',
-    category: 'Experience',
-    title: 'Web Design',
-    description:
-      'Responsive and conversion-focused web design crafted to align with your goals, elevate user experience, and scale effortlessly as your business grows.',
-    tags: ['UI/UX Design', 'Design Systems', 'Interactive Prototypes', 'Micro-Interactions', 'Brand Expression'],
-  },
-  {
-    number: '03',
-    category: 'Growth',
-    title: 'Social Media Marketing',
-    description:
-      'Strategic social media marketing designed to engage, inspire, and convert—building meaningful connections with your audience at every stage of their journey.',
-    tags: ['Campaign Strategy', 'Visual Content', 'Storytelling', 'Audience Building', 'Paid Social Assets'],
-  },
-  {
-    number: '04',
-    category: 'Visibility',
-    title: 'Search Engine Optimization (SEO)',
-    description:
-      'Data-driven SEO strategies designed to increase visibility, attract qualified traffic, and drive sustainable business growth through smart optimization and performance insights.',
-    tags: ['Technical SEO', 'Keyword Intelligence', 'Content Architecture', 'Site Audits', 'Core Web Vitals'],
-  },
-  {
-    number: '05',
-    category: 'Conversion',
-    title: 'Sales Funnels',
-    description:
-      'High-converting sales funnels built to transform traffic into loyal customers—driving measurable growth and delivering explosive ROI through strategy, design, and optimization.',
-    tags: ['CRO Optimization', 'Funnel Mapping', 'Landing Pages', 'A/B Experimentation', 'Analytics Tracking'],
-  },
-  {
-    number: '06',
-    category: 'Acquisition',
-    title: 'PPC Advertising',
-    description:
-      'Performance-driven PPC advertising campaigns built to generate leads, increase sales, and maximize ROI through strategic targeting, optimization, and cross-platform expertise.',
-    tags: ['Google Ads', 'Meta Campaigns', 'Retargeting Architecture', 'ROI Optimization', 'Creative Ad Testing'],
-  },
-];
+const services = Object.values(servicesData);
 ---
 
 <div id="services-list" class="section">
   {services.map((service) => (
-    <div class="services-list-card">
+    <a href={`/services/${service.slug}`} class="services-list-card">
       <div class="services-card-top">
         <div class="services-card-header">
           <span class="services-card-num">{service.number} //</span>
@@ -74,11 +18,17 @@ const services: ServiceItem[] = [
         <p class="services-card-desc">{service.description}</p>
       </div>
 
-      <div class="services-card-tags">
-        {service.tags.map((tag) => (
-          <span class="services-card-tag">{tag}</span>
-        ))}
+      <div class="services-card-bottom">
+        <div class="services-card-tags">
+          {service.capabilities.slice(0, 3).map((cap) => (
+            <span class="services-card-tag">{cap.title}</span>
+          ))}
+        </div>
+        <div class="services-card-cta">
+          <span>Explore Capability</span>
+          <span class="services-card-arrow">→</span>
+        </div>
       </div>
-    </div>
+    </a>
   ))}
 </div>

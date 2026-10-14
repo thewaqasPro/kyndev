@@ -1,0 +1,32 @@
+---
+// src/components/services/single/ServiceCapabilities.astro
+import type { ServiceData } from '../../../data/servicesData';
+
+interface Props {
+  service: ServiceData;
+}
+
+const { service } = Astro.props;
+---
+
+<section class="service-capabilities">
+  <div class="service-section-header">
+    <div class="service-section-tag">// Core Pillars & Specifications</div>
+    <h2 class="service-section-title">Engineered Capabilities</h2>
+  </div>
+
+  <div class="service-capabilities-grid">
+    {service.capabilities.map((cap, index) => (
+      <div class="service-capability-card">
+        <div class="capability-card-num">0{index + 1} // CAPABILITY</div>
+        <h3 class="capability-card-title">{cap.title}</h3>
+        <p class="capability-card-desc">{cap.description}</p>
+        <ul class="capability-card-features">
+          {cap.features.map((feature) => (
+            <li>{feature}</li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>

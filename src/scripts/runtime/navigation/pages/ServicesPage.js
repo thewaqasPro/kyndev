@@ -2,7 +2,7 @@
  * Services Page Controller
  */
 class ServicesPage extends Page {
-  path = "services";
+  path = /^services(\/([^\/]+))?$/;
   id = "services";
   endVisualColor = properties.blueColorHex;
 }

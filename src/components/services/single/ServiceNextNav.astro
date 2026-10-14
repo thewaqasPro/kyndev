@@ -1,0 +1,25 @@
+---
+// src/components/services/single/ServiceNextNav.astro
+import type { ServiceData } from '../../../data/servicesData';
+
+interface Props {
+  service: ServiceData;
+}
+
+const { service } = Astro.props;
+---
+
+<section class="service-next-nav">
+  <div class="service-next-left">
+    <div class="service-next-sub">Next Capability // {service.nextService.number}</div>
+    <a href={`/services/${service.nextService.slug}`} class="service-next-title-link">
+      {service.nextService.title} →
+    </a>
+  </div>
+
+  <div class="service-next-right">
+    <a href="/contact" class="service-cta-btn">
+      Initiate Project
+    </a>
+  </div>
+</section>

@@ -1,0 +1,47 @@
+---
+// src/pages/services/[slug].astro
+import Layout from '../../layouts/Layout.astro';
+import { servicesData } from '../../data/servicesData';
+import ServiceHero from '../../components/services/single/ServiceHero.astro';
+import ServiceCapabilities from '../../components/services/single/ServiceCapabilities.astro';
+import ServiceProcess from '../../components/services/single/ServiceProcess.astro';
+import ServiceProjectsSpotlight from '../../components/services/single/ServiceProjectsSpotlight.astro';
+import ServiceNextNav from '../../components/services/single/ServiceNextNav.astro';
+import '../../components/services/single/serviceSingle.css';
+
+export async function getStaticPaths() {
+  return Object.keys(servicesData).map((slug) => ({
+    params: { slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const service = servicesData[slug as string];
+
+if (!service) {
+  return Astro.redirect('/services');
+}
+
+const title = `KYNDEV - ${service.title}`;
+const description = service.description;
+const ogUrl = `https://kyndev.com/services/${service.slug}/`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  ogUrl={ogUrl}
+  ogTitle={title}
+  ogDescription={description}
+  scrollNavPath="/services"
+  scrollNavText="All Services"
+  scrollNavSubtitle="Overview"
+>
+  <div id="service-single" class="page service-single-container">
+    <ServiceHero service={service} />
+    <ServiceCapabilities service={service} />
+    <ServiceProcess service={service} />
+    <ServiceProjectsSpotlight service={service} />
+    <ServiceNextNav service={service} />
+  </div>
+</Layout>
