@@ -69,11 +69,6 @@ class TransitionOverlay {
         c = Math.sqrt(t * t + r * r) / n,
         u = this.ctx;
 
-      (u.save(),
-        u.scale(settings.DPR, settings.DPR),
-        (u.fillStyle = "#000"),
-        u.fillRect(0, 0, t, r));
-
       // Handle route navigation transition state
       const isNavTransition = this.needsShowText || this.showTextRatio > 0;
 
@@ -109,48 +104,90 @@ class TransitionOverlay {
       let effProgress = isNavTransition ? navProgress : a;
       let f = ease.expoInOut(1 - this.activeRatio);
       let effReveal = isNavTransition ? navReveal : f;
-      let p = (1 + effReveal * c) * n;
 
-      u.translate(t * 0.5, r * 0.5);
-      u.rotate(effReveal * (this.contentShowRatio === 0 ? -1 : 1));
-      u.translate(n * effReveal * c, -n * 0.5 * effReveal * c);
-      u.scale(p, p);
+      // Smooth background fade during zoom reveal so it dissolves seamlessly into page
+      const bgAlpha = math.fit(effReveal, 0.15, 0.85, 1, 0, ease.expoInOut);
+      const kAlpha = math.fit(effReveal, 0, 0.42, 1, 0, ease.expoOut);
 
-      if (effMorph === 0) {
-        // Sleek horizontal progress loading bar
-        u.fillStyle = "#333";
-        u.fillRect(-2.7, -0.5, 5.4, 1);
-        u.fillStyle = "#fff";
-        u.fillRect(-2.7, -0.5, 5.4 * effProgress, 1);
-      } else {
-        // Kinetic origami transformation: morph from horizontal bar to brand "K"
-        const jX = -0.6;
-        const jY = 0;
-        u.translate(-0.35 * effMorph, 0);
+      u.save();
+      u.scale(settings.DPR, settings.DPR);
+      u.clearRect(0, 0, t, r);
 
-        const drawSegment = (sx, sy, sw, sh, angle) => {
-          u.save();
-          u.translate(jX, jY);
-          if (angle !== 0) u.rotate(angle);
-          u.globalCompositeOperation = "xor";
-          u.fillRect(sx, sy, sw, sh);
-          u.globalCompositeOperation = "source-over";
-          u.globalAlpha = 1 - effReveal;
-          u.fillRect(sx, sy, sw, sh);
-          u.restore();
+      // Disable any shadow or blur artifacts
+      u.shadowColor = "transparent";
+      u.shadowBlur = 0;
+      u.shadowOffsetX = 0;
+      u.shadowOffsetY = 0;
+
+      // Smooth cinematic backdrop
+      if (bgAlpha > 0) {
+        u.fillStyle = `rgba(10, 11, 16, ${bgAlpha})`;
+        u.fillRect(0, 0, t, r);
+      }
+
+      // If K has dissolved, skip drawing letter geometry
+      if (kAlpha > 0.001) {
+        let p = (1 + effReveal * c) * n;
+
+        u.save();
+        u.translate(t * 0.5, r * 0.5);
+        u.rotate(effReveal * (this.contentShowRatio === 0 ? -1 : 1));
+        u.translate(n * effReveal * c, -n * 0.5 * effReveal * c);
+        u.scale(p, p);
+
+        // Rounded rectangle drawing helper
+        const drawRoundedRect = (ctx, sx, sy, sw, sh, rad) => {
+          ctx.beginPath();
+          if (typeof ctx.roundRect === "function") {
+            ctx.roundRect(sx, sy, sw, sh, rad);
+          } else {
+            ctx.rect(sx, sy, sw, sh);
+          }
+          ctx.fill();
         };
 
-        // 1. Upper Vertical Stem (rotates 90 deg into upper spine)
-        drawSegment(-2.1, -0.5, 2.1, 1, effMorph * Math.PI * 0.5);
+        if (effMorph === 0) {
+          // Sleek horizontal progress loading capsule with smooth rounded caps
+          u.globalCompositeOperation = "source-over";
+          u.fillStyle = `rgba(45, 50, 65, ${kAlpha * 0.7})`;
+          drawRoundedRect(u, -2.7, -0.5, 5.4, 1, 0.48);
 
-        // 2. Lower Vertical Stem (rotates -90 deg into lower spine)
-        drawSegment(-2.1, -0.5, 2.1, 1, -effMorph * Math.PI * 0.5);
+          if (effProgress > 0) {
+            u.fillStyle = `rgba(255, 255, 255, ${kAlpha})`;
+            drawRoundedRect(u, -2.7, -0.5, Math.max(0.2, 5.4 * effProgress), 1, 0.48);
+          }
+        } else {
+          // Kinetic origami transformation: morph from horizontal bar to brand "K"
+          const jX = -0.6;
+          const jY = 0;
+          u.translate(-0.35 * effMorph, 0);
 
-        // 3. Upper Diagonal Arm (rotates upward by 42 deg)
-        drawSegment(0, -0.5, 3.2, 1, -effMorph * (Math.PI * 0.233));
+          const drawSegment = (sx, sy, sw, sh, rad, angle) => {
+            u.save();
+            u.translate(jX, jY);
+            if (angle !== 0) u.rotate(angle);
+            u.globalCompositeOperation = "source-over";
+            u.fillStyle = `rgba(255, 255, 255, ${kAlpha})`;
+            drawRoundedRect(u, sx, sy, sw, sh, rad);
+            u.restore();
+          };
 
-        // 4. Lower Diagonal Arm (rotates downward by 42 deg)
-        drawSegment(0, -0.5, 3.2, 1, effMorph * (Math.PI * 0.233));
+          // Rounded stroke radius for sleek, refined corners
+          const strokeRadius = 0.22;
+
+          // 1. Upper Vertical Stem (rotates 90 deg into upper spine)
+          drawSegment(-2.1, -0.5, 2.1, 1, strokeRadius, effMorph * Math.PI * 0.5);
+
+          // 2. Lower Vertical Stem (rotates -90 deg into lower spine)
+          drawSegment(-2.1, -0.5, 2.1, 1, strokeRadius, -effMorph * Math.PI * 0.5);
+
+          // 3. Upper Diagonal Arm (rotates upward by 42 deg)
+          drawSegment(0, -0.5, 3.2, 1, strokeRadius, -effMorph * (Math.PI * 0.233));
+
+          // 4. Lower Diagonal Arm (rotates downward by 42 deg)
+          drawSegment(0, -0.5, 3.2, 1, strokeRadius, effMorph * (Math.PI * 0.233));
+        }
+        u.restore();
       }
 
       u.restore();
