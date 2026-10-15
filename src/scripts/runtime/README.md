@@ -85,7 +85,7 @@ src/scripts/runtime/
 ├── ui/                                # DOM UI Controllers & Transitions
 │   ├── Header.js                      # Navigation menu, labs link & sound toggles (header)
 │   ├── Preloader.js                   # Digits percentage counter & reveal sequencer (preloader)
-│   ├── TransitionOverlay.js           # Route transition canvas & 1.5s safety watchdog (transitionOverlay)
+│   ├── TransitionOverlay.js           # Route transition canvas, K-morph, offscreen rasterizer & live debug panel
 │   ├── Links.js                       # Animated canvas link hover underlines (links)
 │   ├── VideoOverlay.js                # Showreel video modal player & timecode sync (videoOverlay)
 │   ├── DomHelper.js                   # DOM text splitting & word animations
@@ -116,7 +116,11 @@ src/scripts/runtime/
 2. **To tweak shaders & postprocessing**: Navigate to [`webgl/passes/`](./webgl/passes/) (e.g. [`Bloom.js`](./webgl/passes/Bloom.js), [`Smaa.js`](./webgl/passes/Smaa.js)).
 3. **To adjust page route behavior or animations**: Edit [`navigation/RouteManager.js`](./navigation/RouteManager.js) or individual pages in [`navigation/pages/`](./navigation/pages/).
 4. **To modify navigation UI or menus**: Edit [`ui/Header.js`](./ui/Header.js) or [`ui/TransitionOverlay.js`](./ui/TransitionOverlay.js).
+5. **To test or customize the "K" preloader / transition morph**:
+   - Access the live interactive HUD in the browser at any time by appending `?debug-k` (e.g. `http://localhost:4321/?debug-k`).
+   - Freeze the animation, tweak morph fold, zoom dissolve, or corner radius in real time.
+   - For complete stroke coordinates, geometry details, and code examples, see **[Section 7 of the Multi-Page Guide](../../../docs/MULTI_PAGE_AND_COMPONENT_GUIDE.md#7-brand-k-preloader-morph--live-transition-debugger)**.
 
-### Relationship with Legacy `runtime.js`
-- [`src/scripts/runtime.js`](../runtime.js) remains the production file loaded by [`Layout.astro`](../../layouts/Layout.astro). It has been kept 100% intact and unchanged.
-- The new [`src/scripts/runtime/`](./) directory provides the clean deconstruction, making it straightforward to review, test, or incrementally swap subsystems in future releases.
+### Active Runtime Architecture
+- The modern modular runtime at [`src/scripts/runtime/index.js`](./index.js) is actively loaded by [`Layout.astro`](../../layouts/Layout.astro).
+- The monolithic [`src/scripts/runtime.js`](../runtime.js) is preserved as an intact reference.
