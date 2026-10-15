@@ -5,62 +5,92 @@ import "./heroTools.css";
 interface Props {
   title?: string;
   tag?: string;
+  description?: string;
+  layout?: "full" | "split";
   showReturnBanner?: boolean;
 }
 
 const {
-  title = "Scale your revenue with battle-tested 3D performance across top platforms.",
+  title = "We engineer high-converting campaigns across Google, Meta, HubSpot & Klaviyo.",
   tag = "Performance Marketing Ecosystem",
+  description = "Scale your brand with battle-tested paid acquisition, data-driven automation, and custom attribution models built for exponential ROI.",
+  layout = "full",
   showReturnBanner = true,
 } = Astro.props;
 ---
 
 <div id="home-hero-tools" class="section">
-  <!-- Bounded Deck Stage Container: All elements & 3D badges stay strictly inside -->
-  <div id="hero-tools-deck">
+  <!-- Bounded Deck Stage Container: Supports optional 40/60 split or full deck -->
+  <div id="hero-tools-deck" class={`deck-${layout}`} data-layout={layout}>
     {showReturnBanner && (
       <div id="hero-tools-preview-banner">
         <span class="pulse-dot"></span>
-        <span>3D Marketing Tools Prototype</span>
+        <span>3D Marketing Tools</span>
         <span>•</span>
-        <a href="/hub" data-link-type="internal">Component Hub</a>
+        <div class="hero-tools-layout-toggle" role="group" aria-label="Layout mode switch">
+          <button type="button" class="layout-toggle-btn active" data-set-layout="full">Full Deck</button>
+          <button type="button" class="layout-toggle-btn" data-set-layout="split">40/60 Split</button>
+        </div>
+        <span>•</span>
+        <a href="/hub" data-link-type="internal">Hub</a>
         <span>•</span>
         <a href="/" data-link-type="internal">Balloons Hero →</a>
       </div>
     )}
 
-    <!-- Header with tag and title -->
-    <div id="hero-tools-header">
-      <span id="hero-tools-tag">{tag}</span>
-      <h1 id="hero-tools-title">
-        We engineer high-converting campaigns across <span class="accent">Google, Meta, HubSpot & Klaviyo</span>.
-      </h1>
-    </div>
+    <!-- Left Column: Title, Description, Actions & HUD Card (Active in 40/60 Split, overlays in Full Deck) -->
+    <div id="hero-tools-col-left">
+      <div id="hero-tools-header">
+        <span id="hero-tools-tag">{tag}</span>
+        <h1 id="hero-tools-title">
+          We engineer high-converting campaigns across <span class="accent">Google, Meta, HubSpot & Klaviyo</span>.
+        </h1>
+        <p id="hero-tools-description">
+          {description}
+        </p>
+      </div>
 
-    <!-- 3D Physics Canvas Container -->
-    <div id="hero-tools-canvas-container" aria-label="Interactive 3D Marketing Tools Simulation"></div>
+      <!-- Action buttons in split mode -->
+      <div id="hero-tools-split-actions">
+        <a href="/services" class="hero-tools-btn" data-link-type="internal">
+          Explore Our Services →
+        </a>
+        <button id="hero-tools-split-impulse-btn" class="hero-tools-btn hero-tools-btn-secondary" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+          </svg>
+          Scatter Stack
+        </button>
+      </div>
 
-    <!-- HUD Card -->
-    <div id="hero-tools-hud">
-      <div id="hero-tools-hud-icon">G</div>
-      <div id="hero-tools-hud-content">
-        <h3 id="hero-tools-hud-name">Google Ads</h3>
-        <span id="hero-tools-hud-sub">PPC & Search Scaling</span>
-        <span id="hero-tools-hud-hint">Click or drag any 3D tool badge to toss & inspect</span>
+      <!-- Interactive Tool HUD Card -->
+      <div id="hero-tools-hud">
+        <div id="hero-tools-hud-icon">G</div>
+        <div id="hero-tools-hud-content">
+          <h3 id="hero-tools-hud-name">Google Ads</h3>
+          <span id="hero-tools-hud-sub">PPC & Search Scaling</span>
+          <span id="hero-tools-hud-hint">Click or drag any 3D tool badge to toss & inspect</span>
+        </div>
       </div>
     </div>
 
-    <!-- Controls -->
-    <div id="hero-tools-controls">
-      <button id="hero-tools-impulse-btn" class="hero-tools-btn" type="button">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
-        </svg>
-        Scatter Stack
-      </button>
-      <a href="/services" class="hero-tools-btn hero-tools-btn-secondary" data-link-type="internal">
-        Explore Our Services →
-      </a>
+    <!-- Right Column: 60% Dedicated 3D Interactive Stage in Split, Full Bleed in Full Deck -->
+    <div id="hero-tools-col-right">
+      <!-- 3D Physics Canvas Container -->
+      <div id="hero-tools-canvas-container" aria-label="Interactive 3D Marketing Tools Simulation"></div>
+
+      <!-- Bottom Right Controls (visible in full deck mode) -->
+      <div id="hero-tools-controls">
+        <button id="hero-tools-impulse-btn" class="hero-tools-btn" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+          </svg>
+          Scatter Stack
+        </button>
+        <a href="/services" class="hero-tools-btn hero-tools-btn-secondary" data-link-type="internal">
+          Explore Our Services →
+        </a>
+      </div>
     </div>
   </div>
 </div>

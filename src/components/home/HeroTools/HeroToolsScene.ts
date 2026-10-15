@@ -44,11 +44,11 @@ export class HeroToolsScene {
   private clock = new THREE.Clock();
 
   // Liquid Wave Post-processing Pipeline (Signature Kyndev Fluid Wave)
-  private postRenderTarget: THREE.WebGLRenderTarget | null = null;
-  private postScene: THREE.Scene | null = null;
-  private postCamera: THREE.OrthographicCamera | null = null;
-  private postMaterial: THREE.ShaderMaterial | null = null;
-  private postQuad: THREE.Mesh | null = null;
+  public postRenderTarget: THREE.WebGLRenderTarget | null = null;
+  public postScene: THREE.Scene | null = null;
+  public postCamera: THREE.OrthographicCamera | null = null;
+  public postMaterial: THREE.ShaderMaterial | null = null;
+  public postQuad: THREE.Mesh | null = null;
 
   public onToolSelect?: (tool: MarketingToolConfig) => void;
 
@@ -248,7 +248,6 @@ export class HeroToolsScene {
           ctx.save();
           ctx.translate(c, c);
 
-          // Google "G" clean geometric vector path
           ctx.lineWidth = r * 0.42;
           ctx.lineCap = 'butt';
 
@@ -299,7 +298,6 @@ export class HeroToolsScene {
           ctx.save();
           ctx.translate(c, c);
 
-          // Meta infinity loop gradient
           const grad = ctx.createLinearGradient(-r, 0, r, 0);
           grad.addColorStop(0, '#0064E0');
           grad.addColorStop(0.5, '#0081FB');
@@ -341,12 +339,10 @@ export class HeroToolsScene {
           ctx.fillStyle = '#FF7A59';
           ctx.lineWidth = r * 0.22;
 
-          // Main central node
           ctx.beginPath();
           ctx.arc(0, 0, r * 1.1, 0, Math.PI * 2);
           ctx.stroke();
 
-          // Stalk 1 (top right)
           const angle1 = (-35 * Math.PI) / 180;
           const d1 = r * 2.2;
           ctx.beginPath();
@@ -357,7 +353,6 @@ export class HeroToolsScene {
           ctx.arc(Math.cos(angle1) * d1, Math.sin(angle1) * d1, r * 0.55, 0, Math.PI * 2);
           ctx.fill();
 
-          // Stalk 2 (bottom right)
           const angle2 = (45 * Math.PI) / 180;
           const d2 = r * 2.1;
           ctx.beginPath();
@@ -368,7 +363,6 @@ export class HeroToolsScene {
           ctx.arc(Math.cos(angle2) * d2, Math.sin(angle2) * d2, r * 0.48, 0, Math.PI * 2);
           ctx.fill();
 
-          // Stalk 3 (top left)
           const angle3 = (-145 * Math.PI) / 180;
           const d3 = r * 1.8;
           ctx.beginPath();
@@ -399,7 +393,6 @@ export class HeroToolsScene {
           ctx.save();
           ctx.translate(c, c);
 
-          // Klaviyo signature right-facing modern flag / pennant
           ctx.fillStyle = '#12B76A';
           ctx.beginPath();
           ctx.moveTo(-w * 0.45, -h * 0.45);
@@ -408,7 +401,6 @@ export class HeroToolsScene {
           ctx.closePath();
           ctx.fill();
 
-          // Inner cutout detail
           ctx.fillStyle = '#0a0d16';
           ctx.beginPath();
           ctx.arc(-w * 0.1, 0, h * 0.22, 0, Math.PI * 2);
@@ -433,20 +425,17 @@ export class HeroToolsScene {
           ctx.save();
           ctx.translate(c, c);
 
-          // Shopping bag silhouette
           ctx.fillStyle = '#95BF47';
           ctx.beginPath();
           ctx.roundRect(-r * 0.8, -r * 0.5, r * 1.6, r * 1.5, [r * 0.25, r * 0.25, r * 0.15, r * 0.15]);
           ctx.fill();
 
-          // Bag handle
           ctx.strokeStyle = '#5E8E3E';
           ctx.lineWidth = r * 0.22;
           ctx.beginPath();
           ctx.arc(0, -r * 0.5, r * 0.45, Math.PI, 0, false);
           ctx.stroke();
 
-          // Stylized "S"
           ctx.fillStyle = '#ffffff';
           ctx.font = `bold ${Math.round(r * 0.95)}px Space Grotesk, sans-serif`;
           ctx.textAlign = 'center';
@@ -469,7 +458,6 @@ export class HeroToolsScene {
     const c = size / 2;
     const r = c * 0.94;
 
-    // Dark high-contrast token body background
     const bgGrad = ctx.createRadialGradient(c, c, r * 0.1, c, c, r);
     bgGrad.addColorStop(0, '#1c2236');
     bgGrad.addColorStop(0.7, '#111422');
@@ -480,7 +468,6 @@ export class HeroToolsScene {
     ctx.arc(c, c, r, 0, Math.PI * 2);
     ctx.fill();
 
-    // Metallic beveled perimeter rings
     ctx.strokeStyle = tool.primaryColor;
     ctx.lineWidth = 14;
     ctx.beginPath();
@@ -494,25 +481,20 @@ export class HeroToolsScene {
     ctx.stroke();
 
     if (isFront) {
-      // Draw platform icon
       tool.drawIcon(ctx, size * 0.72);
 
-      // Tool Name text
       ctx.textAlign = 'center';
       ctx.fillStyle = '#ffffff';
       ctx.font = '800 64px Space Grotesk, sans-serif';
       ctx.fillText(tool.name.toUpperCase(), c, 800);
 
-      // Subtitle
       ctx.fillStyle = tool.primaryColor;
       ctx.font = '600 32px IBMPlexMono, monospace';
       ctx.fillText(tool.subtitle.toUpperCase(), c, 860);
     } else {
-      // Back Face: Kyndev Verified Performance Badge
       ctx.save();
       ctx.translate(c, c);
 
-      // Inner glow ring
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
       ctx.lineWidth = 6;
       ctx.beginPath();
@@ -543,16 +525,16 @@ export class HeroToolsScene {
     return texture;
   }
 
-  private getBounds(): { boundX: number; boundY: number; boundZ: number } {
+  public getBounds(): { boundX: number; boundY: number; boundZ: number } {
     const vFov = (this.camera.fov * Math.PI) / 180;
     const visibleHeightAtZero = 2 * Math.tan(vFov / 2) * this.camera.position.z;
     const visibleWidthAtZero = visibleHeightAtZero * this.camera.aspect;
 
     // Strict containment inside the visible deck container
-    // Inset safely by 14% so all badges bounce off interior walls and never touch container edge
-    const boundX = (visibleWidthAtZero * 0.5) * 0.86;
-    const boundY = (visibleHeightAtZero * 0.5) * 0.82;
-    const boundZ = 2.5;
+    // Inset safely by 16% so all badges bounce off interior walls and never escape
+    const boundX = (visibleWidthAtZero * 0.5) * 0.84;
+    const boundY = (visibleHeightAtZero * 0.5) * 0.80;
+    const boundZ = 2.2;
 
     return { boundX, boundY, boundZ };
   }
@@ -568,13 +550,11 @@ export class HeroToolsScene {
         64,
         2
       );
-      // Align cylinder axis to face camera
       geom.rotateX(Math.PI / 2);
 
       const frontTexture = this.createTexture(tool, true);
       const backTexture = this.createTexture(tool, false);
 
-      // Materials: 0 = perimeter rim, 1 = front face, 2 = back face
       const rimMaterial = new THREE.MeshStandardMaterial({
         color: new THREE.Color(tool.accentColor),
         metalness: 0.85,
@@ -598,7 +578,6 @@ export class HeroToolsScene {
       mesh.castShadow = true;
       mesh.receiveShadow = true;
 
-      // Position within safe inner deck bounds
       const { boundX, boundY } = this.getBounds();
       const maxR = tool.radius + tool.thickness * 0.5;
       const limitX = Math.max(boundX - maxR, 0.5) * 0.85;
@@ -606,14 +585,10 @@ export class HeroToolsScene {
 
       const x = (Math.random() - 0.5) * 2 * limitX;
       const y = (Math.random() - 0.5) * 2 * limitY;
-      const z = (Math.random() - 0.5) * 2.0;
+      const z = (Math.random() - 0.5) * 1.5;
 
       mesh.position.set(x, y, z);
-      mesh.rotation.set(
-        (Math.random() - 0.5) * 0.6,
-        (Math.random() - 0.5) * 0.6,
-        (Math.random() - 0.5) * 0.4
-      );
+      mesh.rotation.set(0, 0, (Math.random() - 0.5) * 0.4);
 
       this.scene.add(mesh);
 
@@ -624,13 +599,9 @@ export class HeroToolsScene {
         velocity: new THREE.Vector3(
           (Math.random() - 0.5) * 0.8,
           (Math.random() - 0.5) * 0.8,
-          (Math.random() - 0.5) * 0.3
+          (Math.random() - 0.5) * 0.2
         ),
-        angularVelocity: new THREE.Vector3(
-          (Math.random() - 0.5) * 0.7,
-          (Math.random() - 0.5) * 0.7,
-          (Math.random() - 0.5) * 0.4
-        ),
+        angularVelocity: new THREE.Vector3(0, 0, (Math.random() - 0.5) * 0.4),
         rotation: mesh.rotation,
         radius: tool.radius,
         mass: tool.radius * 2.0,
@@ -652,6 +623,8 @@ export class HeroToolsScene {
   private onPointerMove = (e: MouseEvent): void => {
     if (!this.container) return;
     const rect = this.container.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+
     const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
@@ -672,9 +645,9 @@ export class HeroToolsScene {
         const targetY = Math.max(-limitY, Math.min(limitY, this.intersectionPoint.y));
         const clampedTarget = new THREE.Vector3(targetX, targetY, this.draggedBody.position.z);
 
-        this.draggedBody.velocity.copy(
-          clampedTarget.sub(this.draggedBody.position).multiplyScalar(15)
-        );
+        const throwVel = clampedTarget.clone().sub(this.draggedBody.position).multiplyScalar(12);
+        throwVel.clampLength(0, 10.0);
+        this.draggedBody.velocity.copy(throwVel);
         this.draggedBody.position.set(targetX, targetY, this.draggedBody.position.z);
       }
     }
@@ -683,6 +656,8 @@ export class HeroToolsScene {
   private onPointerDown = (e: MouseEvent): void => {
     if (!this.container) return;
     const rect = this.container.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+
     const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     this.mouse.set(x, y);
@@ -706,11 +681,11 @@ export class HeroToolsScene {
           this.onToolSelect(body.tool);
         }
 
-        // Spin burst on pickup
+        // Controlled spin on click (safe magnitude to preserve face visibility)
         body.angularVelocity.set(
-          (Math.random() - 0.5) * 4.0,
-          (Math.random() - 0.5) * 4.0,
-          (Math.random() - 0.5) * 2.0
+          (Math.random() - 0.5) * 1.5,
+          (Math.random() - 0.5) * 1.5,
+          (Math.random() - 0.5) * 1.0
         );
       }
     }
@@ -731,22 +706,21 @@ export class HeroToolsScene {
       const limitY = Math.max(boundY - maxR, 0.5);
 
       b.velocity.set(
-        (Math.random() - 0.5) * 16,
-        (Math.random() - 0.5) * 16,
-        (Math.random() - 0.5) * 8
+        (Math.random() - 0.5) * 8,
+        (Math.random() - 0.5) * 8,
+        (Math.random() - 0.5) * 3
       );
       b.angularVelocity.set(
-        (Math.random() - 0.5) * 6,
-        (Math.random() - 0.5) * 6,
-        (Math.random() - 0.5) * 4
+        (Math.random() - 0.5) * 2,
+        (Math.random() - 0.5) * 2,
+        (Math.random() - 0.5) * 1.5
       );
-      // Ensure clamp immediately
       b.position.x = Math.max(-limitX, Math.min(limitX, b.position.x));
       b.position.y = Math.max(-limitY, Math.min(limitY, b.position.y));
     });
   }
 
-  private onResize = (): void => {
+  public onResize = (): void => {
     if (this.isDestroyed || !this.container) return;
     const width = this.container.clientWidth || window.innerWidth;
     const height = this.container.clientHeight || window.innerHeight;
@@ -776,46 +750,36 @@ export class HeroToolsScene {
       const limitX = Math.max(boundX - maxR, 0.5);
       const limitY = Math.max(boundY - maxR, 0.5);
 
+      // Defense against NaN/Infinity
+      if (!isFinite(b.position.x) || !isFinite(b.position.y) || !isFinite(b.position.z)) {
+        b.position.set((Math.random() - 0.5) * 2, (Math.random() - 0.5) * 2, 0);
+        b.velocity.set(0, 0, 0);
+      }
+      if (!isFinite(b.velocity.x) || !isFinite(b.velocity.y) || !isFinite(b.velocity.z)) {
+        b.velocity.set(0, 0, 0);
+      }
+
       if (!b.isDragging) {
         // Subtle drift toward gentle floating orbit
         b.velocity.x += -b.position.x * 0.08 * dt;
         b.velocity.y += -b.position.y * 0.08 * dt;
         b.velocity.z += -b.position.z * 0.12 * dt;
 
-        // Damping
+        // Velocity damping & strict speed cap to prevent clipping escapes
         b.velocity.multiplyScalar(0.985);
-        b.angularVelocity.multiplyScalar(0.98);
+        b.velocity.clampLength(0, 10.0);
+
+        // Face-Forward Spring: keeps tokens upright and legible facing the camera
+        b.angularVelocity.x += -b.rotation.x * 2.5 * dt;
+        b.angularVelocity.y += -b.rotation.y * 2.5 * dt;
+        b.angularVelocity.multiplyScalar(0.96);
+        b.angularVelocity.clampLength(0, 5.0);
 
         // Update position & rotation
         b.position.addScaledVector(b.velocity, dt);
         b.rotation.x += b.angularVelocity.x * dt;
         b.rotation.y += b.angularVelocity.y * dt;
         b.rotation.z += b.angularVelocity.z * dt;
-
-        // Wall collisions (Elastic Bounce strictly within Deck Container walls)
-        if (b.position.x > limitX) {
-          b.position.x = limitX;
-          b.velocity.x = -Math.abs(b.velocity.x) * 0.85;
-        } else if (b.position.x < -limitX) {
-          b.position.x = -limitX;
-          b.velocity.x = Math.abs(b.velocity.x) * 0.85;
-        }
-
-        if (b.position.y > limitY) {
-          b.position.y = limitY;
-          b.velocity.y = -Math.abs(b.velocity.y) * 0.85;
-        } else if (b.position.y < -limitY) {
-          b.position.y = -limitY;
-          b.velocity.y = Math.abs(b.velocity.y) * 0.85;
-        }
-
-        if (b.position.z > boundZ) {
-          b.position.z = boundZ;
-          b.velocity.z = -Math.abs(b.velocity.z) * 0.8;
-        } else if (b.position.z < -boundZ) {
-          b.position.z = -boundZ;
-          b.velocity.z = Math.abs(b.velocity.z) * 0.8;
-        }
       }
 
       // Inter-token sphere collisions
@@ -825,29 +789,57 @@ export class HeroToolsScene {
         const dist = diff.length();
         const minDist = b.radius + b2.radius;
 
-        if (dist < minDist && dist > 0.001) {
+        if (dist < minDist && dist > 0.005) {
           const normal = diff.normalize();
           const overlap = minDist - dist;
 
-          // Push apart
-          b.position.addScaledVector(normal, overlap * 0.5);
-          b2.position.addScaledVector(normal, -overlap * 0.5);
+          // Push apart with gentle separation
+          const pushAmt = Math.min(overlap * 0.45, 0.5);
+          b.position.addScaledVector(normal, pushAmt);
+          b2.position.addScaledVector(normal, -pushAmt);
 
           // Elastic collision response
           const relativeVelocity = b.velocity.clone().sub(b2.velocity);
           const velocityAlongNormal = relativeVelocity.dot(normal);
 
           if (velocityAlongNormal < 0) {
-            const restitution = 0.85;
-            const impulseMagnitude =
+            const restitution = 0.75;
+            const impulseMagnitude = Math.min(
               (-(1 + restitution) * velocityAlongNormal) /
-              (1 / b.mass + 1 / b2.mass);
+              (1 / b.mass + 1 / b2.mass),
+              8.0
+            );
             const impulse = normal.clone().multiplyScalar(impulseMagnitude);
 
             b.velocity.addScaledVector(impulse, 1 / b.mass);
             b2.velocity.addScaledVector(impulse, -1 / b2.mass);
           }
         }
+      }
+
+      // FINAL BOUNDARY CLAMP: Enforces strict containment after all collisions
+      if (b.position.x > limitX) {
+        b.position.x = limitX;
+        b.velocity.x = -Math.abs(b.velocity.x) * 0.8;
+      } else if (b.position.x < -limitX) {
+        b.position.x = -limitX;
+        b.velocity.x = Math.abs(b.velocity.x) * 0.8;
+      }
+
+      if (b.position.y > limitY) {
+        b.position.y = limitY;
+        b.velocity.y = -Math.abs(b.velocity.y) * 0.8;
+      } else if (b.position.y < -limitY) {
+        b.position.y = -limitY;
+        b.velocity.y = Math.abs(b.velocity.y) * 0.8;
+      }
+
+      if (b.position.z > boundZ) {
+        b.position.z = boundZ;
+        b.velocity.z = -Math.abs(b.velocity.z) * 0.8;
+      } else if (b.position.z < -boundZ) {
+        b.position.z = -boundZ;
+        b.velocity.z = Math.abs(b.velocity.z) * 0.8;
       }
     }
   }

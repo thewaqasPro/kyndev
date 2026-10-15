@@ -1,6 +1,7 @@
 /**
  * Hero Tools Section Controller
  * Isolated component controller for the interactive 3D Marketing Tools Physics Section.
+ * Supports Full Deck (default) and 40/60 Split Column layout modes.
  */
 import { HeroToolsScene } from "../../../components/home/HeroTools/HeroToolsScene.ts";
 import audios from "../audio/Audios.js";
@@ -8,23 +9,46 @@ import audios from "../audio/Audios.js";
 class HeroToolsSection {
   domContainer = null;
   domVisualContainer = null;
+  domDeck = null;
   domHudIcon = null;
   domHudName = null;
   domHudSub = null;
   domImpulseBtn = null;
+  domSplitImpulseBtn = null;
   scene = null;
   _onImpulseClick = null;
+  _onSplitImpulseClick = null;
 
   preInit(container) {
     const root = container || document;
     this.domContainer = root.querySelector("#home-hero-tools");
     if (!this.domContainer) return;
 
+    this.domDeck = this.domContainer.querySelector("#hero-tools-deck");
     this.domVisualContainer = this.domContainer.querySelector("#hero-tools-canvas-container");
     this.domHudIcon = this.domContainer.querySelector("#hero-tools-hud-icon");
     this.domHudName = this.domContainer.querySelector("#hero-tools-hud-name");
     this.domHudSub = this.domContainer.querySelector("#hero-tools-hud-sub");
     this.domImpulseBtn = this.domContainer.querySelector("#hero-tools-impulse-btn");
+    this.domSplitImpulseBtn = this.domContainer.querySelector("#hero-tools-split-impulse-btn");
+  }
+
+  setLayout(mode) {
+    if (!this.domDeck) return;
+    const targetMode = mode === "split" ? "split" : "full";
+    this.domDeck.setAttribute("data-layout", targetMode);
+
+    // Update toggle button states
+    const toggleBtns = this.domContainer?.querySelectorAll("[data-set-layout]");
+    toggleBtns?.forEach((btn) => {
+      btn.classList.toggle("active", btn.getAttribute("data-set-layout") === targetMode);
+    });
+
+    // Give DOM time to reflow, then update 3D scene viewport & boundaries
+    setTimeout(() => {
+      this.scene?.onResize?.();
+      this.scene?.applyImpulseToAll?.();
+    }, 60);
   }
 
   init() {
@@ -32,6 +56,25 @@ class HeroToolsSection {
       this.preInit();
     }
     if (!this.domVisualContainer) return;
+
+    // Check URL query parameters for layout selection
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("layout") === "split") {
+        this.setLayout("split");
+      }
+    } catch (e) {}
+
+    // Wire up interactive layout toggle buttons in the banner
+    const toggleBtns = this.domContainer.querySelectorAll("[data-set-layout]");
+    toggleBtns.forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const mode = btn.getAttribute("data-set-layout");
+        this.setLayout(mode);
+        audios?.countPlay?.("click");
+      });
+    });
 
     // Clean existing scene if re-mounting
     if (this.scene) {
@@ -69,13 +112,21 @@ class HeroToolsSection {
         };
         this.domImpulseBtn.addEventListener("click", this._onImpulseClick);
       }
+
+      if (this.domSplitImpulseBtn && !this._onSplitImpulseClick) {
+        this._onSplitImpulseClick = () => {
+          this.scene?.applyImpulseToAll();
+          audios?.countPlay?.("click");
+        };
+        this.domSplitImpulseBtn.addEventListener("click", this._onSplitImpulseClick);
+      }
     } catch (err) {
       console.warn("[HeroToolsSection] Error initializing 3D scene:", err);
     }
   }
 
   resize(w, h) {
-    // HeroToolsScene internally manages viewport resizing
+    this.scene?.onResize?.();
   }
 
   update(dt) {
@@ -90,6 +141,10 @@ class HeroToolsSection {
     if (this.domImpulseBtn && this._onImpulseClick) {
       this.domImpulseBtn.removeEventListener("click", this._onImpulseClick);
       this._onImpulseClick = null;
+    }
+    if (this.domSplitImpulseBtn && this._onSplitImpulseClick) {
+      this.domSplitImpulseBtn.removeEventListener("click", this._onSplitImpulseClick);
+      this._onSplitImpulseClick = null;
     }
   }
 }

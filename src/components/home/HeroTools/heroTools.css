@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Hero Tools Section Styles (Kyndev Framed Dark Deck on Pure White Canvas)
+   Hero Tools Section Styles (Kyndev Pure White Canvas with Full & 40/60 Split)
    ========================================================================== */
 
 #home-hero-tools {
@@ -13,15 +13,14 @@
   justify-content: flex-start;
   align-items: stretch;
   box-sizing: border-box;
-  /* Completely pure white background as requested */
-  background: #ffffff;
+  /* Pure white canvas */
+  /* background: #ffffff; */
   color: #11141d;
-  /* Width matching header and other sections: padding-x uses var(--base-padding-x) */
-  /* Top spacing placed below the fixed header (which extends to ~148px) */
+  /* Width matching header and other sections */
   padding: calc(var(--base-padding-y) + 7.25rem) var(--base-padding-x) var(--base-padding-y);
 }
 
-/* Framed Dark Deck Container: Dark background, matching exact page width between base paddings */
+/* Framed Dark Deck Container: Base styling for both Full and Split modes */
 #hero-tools-deck {
   position: relative;
   width: 100%;
@@ -34,23 +33,159 @@
   border-radius: 28px;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   overflow: hidden;
+  color: #f0f3fa;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   Layout Mode A: Full Deck (Default Implementation - 100% Preserved)
+   -------------------------------------------------------------------------- */
+#hero-tools-deck:not([data-layout="split"]) {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 3rem 3.5rem 2.5rem;
-  color: #f0f3fa;
 }
 
+#hero-tools-deck:not([data-layout="split"]) #hero-tools-col-left {
+  position: relative;
+  z-index: 10;
+  max-width: 52rem;
+  pointer-events: none;
+}
+
+#hero-tools-deck:not([data-layout="split"]) #hero-tools-description,
+#hero-tools-deck:not([data-layout="split"]) #hero-tools-split-actions {
+  display: none;
+}
+
+#hero-tools-deck:not([data-layout="split"]) #hero-tools-col-right {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+#hero-tools-deck:not([data-layout="split"]) #hero-tools-canvas-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+#hero-tools-deck:not([data-layout="split"]) #hero-tools-hud {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 3.5rem;
+  z-index: 20;
+}
+
+#hero-tools-deck:not([data-layout="split"]) #hero-tools-controls {
+  position: absolute;
+  bottom: 2.5rem;
+  right: 3.5rem;
+  z-index: 20;
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* --------------------------------------------------------------------------
+   Layout Mode B: 40/60 Split Mode (Optional 2-Column Implementation)
+   -------------------------------------------------------------------------- */
+#hero-tools-deck[data-layout="split"] {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 2.5rem;
+  padding: 2.5rem 3rem;
+}
+
+/* Left Column: Exactly 40% Width */
+#hero-tools-deck[data-layout="split"] #hero-tools-col-left {
+  position: relative;
+  flex: 0 0 calc(40% - 1.25rem);
+  width: calc(40% - 1.25rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+#hero-tools-deck[data-layout="split"] #hero-tools-header {
+  pointer-events: auto;
+}
+
+#hero-tools-deck[data-layout="split"] #hero-tools-title {
+  font-size: clamp(1.85rem, 2.7vw, 2.85rem);
+  line-height: 1.12;
+}
+
+#hero-tools-deck[data-layout="split"] #hero-tools-description {
+  display: block;
+  font-family: Space Grotesk, sans-serif;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #94a3b8;
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+}
+
+#hero-tools-deck[data-layout="split"] #hero-tools-split-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+#hero-tools-deck[data-layout="split"] #hero-tools-hud {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  max-width: 100%;
+  margin-top: 2rem;
+}
+
+/* Right Column: Exactly 60% Width for 3D Scene */
+#hero-tools-deck[data-layout="split"] #hero-tools-col-right {
+  position: relative;
+  flex: 0 0 calc(60% - 1.25rem);
+  width: calc(60% - 1.25rem);
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 50%, rgba(26, 33, 52, 0.45) 0%, rgba(9, 11, 18, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 36px rgba(0, 0, 0, 0.35);
+}
+
+#hero-tools-deck[data-layout="split"] #hero-tools-canvas-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+}
+
+#hero-tools-deck[data-layout="split"] #hero-tools-controls {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Shared Component Elements
+   -------------------------------------------------------------------------- */
 #hero-tools-preview-banner {
   position: absolute;
-  top: 2rem;
-  right: 2.5rem;
+  top: 1.75rem;
+  right: 2.25rem;
   z-index: 50;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.45rem 1.15rem;
-  background: rgba(18, 22, 34, 0.85);
+  padding: 0.4rem 1.15rem;
+  background: rgba(18, 22, 34, 0.88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -77,6 +212,39 @@
   50% { transform: scale(1.4); opacity: 0.6; }
 }
 
+.hero-tools-layout-toggle {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.layout-toggle-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-family: IBMPlexMono, monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.layout-toggle-btn:hover {
+  color: #ffffff;
+}
+
+.layout-toggle-btn.active {
+  background: #0081fb;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 129, 251, 0.4);
+}
+
 #hero-tools-preview-banner a {
   color: #0081fb;
   text-decoration: underline;
@@ -87,8 +255,6 @@
 #hero-tools-header {
   position: relative;
   z-index: 10;
-  max-width: 52rem;
-  pointer-events: none;
 }
 
 #hero-tools-tag {
@@ -123,14 +289,6 @@
 }
 
 #hero-tools-canvas-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  border-radius: 28px;
-  overflow: hidden;
   cursor: grab;
 }
 
@@ -138,12 +296,8 @@
   cursor: grabbing;
 }
 
-/* Interactive Tool HUD Card (Dark Glass) */
+/* Interactive Tool HUD Card */
 #hero-tools-hud {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 3.5rem;
-  z-index: 20;
   display: flex;
   align-items: center;
   gap: 1.25rem;
@@ -155,6 +309,7 @@
   border-radius: 18px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
   max-width: 25rem;
+  pointer-events: auto;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
 }
 
@@ -201,16 +356,7 @@
   margin-top: 0.2rem;
 }
 
-/* Bottom Right Controls */
-#hero-tools-controls {
-  position: absolute;
-  bottom: 2.5rem;
-  right: 3.5rem;
-  z-index: 20;
-  display: flex;
-  gap: 0.75rem;
-}
-
+/* Buttons */
 .hero-tools-btn {
   display: inline-flex;
   align-items: center;
@@ -227,6 +373,7 @@
   cursor: pointer;
   box-shadow: 0 6px 20px rgba(0, 129, 251, 0.35);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
 }
 
 .hero-tools-btn:hover {
@@ -249,30 +396,52 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
+/* --------------------------------------------------------------------------
+   Responsive Adaptations
+   -------------------------------------------------------------------------- */
 @media (max-width: 992px) {
   #home-hero-tools {
     padding: calc(var(--base-padding-y) + 5rem) var(--base-padding-x) var(--base-padding-y);
     min-height: 700px;
   }
-  #hero-tools-deck {
+
+  #hero-tools-deck:not([data-layout="split"]) {
     padding: 2.25rem 2rem 2rem;
     border-radius: 20px;
   }
-  #hero-tools-canvas-container {
-    border-radius: 20px;
+
+  #hero-tools-deck[data-layout="split"] {
+    flex-direction: column;
+    padding: 2rem 1.75rem;
+    gap: 1.75rem;
+    overflow-y: auto;
   }
+
+  #hero-tools-deck[data-layout="split"] #hero-tools-col-left {
+    flex: none;
+    width: 100%;
+  }
+
+  #hero-tools-deck[data-layout="split"] #hero-tools-col-right {
+    flex: none;
+    width: 100%;
+    min-height: 380px;
+  }
+
   #hero-tools-preview-banner {
     top: 1.25rem;
     right: 1.5rem;
     font-size: 0.7rem;
     padding: 0.35rem 0.9rem;
   }
-  #hero-tools-hud {
+
+  #hero-tools-deck:not([data-layout="split"]) #hero-tools-hud {
     bottom: 5.75rem;
     left: 2rem;
     max-width: calc(100% - 4rem);
   }
-  #hero-tools-controls {
+
+  #hero-tools-deck:not([data-layout="split"]) #hero-tools-controls {
     bottom: 1.5rem;
     right: 2rem;
     left: 2rem;
@@ -285,33 +454,32 @@
     padding: calc(var(--base-padding-y) + 4.5rem) var(--base-padding-x) var(--base-padding-y);
     min-height: 660px;
   }
+
   #hero-tools-deck {
-    padding: 1.75rem 1.25rem 1.5rem;
-    border-radius: 16px;
+    border-radius: 18px;
   }
-  #hero-tools-canvas-container {
-    border-radius: 16px;
-  }
+
   #hero-tools-preview-banner {
     position: static;
     margin-bottom: 1rem;
     align-self: flex-start;
   }
-  #hero-tools-header {
-    max-width: 100%;
-  }
+
   #hero-tools-title {
-    font-size: 1.75rem;
+    font-size: 1.75rem !important;
   }
+
   #hero-tools-hud {
-    display: none; /* Keep clean touch surface on small mobile */
+    display: none;
   }
-  #hero-tools-controls {
+
+  #hero-tools-deck:not([data-layout="split"]) #hero-tools-controls {
     bottom: 1.25rem;
     left: 1.25rem;
     right: 1.25rem;
     flex-direction: column;
   }
+
   .hero-tools-btn {
     width: 100%;
     justify-content: center;
