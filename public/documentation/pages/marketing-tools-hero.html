@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing Tools Hero 3D Architecture (/hero-tools) - KYNDEV Docs</title>
+  <link rel="stylesheet" href="../css/docs.css">
+  <link rel="icon" type="image/png" href="../../public/assets/meta/favicon-32x32.png">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="docs-header">
+    <div class="header-left">
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+      <a href="../index.html" class="brand-badge">
+        <div class="brand-logo-mark">K</div>
+        <span>KYNDEV DOCS</span>
+      </a>
+      <span class="brand-version">v2.4.0 &bull; Modular</span>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or debug keys..." />
+    </div>
+
+    <div class="header-right">
+      <button class="theme-toggle-btn" id="theme-toggle" title="Switch Theme">☀️</button>
+      <a href="http://localhost:4321/hero-tools" target="_blank" class="live-site-link">Preview /hero-tools ↗</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="../index.html">Overview & Architecture</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./k-preloader-debugger.html">Brand "K" & ?debug-k</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Architecture Guides</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./multi-page-architecture.html">Multi-Page & SPA Routing</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./components-lifecycle.html">Components Lifecycle</a>
+          </li>
+          <li class="sidebar-nav-item active">
+            <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools) <span class="nav-tag">Active</span></a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-content">
+      <div class="article-header">
+        <div class="article-breadcrumbs">
+          <a href="../index.html">KYNDEV</a> / <span>3D Scenes</span> / <span>Marketing Tools Hero</span>
+        </div>
+        <h1 class="article-title">Marketing Tools Hero 3D Architecture (/hero-tools)</h1>
+        <p class="article-lead">
+          Architecture, grid alignment, official vector brand SVGs, and 3D canvas layering for the Marketing Tools Hero section.
+        </p>
+      </div>
+
+      <div class="prose">
+        <h2 id="overview">1. Section Overview</h2>
+        <p>
+          Located at <a href="http://localhost:4321/hero-tools" target="_blank"><code>/hero-tools</code></a> (implemented in <code>src/pages/hero-tools.astro</code>), this section presents floating 3D marketing badges (Meta Ads, Google Ads, TikTok, Shopify, Klaviyo, GA4) alongside the agency value proposition.
+        </p>
+
+        <h2 id="four-corner-grid">2. The 4-Corner Grid System</h2>
+        <p>
+          The layout uses a 4-corner CSS Grid layout where textual content and key agency metrics occupy the four perimeter corners, leaving the center area unobstructed for the interactive 3D WebGL canvas:
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Corner Position</th>
+                <th>Element / Content</th>
+                <th>Layout Class</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Top-Left</strong></td>
+                <td>Main Headline: <em>"MARKETING THAT SCALES REVENUE"</em></td>
+                <td><code>.hero-corner-tl</code></td>
+              </tr>
+              <tr>
+                <td><strong>Top-Right</strong></td>
+                <td>Technical Overview & Core Capabilities Subtext</td>
+                <td><code>.hero-corner-tr</code></td>
+              </tr>
+              <tr>
+                <td><strong>Bottom-Left</strong></td>
+                <td>Primary CTA: <em>"SCALE YOUR CAMPAIGNS"</em></td>
+                <td><code>.hero-corner-bl</code></td>
+              </tr>
+              <tr>
+                <td><strong>Bottom-Right</strong></td>
+                <td>Interactive 3D Tool Inspector & Metric Readout</td>
+                <td><code>.hero-corner-br</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="layering">3. Z-Index Layering Hierarchy</h2>
+        <p>
+          To ensure HTML text remains sharp, selectable, and crisp above the Three.js canvas:
+        </p>
+        <pre><code>/* 1. Base 3D Canvas (Background) */
+.hero-canvas-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1; /* Below text overlays */
+}
+
+/* 2. Four Corner Text Grid (Foreground) */
+.hero-grid-overlay {
+  position: relative;
+  z-index: 10; /* Crisp interactive typography above 3D */
+  pointer-events: none;
+}
+
+.hero-grid-overlay a, 
+.hero-grid-overlay button {
+  pointer-events: auto; /* Re-enable pointer events for CTAs */
+}</code></pre>
+
+        <h2 id="official-svgs">4. Official Vector Brand SVGs</h2>
+        <p>
+          All 3D tools in the scene use official, high-resolution vector SVGs to avoid artifacting or pixelation:
+        </p>
+        <ul>
+          <li><strong>Meta Ads</strong>: Official Meta infinity loop gradient vector.</li>
+          <li><strong>Google Ads</strong>: Tri-color yellow, blue, and green polygon vector.</li>
+          <li><strong>TikTok Ads</strong>: Precision cyan/red chromatic offset music note vector.</li>
+          <li><strong>Shopify Plus</strong>: Official Shopify bag vector.</li>
+          <li><strong>Klaviyo</strong>: Minimalist chevron flag vector.</li>
+          <li><strong>Google Analytics 4</strong>: Orange and yellow bar/pie analytics logo.</li>
+        </ul>
+
+        <div class="page-nav-footer">
+          <a href="./components-lifecycle.html" class="nav-link-box">
+            <span class="nav-link-sub">&larr; Previous</span>
+            <span class="nav-link-title">Components Lifecycle</span>
+          </a>
+          <a href="../index.html" class="nav-link-box">
+            <span class="nav-link-sub">Back to Start</span>
+            <span class="nav-link-title">Overview & Architecture &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right On-Page Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list">
+        <li class="toc-item active"><a href="#overview">1. Section Overview</a></li>
+        <li class="toc-item"><a href="#four-corner-grid">2. 4-Corner Grid System</a></li>
+        <li class="toc-item"><a href="#layering">3. Z-Index Layering</a></li>
+        <li class="toc-item"><a href="#official-svgs">4. Official Brand SVGs</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="../js/docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYNDEV Developer Documentation & Architecture Hub</title>
+  <link rel="stylesheet" href="./css/docs.css">
+  <link rel="icon" type="image/png" href="../public/assets/meta/favicon-32x32.png">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="docs-header">
+    <div class="header-left">
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+      <a href="./index.html" class="brand-badge">
+        <div class="brand-logo-mark">K</div>
+        <span>KYNDEV DOCS</span>
+      </a>
+      <span class="brand-version">v2.4.0 &bull; Modular</span>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or debug keys..." />
+    </div>
+
+    <div class="header-right">
+      <button class="theme-toggle-btn" id="theme-toggle" title="Switch Theme">☀️</button>
+      <a href="http://localhost:4321/" target="_blank" class="live-site-link">View Live Site ↗</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item active">
+            <a href="./index.html">Overview & Architecture <span class="nav-tag">Hub</span></a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./pages/k-preloader-debugger.html">Brand "K" & ?debug-k <span class="nav-tag">New</span></a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Architecture Guides</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./pages/multi-page-architecture.html">Multi-Page & SPA Routing</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./pages/components-lifecycle.html">Components Lifecycle</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./pages/marketing-tools-hero.html">Marketing Tools Hero (/hero-tools)</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Reference Links</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="http://localhost:4321/?debug-k" target="_blank">⚡ Live ?debug-k HUD ↗</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="http://localhost:4321/hero-tools" target="_blank">🎯 Hero Tools Preview ↗</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-content">
+      <div class="article-header">
+        <div class="article-breadcrumbs">
+          <span>KYNDEV</span> / <span>Documentation</span> / <span>Hub</span>
+        </div>
+        <h1 class="article-title">Architecture & Developer Portal</h1>
+        <p class="article-lead">
+          The definitive reference guide for engineering, expanding, and debugging the <strong>KYNDEV</strong> high-performance 3D WebGL and Astro application.
+        </p>
+      </div>
+
+      <div class="prose">
+        <div class="callout tip">
+          <div class="callout-title">💡 Fast Offline Access</div>
+          <div class="callout-body">
+            This documentation is 100% self-contained with zero runtime dependencies. You can open any page directly in your browser by double-clicking the HTML files in Finder or navigating to <code>/documentation/</code>.
+          </div>
+        </div>
+
+        <h2 id="quick-links">Quick Reference Guides</h2>
+        <p>Explore the primary documentation sections below:</p>
+
+        <div class="cards-grid">
+          <a href="./pages/k-preloader-debugger.html" class="doc-card">
+            <div class="doc-card-icon">⚡</div>
+            <div class="doc-card-title">Brand "K" Morph & Live Debugger</div>
+            <div class="doc-card-desc">
+              How the branded K preloader morph works, geometric math formulas, zero-seam offscreen rasterization, and how to use <code>?debug-k</code> to freeze and adjust values.
+            </div>
+            <div class="doc-card-footer">Read Guide &rarr;</div>
+          </a>
+
+          <a href="./pages/multi-page-architecture.html" class="doc-card">
+            <div class="doc-card-icon">🗺️</div>
+            <div class="doc-card-title">Multi-Page SPA Architecture</div>
+            <div class="doc-card-desc">
+              How Astro static generation coordinates with client-side SPA routing, <code>PageManager</code>, and building 10–20+ routes with zero WebGL boilerplate.
+            </div>
+            <div class="doc-card-footer">Read Guide &rarr;</div>
+          </a>
+
+          <a href="./pages/components-lifecycle.html" class="doc-card">
+            <div class="doc-card-icon">⚙️</div>
+            <div class="doc-card-title">SectionRegistry & Lifecycle</div>
+            <div class="doc-card-desc">
+              The standardized component lifecycle contract (<code>preInit</code>, <code>init</code>, <code>resize</code>, <code>update</code>, <code>hide</code>) and tree-shaking unused sections.
+            </div>
+            <div class="doc-card-footer">Read Guide &rarr;</div>
+          </a>
+
+          <a href="./pages/marketing-tools-hero.html" class="doc-card">
+            <div class="doc-card-icon">🛠️</div>
+            <div class="doc-card-title">Marketing Tools Hero 3D</div>
+            <div class="doc-card-desc">
+              4-corner grid typography alignment, brand vector SVG integration (Meta, TikTok, Google, Shopify), and clean HUD layering.
+            </div>
+            <div class="doc-card-footer">Read Guide &rarr;</div>
+          </a>
+        </div>
+
+        <h2 id="architecture-overview">System Architecture Overview</h2>
+        <p>
+          KYNDEV merges static build performance from Astro with an advanced client-side WebGL & physics runtime deconstructed into 11 specialized domains:
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Directory Domain</th>
+                <th>Responsibility</th>
+                <th>Key Singletons & Controllers</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>src/scripts/runtime/core/</code></td>
+                <td>Foundation math, viewport uniforms, dynamics, device profiling</td>
+                <td><code>math</code>, <code>properties</code>, <code>settings</code>, <code>input</code>, <code>ease</code></td>
+              </tr>
+              <tr>
+                <td><code>src/scripts/runtime/webgl/</code></td>
+                <td>Three.js renderer, post-processing stack (SMAA, Bloom, FSR)</td>
+                <td><code>app</code>, <code>postprocessing</code>, <code>fboHelper</code>, <code>blur</code></td>
+              </tr>
+              <tr>
+                <td><code>src/scripts/runtime/scenes/</code></td>
+                <td>Interactive 3D stages (Balloons, Moon rock, FLIP fluid, Tunnels)</td>
+                <td><code>homeBalloons</code>, <code>aboutHero</code>, <code>goalTunnels</code></td>
+              </tr>
+              <tr>
+                <td><code>src/scripts/runtime/navigation/</code></td>
+                <td>SPA router, dynamic page controllers, scroll physics</td>
+                <td><code>routeManager</code>, <code>pagesManager</code>, <code>scrollManager</code></td>
+              </tr>
+              <tr>
+                <td><code>src/scripts/runtime/ui/</code></td>
+                <td>Preloader, route transition canvas, navigation overlays</td>
+                <td><code>preloader</code>, <code>transitionOverlay</code>, <code>header</code>, <code>links</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="debug-keys">Developer Shortcuts & Debug Keys</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Trigger Method</th>
+                <th>Target Feature</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>?debug-k</code> in URL</td>
+                <td>Transition Overlay</td>
+                <td>Opens the interactive floating HUD to freeze, test, and tune the K morph and reveal sliders.</td>
+              </tr>
+              <tr>
+                <td><code>window.DEBUG_K = { ... }</code></td>
+                <td>Transition Overlay</td>
+                <td>Activates debug mode programmatically via browser DevTools console.</td>
+              </tr>
+              <tr>
+                <td><code>/hero-tools</code></td>
+                <td>Hero Section</td>
+                <td>Renders the isolated 3D Marketing Tools Hero page.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="page-nav-footer">
+          <div></div>
+          <a href="./pages/k-preloader-debugger.html" class="nav-link-box">
+            <span class="nav-link-sub">Next Guide</span>
+            <span class="nav-link-title">Brand "K" Morph & Live Debugger &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right On-Page Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list">
+        <li class="toc-item active"><a href="#quick-links">Quick Reference Guides</a></li>
+        <li class="toc-item"><a href="#architecture-overview">System Architecture</a></li>
+        <li class="toc-item"><a href="#debug-keys">Developer Shortcuts</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="./js/docs.js"></script>
+</body>
+</html>

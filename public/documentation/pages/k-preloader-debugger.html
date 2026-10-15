@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand "K" Preloader Morph & Live Debugger - KYNDEV Docs</title>
+  <link rel="stylesheet" href="../css/docs.css">
+  <link rel="icon" type="image/png" href="../../public/assets/meta/favicon-32x32.png">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="docs-header">
+    <div class="header-left">
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+      <a href="../index.html" class="brand-badge">
+        <div class="brand-logo-mark">K</div>
+        <span>KYNDEV DOCS</span>
+      </a>
+      <span class="brand-version">v2.4.0 &bull; Modular</span>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or debug keys..." />
+    </div>
+
+    <div class="header-right">
+      <button class="theme-toggle-btn" id="theme-toggle" title="Switch Theme">☀️</button>
+      <a href="http://localhost:4321/?debug-k" target="_blank" class="live-site-link">Test ?debug-k Live ↗</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="../index.html">Overview & Architecture</a>
+          </li>
+          <li class="sidebar-nav-item active">
+            <a href="./k-preloader-debugger.html">Brand "K" & ?debug-k <span class="nav-tag">Active</span></a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Architecture Guides</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./multi-page-architecture.html">Multi-Page & SPA Routing</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./components-lifecycle.html">Components Lifecycle</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools)</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Quick Actions</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="http://localhost:4321/?debug-k" target="_blank">⚡ Open Live Debugger ↗</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-content">
+      <div class="article-header">
+        <div class="article-breadcrumbs">
+          <a href="../index.html">KYNDEV</a> / <span>UI & Transitions</span> / <span>Brand K Morph</span>
+        </div>
+        <h1 class="article-title">Brand "K" Preloader Morph & Live Debugger</h1>
+        <p class="article-lead">
+          Complete technical guide to the branded KYNDEV "K" loading animation, zero-seam rasterization engine, and the interactive real-time developer debugger.
+        </p>
+      </div>
+
+      <div class="prose">
+        <div class="callout tip">
+          <div class="callout-title">⚡ Quick Debug Key</div>
+          <div class="callout-body">
+            You can freeze and inspect the K morph at any time on your local server by appending <code>?debug-k</code> to the URL, for example: 
+            <a href="http://localhost:4321/?debug-k" target="_blank"><code>http://localhost:4321/?debug-k</code></a>.
+          </div>
+        </div>
+
+        <h2 id="overview">1. Architectural Overview</h2>
+        <p>
+          The site's preloader and page-to-page route transitions are rendered onto an HTML5 2D canvas overlay (<code>&lt;canvas id="transition-overlay"&gt;</code>) managed by <code>src/scripts/runtime/ui/TransitionOverlay.js</code>.
+        </p>
+        <p>
+          The transition sequence operates in 3 distinct stages:
+        </p>
+        <ol>
+          <li><strong>Asset Loading Capsule (<code>loadBarRatio</code>)</strong>: As assets ingest, a minimalist horizontal progress pill grows from 0% to 100%.</li>
+          <li><strong>Geometric "K" Origami Morph (<code>lineTransformRatio</code> / <code>showTextRatio</code>)</strong>: The progress bar unfolds into the 4 constituent strokes of the KYNDEV "K" symbol.</li>
+          <li><strong>Unified Dissolve (<code>revealRatio</code> / <code>hideTextRatio</code>)</strong>: The K zooms forward toward the camera while smoothly fading to transparent in unison with the dark backdrop, revealing the interactive 3D hero page beneath.</li>
+        </ol>
+
+        <h2 id="live-debugger">2. How to Use the Live Debugger (?debug-k)</h2>
+        <p>
+          A real-time developer HUD is built directly into <code>TransitionOverlay.js</code>. It allows you to freeze the animation, manually scrub through morph ratios, inspect border radii, and test transitions without reloading the page.
+        </p>
+
+        <h3>Activating the HUD</h3>
+        <p>There are two ways to activate the panel:</p>
+        <ul>
+          <li><strong>URL Query Parameter (Recommended)</strong>: Add <code>?debug-k</code> to any route, such as <code>http://localhost:4321/?debug-k</code> or <code>http://localhost:4321/about?debug-k</code>.</li>
+          <li><strong>DevTools Console</strong>: Open your browser's developer console and enter:
+            <pre><code>window.DEBUG_K = { active: true, morph: 1.0, reveal: 0.0, radius: 0.18, angle: 0.233 };</code></pre>
+          </li>
+        </ul>
+
+        <h3>HUD Control Functions</h3>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>HUD Control</th>
+                <th>Range / Type</th>
+                <th>Behavior & Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Freeze</strong></td>
+                <td>Checkbox (Checked by default)</td>
+                <td>Freezes timeline updates. Uncheck to allow normal route transitions, or check to lock the overlay on screen indefinitely for inspection.</td>
+              </tr>
+              <tr>
+                <td><strong>Morph Fold</strong></td>
+                <td>Slider: <code>0.00</code> &rarr; <code>1.00</code></td>
+                <td>
+                  <code>0.00</code> = Horizontal loading capsule.<br>
+                  <code>0.50</code> = Mid-way origami folding sequence.<br>
+                  <code>1.00</code> = Fully locked KYNDEV "K" symbol.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Reveal Zoom & Fade Out</strong></td>
+                <td>Slider: <code>0.00</code> &rarr; <code>1.00</code></td>
+                <td>
+                  <code>0.00</code> = Full opacity solid white K.<br>
+                  <code>0.50</code> = Halfway camera zoom-in and half alpha.<br>
+                  <code>1.00</code> = Completely dissolved into the page.
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Corner Radius</strong></td>
+                <td>Slider: <code>0.00</code> &rarr; <code>0.45</code></td>
+                <td>Dynamically changes the outer corner roundness of the letter strokes. <code>0.00</code> yields sharp brutalist corners; <code>0.18</code> yields the default sleek modern rounded caps.</td>
+              </tr>
+              <tr>
+                <td><strong>▶ Play Sequence</strong></td>
+                <td>Button</td>
+                <td>Simulates a live 2.4-second playback cycle (Morph &rarr; Pause &rarr; Zoom Dissolve) to test animation timing in real time.</td>
+              </tr>
+              <tr>
+                <td><strong>Reset</strong></td>
+                <td>Button</td>
+                <td>Instantly resets all values to standard defaults (<code>morph: 1.0, reveal: 0.0, radius: 0.18</code>).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="geometry">3. Mathematical Stroke Geometry & Alignment</h2>
+        <p>
+          The letter "K" is assembled from 4 rotating rectangle segments. All 4 strokes pivot around a shared central anchor point:
+        </p>
+        <pre><code>const jX = -0.6; // Shared horizontal junction point
+const jY = 0;    // Vertical center line</code></pre>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Stroke Segment</th>
+                <th>Offset (sx, sy)</th>
+                <th>Size (sw, sh)</th>
+                <th>Rotation Formula</th>
+                <th>Corner Radii [tl, tr, br, bl]</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Upper Stem</strong></td>
+                <td><code>(-2.1, -0.5)</code></td>
+                <td><code>(2.1, 1)</code></td>
+                <td><code>+effMorph * (Math.PI * 0.5)</code> (+90°)</td>
+                <td><code>[strokeRadius, 0, 0, strokeRadius]</code></td>
+              </tr>
+              <tr>
+                <td><strong>2. Lower Stem</strong></td>
+                <td><code>(-2.1, -0.5)</code></td>
+                <td><code>(2.1, 1)</code></td>
+                <td><code>-effMorph * (Math.PI * 0.5)</code> (-90°)</td>
+                <td><code>[strokeRadius, 0, 0, strokeRadius]</code></td>
+              </tr>
+              <tr>
+                <td><strong>3. Upper Wing</strong></td>
+                <td><code>(0, -0.5)</code></td>
+                <td><code>(3.2, 1)</code></td>
+                <td><code>-effMorph * (Math.PI * 0.233)</code> (~ -42°)</td>
+                <td><code>[0, strokeRadius, strokeRadius, 0]</code></td>
+              </tr>
+              <tr>
+                <td><strong>4. Lower Wing</strong></td>
+                <td><code>(0, -0.5)</code></td>
+                <td><code>(3.2, 1)</code></td>
+                <td><code>+effMorph * (Math.PI * 0.233)</code> (~ +42°)</td>
+                <td><code>[0, strokeRadius, strokeRadius, 0]</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="zero-radius">4. Why Zero Radius at the Center Junction Matters</h2>
+        <p>
+          In previous builds, applying corner radius uniformly across all 4 corners of every stroke caused the vertical spine to appear divided in the middle: where the upper half and lower half met at <code>y = 0</code>, the rounded corners created inward notches and gaps.
+        </p>
+        <div class="callout success">
+          <div class="callout-title">The Continuous Column Fix</div>
+          <div class="callout-body">
+            By assigning <code>[strokeRadius, 0, 0, strokeRadius]</code>, the meeting ends at the center junction have a <strong>radius of 0</strong> (completely square), while the outer ends (the very top of the letter and the very bottom) retain the smooth rounding. This makes the vertical column look like a single seamless, solid pillar.
+          </div>
+        </div>
+
+        <h2 id="offscreen-canvas">5. Offscreen Canvas Rasterization (_kCanvas)</h2>
+        <p>
+          When multiple shapes overlap, drawing them with semi-transparency (e.g., during the fade-out dissolve) causes the overlapping regions to double in opacity, creating dark lines or "seams".
+        </p>
+        <p>
+          To solve this permanently, <code>TransitionOverlay.js</code> renders all 4 strokes at solid 100% white onto an isolated offscreen canvas (<code>this._kCanvas</code>, 512×512):
+        </p>
+
+        <div class="code-header">
+          <span>src/scripts/runtime/ui/TransitionOverlay.js</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>// 1. Draw all 4 strokes onto isolated offscreen canvas at 100% solid opacity
+const kCtx = this._kCtx;
+kCtx.clearRect(0, 0, kSize, kSize);
+// ... draw segments with fillStyle = "#ffffff" ...
+
+// 2. Composite the flattened glyph onto the main viewport with unified globalAlpha
+u.save();
+u.globalCompositeOperation = "source-over";
+u.globalAlpha = kAlpha; // Unified fade-out
+u.drawImage(kCanvas, -kSize * 0.5 / kScale, -kSize * 0.5 / kScale, kSize / kScale, kSize / kScale);
+u.restore();</code></pre>
+
+        <h2 id="future-modifications">6. How to Modify the Letter in the Future</h2>
+        <p>
+          All parameters can be easily adjusted in <a href="file:///Users/waqas/DEV/kyndev.com/src/scripts/runtime/ui/TransitionOverlay.js"><code>src/scripts/runtime/ui/TransitionOverlay.js</code></a>:
+        </p>
+
+        <h3>A. Changing Diagonal Wing Angle</h3>
+        <p>To change how wide or narrow the K wings open, edit <code>armAngle</code>:</p>
+        <pre><code>// Default: 0.233 (~42 degrees)
+const armAngle = this.debug.active ? this.debug.angle : 0.233;
+
+// For steeper wings (narrower spread): 0.18 (~32 degrees)
+// For flatter wings (wider spread): 0.25 (45 degrees)</code></pre>
+
+        <h3>B. Changing Arm or Stem Lengths</h3>
+        <p>To make the wings longer or the vertical spine taller, edit the <code>sw</code> (width) parameter in <code>drawSegment</code>:</p>
+        <pre><code>// Make the diagonal wings longer: change 3.2 to 3.6
+drawSegment(0, -0.5, 3.6, 1, armRadii, effMorph * (Math.PI * armAngle));
+
+// Make the vertical stem taller: change 2.1 to 2.4
+drawSegment(-2.4, -0.5, 2.4, 1, stemRadii, effMorph * Math.PI * 0.5);</code></pre>
+
+        <h3>C. Changing Stroke Thickness</h3>
+        <p>To increase the stroke weight (e.g. from <code>1.0</code> to <code>1.2</code> units):</p>
+        <pre><code>// Set height to 1.2 and vertical center offset to -0.6
+drawSegment(sx, -0.6, sw, 1.2, rad, angle);</code></pre>
+
+        <h3>D. Changing Transition Speeds</h3>
+        <p>Route navigation speeds are managed in <code>TransitionOverlay.update(e)</code>:</p>
+        <pre><code>// Increase multipliers for faster transitions, decrease for slower
+this.showTextRatio = Math.min(1, this.showTextRatio + e * 1.5);
+this.waitTextRatio = Math.min(1, this.waitTextRatio + e * 2.8);
+this.hideTextRatio = Math.min(1, this.hideTextRatio + e * 1.5);</code></pre>
+
+        <div class="page-nav-footer">
+          <a href="../index.html" class="nav-link-box">
+            <span class="nav-link-sub">&larr; Previous</span>
+            <span class="nav-link-title">Overview & Architecture</span>
+          </a>
+          <a href="./multi-page-architecture.html" class="nav-link-box">
+            <span class="nav-link-sub">Next Guide</span>
+            <span class="nav-link-title">Multi-Page & SPA Routing &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right On-Page Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list">
+        <li class="toc-item active"><a href="#overview">1. Architectural Overview</a></li>
+        <li class="toc-item"><a href="#live-debugger">2. How to Use ?debug-k</a></li>
+        <li class="toc-item"><a href="#geometry">3. Mathematical Geometry</a></li>
+        <li class="toc-item"><a href="#zero-radius">4. Zero Radius Junction</a></li>
+        <li class="toc-item"><a href="#offscreen-canvas">5. Offscreen Canvas</a></li>
+        <li class="toc-item"><a href="#future-modifications">6. Future Modifications</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="../js/docs.js"></script>
+</body>
+</html>
