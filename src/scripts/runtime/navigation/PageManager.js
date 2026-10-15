@@ -6,6 +6,7 @@ import playgroundPage from './pages/PlaygroundPage.js';
 import servicesPage from './pages/ServicesPage.js';
 import contactPage from './pages/ContactPage.js';
 import heroToolsPage from './pages/HeroToolsPage.js';
+import hubPage from './pages/HubPage.js';
 import routeManager, { Route } from './RouteManager.js';
 import { MinSignal$2 } from '../loaders/QuickLoader.js';
 import { preUfx, postUfx } from '../webgl/passes/PostEffect.js';
@@ -22,7 +23,7 @@ import audios from '../audio/Audios.js';
  */
 class PageManager {
   pages = {};
-  pageList = [homePage, aboutPage, projectPage, projectsPage, playgroundPage, servicesPage, contactPage, heroToolsPage];
+  pageList = [homePage, aboutPage, projectPage, projectsPage, playgroundPage, servicesPage, contactPage, heroToolsPage, hubPage];
   scrollTargetPage = null;
   domContainer = null;
   domInner = null;

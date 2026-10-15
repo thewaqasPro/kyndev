@@ -11,7 +11,7 @@ class HeroToolsPage extends Page {
   id = "hero-tools";
   hasEndVisual = !1;
   updateAudio = !1;
-  endSectionActiveThreshold = 1.2;
+  endSectionActiveThreshold = 0.9;
 
   preInit(r) {
     let e = this.domContainer || (r && r.dom) || document.getElementById("page-container-inner") || document.body;

@@ -1,0 +1,39 @@
+---
+// src/components/hub/HubHero.astro
+import './hub.css';
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+}
+
+const {
+  eyebrow = 'KYNDEV Engineering // Showcase & Prototype Hub',
+  title = 'Interactive 3D Stages, Physics & Architecture Hub',
+  description = 'A unified engineering catalog of live production pages, 3D WebGL physics prototypes, bespoke shaders, and modular components built across the KYNDEV ecosystem.',
+} = Astro.props;
+---
+
+<div id="hub-hero" class="section">
+  <div class="hub-crosses">
+    <div class="hub-cross"></div>
+    <div class="hub-cross"></div>
+  </div>
+
+  <div id="hub-hero-eyebrow">
+    <span class="live-dot"></span>
+    <span>{eyebrow}</span>
+  </div>
+
+  <h1 id="hub-hero-title">{title}</h1>
+  <p id="hub-hero-desc">{description}</p>
+
+  <div class="hub-filters">
+    <button class="hub-filter-btn active" data-filter="all" type="button">All Experiences</button>
+    <button class="hub-filter-btn" data-filter="hero" type="button">Hero Prototypes</button>
+    <button class="hub-filter-btn" data-filter="pages" type="button">Flagship Pages</button>
+    <button class="hub-filter-btn" data-filter="services" type="button">Services Suite</button>
+    <button class="hub-filter-btn" data-filter="cases" type="button">Case Studies</button>
+  </div>
+</div>
