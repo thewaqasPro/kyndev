@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Architecture & File Structure Breakdown - KYNDEV Docs</title>
+  <link rel="stylesheet" href="../css/docs.css">
+  <link rel="icon" type="image/png" href="../../public/assets/meta/favicon-32x32.png">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="docs-header">
+    <div class="header-left">
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+      <a href="../index.html" class="brand-badge">
+        <div class="brand-logo-mark">K</div>
+        <span>KYNDEV DOCS</span>
+      </a>
+      <span class="brand-version">v2.4.0 &bull; Modular</span>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or debug keys..." />
+    </div>
+
+    <div class="header-right">
+      <button class="theme-toggle-btn" id="theme-toggle" title="Switch Theme">☀️</button>
+      <a href="http://localhost:4321/" target="_blank" class="live-site-link">View Live Site ↗</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="../index.html">Overview & Hub</a>
+          </li>
+          <li class="sidebar-nav-item active">
+            <a href="./project-overview-structure.html">Project & File Structure <span class="nav-tag">Active</span></a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./design-system-tokens.html">Design System & Tokens</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Runtime & WebGL</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./k-preloader-debugger.html">Brand "K" & ?debug-k</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./components-lifecycle.html">Components Lifecycle</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools)</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Routing & Previews</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./multi-page-architecture.html">Multi-Page & SPA Routing</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./component-preview-hub.html">Component Preview & Hub</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-content">
+      <div class="article-header">
+        <div class="article-breadcrumbs">
+          <a href="../index.html">KYNDEV</a> / <span>Architecture</span> / <span>Project Overview & Structure</span>
+        </div>
+        <h1 class="article-title">Project Architecture & File Structure Breakdown</h1>
+        <p class="article-lead">
+          In-depth technical breakdown of the 196 source files, 33 static pages, modular runtime architecture vs. legacy monolith, and dev server troubleshooting.
+        </p>
+      </div>
+
+      <div class="prose">
+        <h2 id="metrics">1. Key Project Metrics</h2>
+        <div class="cards-grid">
+          <div class="doc-card">
+            <div class="doc-card-icon">⚡</div>
+            <div class="doc-card-title">196 Source Files</div>
+            <div class="doc-card-desc">Organized across Astro pages, modular CSS stylesheets, 3D WebGL scenes, and decoupled UI controllers.</div>
+          </div>
+          <div class="doc-card">
+            <div class="doc-card-icon">📄</div>
+            <div class="doc-card-title">33 Static Routes</div>
+            <div class="doc-card-desc">Built in ~1.1 seconds via Astro SSG, including 19 detailed project case studies and 6 specialized service verticals.</div>
+          </div>
+          <div class="doc-card">
+            <div class="doc-card-icon">🧩</div>
+            <div class="doc-card-title">48 Runtime Modules</div>
+            <div class="doc-card-desc">Deconstructed from the original 26,946-line monolithic <code>runtime.js</code> into 11 clean, maintainable domains.</div>
+          </div>
+        </div>
+
+        <h2 id="tech-stack">2. Core Technology Stack</h2>
+        <ul>
+          <li><strong>Astro 7+</strong>: Static Site Generator (SSG) delivering pure HTML shells, fluid responsive layouts, and zero client JS overhead by default.</li>
+          <li><strong>Three.js (Custom WebGL Engine)</strong>: Persistent single WebGL canvas (<code>canvas#canvas</code>) handling Jacks rigid-body collisions, Voronoi glass space tunnels, lunar terrain displacement, and FLIP fluid simulations.</li>
+          <li><strong>Post-Processing Pipeline</strong>: Dual-pass Gaussian Blur, HDR Bloom pyramid, Subpixel Morphological Anti-Aliasing (SMAA), Screen Paint distortion, and AMD FidelityFX Super Resolution (FSR) upscaler.</li>
+          <li><strong>Client-Side SPA Coordinator</strong>: <code>RouteManager.js</code> + <code>PageManager.js</code> intercepting internal links to transition pages smoothly without WebGL context loss.</li>
+          <li><strong>SplitType & Tween</strong>: Kinetic typography word/character rollups with garbage-collection safe DOM reverters.</li>
+        </ul>
+
+        <h2 id="directory-tree">3. Complete Directory Structure Map</h2>
+        <p>The project directory is structured into clean separation of concerns:</p>
+
+        <div class="code-header">
+          <span>Project Root Directory Layout</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>kyndev.com/
+├── docs/                                # Technical markdown guides
+│   ├── DESIGN_SYSTEM.md                # Extracted live front-end design system
+│   └── MULTI_PAGE_AND_COMPONENT_GUIDE.md# Multi-page architecture & K-morph guide
+├── documentation/                       # Standalone offline HTML documentation portal
+│   ├── index.html                      # Portal homepage
+│   ├── css/docs.css                    # Modern docs stylesheet
+│   ├── js/docs.js                      # Search, theme toggle, copy buttons
+│   └── pages/                          # Individual comprehensive topic guides
+├── public/                             # Public static assets & mirrors
+│   ├── assets/                         # 3D models (.buf), textures (.exr, .webp), audio (.mp3)
+│   └── documentation/                  # Mirrored docs for local dev server access
+└── src/                                # Application source code (196 files)
+    ├── components/                     # Reusable Astro UI components (22 directories)
+    │   ├── common/                     # Global Header, Footer, EndSection, ScrollNav, Overlays
+    │   ├── home/                       # Hero, HeroTools, Featured, Reel, Goal
+    │   ├── about/                      # AboutWho, AboutCapability, AboutAwards, AboutClients
+    │   ├── services/                   # Single service templates & verticals
+    │   └── projects/                   # ProjectsGallery grid & ProjectDetails case study
+    ├── data/                           # Structured JSON/TS project case studies & services
+    ├── layouts/                        # Master shell (Layout.astro)
+    ├── pages/                          # Astro page routes (generates 33 static HTML pages)
+    │   ├── index.astro                 # Home page
+    │   ├── about.astro                 # About page
+    │   ├── contact.astro               # Contact studio page
+    │   ├── hero-tools.astro            # 3D Marketing Tools Hero page
+    │   ├── hub.astro                   # Developer navigation hub
+    │   ├── preview.astro               # 1-to-1 Component isolation previewer
+    │   ├── projects/                   # Case studies gallery & dynamic [slug].astro routes
+    │   └── services/                   # Services overview & dynamic [slug].astro routes
+    ├── scripts/                        # Client runtime scripts
+    │   ├── runtime.js                  # Preserved 26,946-line monolithic baseline reference
+    │   └── runtime/                    # Modern deconstructed runtime (48 modular files)
+    └── styles/                         # Global typography, CSS variables, & design tokens</code></pre>
+
+        <h2 id="modular-deconstruction">4. Monolith vs. Modular Runtime Deconstruction</h2>
+        <p>
+          Originally, the client WebGL experience was contained in a single 27,000-line file (<code>src/scripts/runtime.js</code>). While functional, debugging a shader pass or modifying a UI preloader required navigating massive complexity.
+        </p>
+        <p>
+          We deconstructed the runtime into <strong>11 focused domains</strong> inside <code>src/scripts/runtime/</code>:
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Domain Path</th>
+                <th>File Count</th>
+                <th>Responsibilities</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>src/scripts/runtime/core/</code></td>
+                <td>11 modules</td>
+                <td>Math utilities (clamp, lerp, fit), browser capability detection, viewport dimensions, dynamic spring physics, mouse/touch raycasting.</td>
+              </tr>
+              <tr>
+                <td><code>src/scripts/runtime/webgl/</code></td>
+                <td>13 modules</td>
+                <td>Root Three.js App renderer, FBO ping-pong buffers, SMAA anti-aliasing, Bloom passes, FSR upscaling, and SVG path triangulators.</td>
+              </tr>
+              <tr>
+                <td><code>src/scripts/runtime/scenes/</code></td>
+                <td>5 modules</td>
+                <td>Physics rigid-body Jacks hero, Space Tunnels with Voronoi glass, lunar landscape terrain, FLIP fluid simulation, and 3D product showcase.</td>
+              </tr>
+              <tr>
+                <td><code>src/scripts/runtime/ui/</code></td>
+                <td>8 modules</td>
+                <td>Header navigation, animated link hover underlines, Showreel Vimeo modal, Preloader counter, and <code>TransitionOverlay.js</code> (Brand K preloader & live debugger).</td>
+              </tr>
+              <tr>
+                <td><code>src/scripts/runtime/navigation/</code></td>
+                <td>11 modules</td>
+                <td>Virtual smooth scrolling manager, SPA RouteManager, PageManager coordinator, and individual page lifecycle controllers.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="troubleshooting">5. Dev Server Commands & Troubleshooting</h2>
+        <p>Helpful commands for local development:</p>
+
+        <h3>Starting the Astro Development Server</h3>
+        <pre><code># Standard start
+pnpm dev
+
+# If another server is occupying port 4321 or 4322, replace it with force:
+pnpm dev --force
+
+# Or specify an alternate open port:
+npx astro dev --port 4325</code></pre>
+
+        <h3>Resolving "Another astro dev server is already running" Error</h3>
+        <div class="callout warning">
+          <div class="callout-title">Port Conflict Resolution</div>
+          <div class="callout-body">
+            If Astro reports <em>"Another astro dev server is already running on PID XXXX"</em>, you can cleanly stop it from the terminal without killing processes manually:
+            <pre><code>npx astro dev stop</code></pre>
+            Or run <code>astro dev --force</code> which automatically shuts down the old background instance and claims the port.
+          </div>
+        </div>
+
+        <div class="page-nav-footer">
+          <a href="../index.html" class="nav-link-box">
+            <span class="nav-link-sub">&larr; Previous</span>
+            <span class="nav-link-title">Overview & Architecture</span>
+          </a>
+          <a href="./design-system-tokens.html" class="nav-link-box">
+            <span class="nav-link-sub">Next Guide</span>
+            <span class="nav-link-title">Design System & Tokens &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right On-Page Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list">
+        <li class="toc-item active"><a href="#metrics">1. Key Metrics</a></li>
+        <li class="toc-item"><a href="#tech-stack">2. Technology Stack</a></li>
+        <li class="toc-item"><a href="#directory-tree">3. Directory Structure</a></li>
+        <li class="toc-item"><a href="#modular-deconstruction">4. Modular Runtime</a></li>
+        <li class="toc-item"><a href="#troubleshooting">5. Dev Server Troubleshooting</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="../js/docs.js"></script>
+</body>
+</html>

@@ -38,25 +38,40 @@
         <div class="sidebar-title">Getting Started</div>
         <ul class="sidebar-nav-list">
           <li class="sidebar-nav-item">
-            <a href="../index.html">Overview & Architecture</a>
+            <a href="../index.html">Overview & Hub</a>
           </li>
           <li class="sidebar-nav-item">
-            <a href="./k-preloader-debugger.html">Brand "K" & ?debug-k</a>
+            <a href="./project-overview-structure.html">Project & File Structure</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./design-system-tokens.html">Design System & Tokens</a>
           </li>
         </ul>
       </div>
 
       <div class="sidebar-group">
-        <div class="sidebar-title">Architecture Guides</div>
+        <div class="sidebar-title">Runtime & WebGL</div>
         <ul class="sidebar-nav-list">
           <li class="sidebar-nav-item">
-            <a href="./multi-page-architecture.html">Multi-Page & SPA Routing</a>
+            <a href="./k-preloader-debugger.html">Brand "K" & ?debug-k</a>
           </li>
           <li class="sidebar-nav-item active">
             <a href="./components-lifecycle.html">Components Lifecycle <span class="nav-tag">Active</span></a>
           </li>
           <li class="sidebar-nav-item">
             <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools)</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Routing & Previews</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./multi-page-architecture.html">Multi-Page & SPA Routing</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./component-preview-hub.html">Component Preview & Hub</a>
           </li>
         </ul>
       </div>
@@ -138,7 +153,23 @@ sectionRegistry.register("#home-featured", () => window.homeFeaturedSection);</c
           When a page mounts, <code>SectionRegistry.detectSections(domContainer, hostPage)</code> runs. If a selector is absent from the DOM, that section controller is completely omitted from the animation loop, saving CPU and GPU cycles.
         </p>
 
-        <h2 id="tree-shaking">3. Complete Section Elimination & Tree-Shaking</h2>
+        <h2 id="modifying-sections">3. Modifying an Existing Section (Example: ReelSection)</h2>
+        <p>To add or customize an element within an existing section:</p>
+        <ol>
+          <li><strong>Add DOM Markup</strong> in <code>src/components/home/Reel/Reel.astro</code>:
+            <pre><code>&lt;div id="home-reel-badge" class="reel-badge"&gt;Featured 2026&lt;/div&gt;</code></pre>
+          </li>
+          <li><strong>Query Element</strong> in <code>src/scripts/runtime/sections/ReelSection.js</code>:
+            <pre><code>this.domBadge = container.querySelector("#home-reel-badge");</code></pre>
+          </li>
+          <li><strong>Animate</strong> in <code>update(e)</code>:
+            <pre><code>if (this.domBadge) {
+  this.domBadge.style.opacity = math.fit(this.videoPlaceholderRatio, 0, 0.5, 0, 1);
+}</code></pre>
+          </li>
+        </ol>
+
+        <h2 id="tree-shaking">4. Complete Section Elimination & Tree-Shaking</h2>
         <p>
           To permanently eliminate a component from the site:
         </p>
@@ -149,9 +180,9 @@ sectionRegistry.register("#home-featured", () => window.homeFeaturedSection);</c
         </ol>
 
         <div class="page-nav-footer">
-          <a href="./multi-page-architecture.html" class="nav-link-box">
+          <a href="./k-preloader-debugger.html" class="nav-link-box">
             <span class="nav-link-sub">&larr; Previous</span>
-            <span class="nav-link-title">Multi-Page & SPA Routing</span>
+            <span class="nav-link-title">Brand "K" & ?debug-k</span>
           </a>
           <a href="./marketing-tools-hero.html" class="nav-link-box">
             <span class="nav-link-sub">Next Guide</span>
@@ -167,7 +198,8 @@ sectionRegistry.register("#home-featured", () => window.homeFeaturedSection);</c
       <ul class="toc-list">
         <li class="toc-item active"><a href="#lifecycle-contract">1. Lifecycle Contract</a></li>
         <li class="toc-item"><a href="#dynamic-discovery">2. SectionRegistry</a></li>
-        <li class="toc-item"><a href="#tree-shaking">3. Tree-Shaking</a></li>
+        <li class="toc-item"><a href="#modifying-sections">3. Modifying Sections</a></li>
+        <li class="toc-item"><a href="#tree-shaking">4. Tree-Shaking</a></li>
       </ul>
     </aside>
   </div>

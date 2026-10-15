@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System & Design Tokens - KYNDEV Docs</title>
+  <link rel="stylesheet" href="../css/docs.css">
+  <link rel="icon" type="image/png" href="../../public/assets/meta/favicon-32x32.png">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="docs-header">
+    <div class="header-left">
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+      <a href="../index.html" class="brand-badge">
+        <div class="brand-logo-mark">K</div>
+        <span>KYNDEV DOCS</span>
+      </a>
+      <span class="brand-version">v2.4.0 &bull; Modular</span>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or debug keys..." />
+    </div>
+
+    <div class="header-right">
+      <button class="theme-toggle-btn" id="theme-toggle" title="Switch Theme">☀️</button>
+      <a href="http://localhost:4321/" target="_blank" class="live-site-link">View Live Site ↗</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="../index.html">Overview & Hub</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./project-overview-structure.html">Project & File Structure</a>
+          </li>
+          <li class="sidebar-nav-item active">
+            <a href="./design-system-tokens.html">Design System & Tokens <span class="nav-tag">Active</span></a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Runtime & WebGL</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./k-preloader-debugger.html">Brand "K" & ?debug-k</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./components-lifecycle.html">Components Lifecycle</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools)</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Routing & Previews</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./multi-page-architecture.html">Multi-Page & SPA Routing</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./component-preview-hub.html">Component Preview & Hub</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-content">
+      <div class="article-header">
+        <div class="article-breadcrumbs">
+          <a href="../index.html">KYNDEV</a> / <span>Design System</span> / <span>Tokens & Foundations</span>
+        </div>
+        <h1 class="article-title">Design System & Token Specifications</h1>
+        <p class="article-lead">
+          The official design tokens, typography scales, 12-column grid geometry, and component templates extracted from the live KYNDEV front-end experience.
+        </p>
+      </div>
+
+      <div class="prose">
+        <h2 id="color-palette">1. Color Palette Tokens</h2>
+        <p>All core color tokens are defined in <code>src/styles/kyndev.css</code>:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Token Name</th>
+                <th>Hex / RGBA Value</th>
+                <th>Role & Usage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--color-blue</code></td>
+                <td><code>#1a2ffb</code></td>
+                <td>Primary electric brand accent; CTAs, links, and high-impact states.</td>
+              </tr>
+              <tr>
+                <td><code>--header-color</code></td>
+                <td><code>#0016ec</code></td>
+                <td>Top navigation buttons, active menu states.</td>
+              </tr>
+              <tr>
+                <td><code>--color-dark-blue</code></td>
+                <td><code>#071bdf</code></td>
+                <td>Deep blue accents and gradient end-stops.</td>
+              </tr>
+              <tr>
+                <td><code>--color-white</code></td>
+                <td><code>#ffffff</code></td>
+                <td>High-contrast typography and default light mode background.</td>
+              </tr>
+              <tr>
+                <td><code>--color-black</code></td>
+                <td><code>#000000</code></td>
+                <td>Canvas base color, inverted page modes.</td>
+              </tr>
+              <tr>
+                <td><code>--color-off-white</code></td>
+                <td><code>#f0f1fa</code></td>
+                <td>Secondary background, subtle card fills.</td>
+              </tr>
+              <tr>
+                <td><code>--color-green</code></td>
+                <td><code>#c1ff00</code></td>
+                <td>Neon volt accent; used in <code>ScrollNav</code> progress bar track.</td>
+              </tr>
+              <tr>
+                <td><code>--color-grey-blue</code></td>
+                <td><code>#2b2e3a</code></td>
+                <td>Muted neutral; pill backgrounds and secondary badges.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Dynamic Case Study Theme Tokens</h3>
+        <p>
+          Each project in <code>src/data/projects.json</code> injects custom ambient theme variables into <code>src/pages/projects/[slug].astro</code>:
+        </p>
+        <ul>
+          <li><code>--project-details-bg</code>: Ambient page background color.</li>
+          <li><code>--project-details-highlight</code>: Accent highlight color.</li>
+          <li><code>--project-details-btn-bg</code> / <code>--project-details-btn-text</code>: Dynamic button colors.</li>
+        </ul>
+
+        <h2 id="typography">2. Typography & Fluid Font Scale</h2>
+        <p>KYNDEV uses a strict font hierarchy with fluid responsive sizing:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Font Family</th>
+                <th>Weights</th>
+                <th>Usage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Aeonik</strong></td>
+                <td>Regular (400), Medium (500), Italic</td>
+                <td>Primary display titles, hero typography, body text, and headlines.</td>
+              </tr>
+              <tr>
+                <td><strong>IBM Plex Mono</strong></td>
+                <td>Regular (400), Medium (500)</td>
+                <td>Numerical telemetry, dates, coordinates, and technical metadata.</td>
+              </tr>
+              <tr>
+                <td><strong>LusionMono</strong></td>
+                <td>Regular (400)</td>
+                <td>Ticker text and secondary readouts.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Fluid Responsive Type Rules</h3>
+        <pre><code>.text-xs   { font-size: 0.75em; }
+.text-base { font-size: clamp(1rem, 1.5vw, 2rem); }
+.text-lg   { font-size: 1.75em; }
+.text-4xl  { font-size: clamp(7em, 8vw, 20em); }</code></pre>
+
+        <h2 id="grid-system">3. 12-Column Spatial Grid</h2>
+        <p>
+          Every page section implements the responsive <code>.section</code> grid:
+        </p>
+
+        <div class="code-header">
+          <span>src/styles/kyndev.css</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>:root {
+  --grid-gap: 2vw;
+  --grid-space: calc((100% - 11 * var(--grid-gap)) / 12);
+  --base-padding-x: max(5vw, 40px);
+  --base-padding-y: clamp(30px, 4vw, 50px);
+  --global-border-radius: 20px;
+}
+
+.section {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+  padding: var(--base-padding-y) var(--base-padding-x);
+}
+
+@media (max-width: 812px) {
+  .section {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    --base-padding-x: 25px;
+    --base-padding-y: 25px;
+  }
+}</code></pre>
+
+        <h2 id="cross-pins">4. Alignment Cross Pins (.cross)</h2>
+        <p>
+          A signature visual motif of the studio is the absolute cross-pin alignment markers positioned on container corners:
+        </p>
+        <pre><code>.cross {
+  position: absolute;
+  width: var(--cross-size);
+  height: var(--cross-size);
+}
+.cross:before, .cross:after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+.cross:before {
+  top: 50%; left: 0; width: 100%; height: 1px;
+}
+.cross:after {
+  left: 50%; top: 0; height: 100%; width: 1px;
+}</code></pre>
+
+        <h2 id="component-template">5. Component Creation Blueprint</h2>
+        <p>When developing a new section component for any page, follow this verified template:</p>
+
+        <div class="code-header">
+          <span>src/components/example/ExampleSection.astro</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>---
+interface Props {
+  headline?: string;
+  tagline?: string;
+}
+
+const { headline = "Precision Engineering", tagline = "01 / CAPABILITIES" } = Astro.props;
+---
+
+&lt;section id="example-section" class="section"&gt;
+  &lt;!-- Cross alignment markers --&gt;
+  &lt;div class="cross top-left"&gt;&lt;/div&gt;
+  &lt;div class="cross top-right"&gt;&lt;/div&gt;
+
+  &lt;!-- Content spanning 12-column grid --&gt;
+  &lt;div style="grid-column: span 5;"&gt;
+    &lt;span class="text-xs"&gt;{tagline}&lt;/span&gt;
+    &lt;h2 class="text-lg"&gt;{headline}&lt;/h2&gt;
+  &lt;/div&gt;
+
+  &lt;div style="grid-column: span 7;"&gt;
+    &lt;p class="text-base"&gt;
+      Integrating high-performance WebGL graphics with seamless editorial narrative.
+    &lt;/p&gt;
+  &lt;/div&gt;
+&lt;/section&gt;</code></pre>
+
+        <div class="page-nav-footer">
+          <a href="./project-overview-structure.html" class="nav-link-box">
+            <span class="nav-link-sub">&larr; Previous</span>
+            <span class="nav-link-title">Project & File Structure</span>
+          </a>
+          <a href="./k-preloader-debugger.html" class="nav-link-box">
+            <span class="nav-link-sub">Next Guide</span>
+            <span class="nav-link-title">Brand "K" & ?debug-k &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right On-Page Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list">
+        <li class="toc-item active"><a href="#color-palette">1. Color Palette</a></li>
+        <li class="toc-item"><a href="#typography">2. Typography Scale</a></li>
+        <li class="toc-item"><a href="#grid-system">3. 12-Column Grid</a></li>
+        <li class="toc-item"><a href="#cross-pins">4. Alignment Cross Pins</a></li>
+        <li class="toc-item"><a href="#component-template">5. Component Blueprint</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="../js/docs.js"></script>
+</body>
+</html>

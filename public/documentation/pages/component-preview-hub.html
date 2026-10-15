@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component Preview & Developer Hub - KYNDEV Docs</title>
+  <link rel="stylesheet" href="../css/docs.css">
+  <link rel="icon" type="image/png" href="../../public/assets/meta/favicon-32x32.png">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="docs-header">
+    <div class="header-left">
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+      <a href="../index.html" class="brand-badge">
+        <div class="brand-logo-mark">K</div>
+        <span>KYNDEV DOCS</span>
+      </a>
+      <span class="brand-version">v2.4.0 &bull; Modular</span>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or debug keys..." />
+    </div>
+
+    <div class="header-right">
+      <button class="theme-toggle-btn" id="theme-toggle" title="Switch Theme">☀️</button>
+      <a href="http://localhost:4321/preview" target="_blank" class="live-site-link">Open /preview ↗</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="../index.html">Overview & Hub</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./project-overview-structure.html">Project & File Structure</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./design-system-tokens.html">Design System & Tokens</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Runtime & WebGL</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./k-preloader-debugger.html">Brand "K" & ?debug-k</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./components-lifecycle.html">Components Lifecycle</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools)</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Routing & Previews</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./multi-page-architecture.html">Multi-Page & SPA Routing</a>
+          </li>
+          <li class="sidebar-nav-item active">
+            <a href="./component-preview-hub.html">Component Preview & Hub <span class="nav-tag">Active</span></a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-content">
+      <div class="article-header">
+        <div class="article-breadcrumbs">
+          <a href="../index.html">KYNDEV</a> / <span>Tooling</span> / <span>Component Preview</span>
+        </div>
+        <h1 class="article-title">Component Isolation Preview & Developer Hub</h1>
+        <p class="article-lead">
+          How to test, preview, and benchmark interactive 3D sections and UI blocks in total isolation using <code>/preview</code> and <code>/hub</code>.
+        </p>
+      </div>
+
+      <div class="prose">
+        <h2 id="preview-page">1. The Isolation Previewer (/preview)</h2>
+        <p>
+          Testing WebGL components within a multi-thousand-pixel scrolling page makes isolating physics bugs or shader glitches difficult. To solve this, the repository includes a standalone component preview harness at <a href="http://localhost:4321/preview" target="_blank"><code>/preview</code></a>.
+        </p>
+        <p>
+          The preview harness renders:
+        </p>
+        <ul>
+          <li><strong>Hero Jacks 3D Physics Section</strong>: Isolated collision parameters and canvas bindings.</li>
+          <li><strong>Reel Video Showreel</strong>: Character rollups and video modal textures in a clean viewport.</li>
+          <li><strong>Featured Cards Gallery</strong>: 2.5D tilting card physics.</li>
+          <li><strong>Goal Space Tunnel</strong>: Glass voronoi shader and astronaut particles.</li>
+          <li><strong>Individual UI Modules</strong>: Header menus, sound toggles, and footer forms.</li>
+        </ul>
+
+        <h2 id="developer-hub">2. The Developer Navigation Hub (/hub)</h2>
+        <p>
+          The studio navigation hub is accessible at <a href="http://localhost:4321/hub" target="_blank"><code>/hub</code></a>. It acts as an internal sitemap and index of every active route, dynamic case study, and experimental lab section on the site.
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Route Path</th>
+                <th>Target Feature</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>/preview</code></td>
+                <td>Component Isolation Harness</td>
+                <td>Previews ready-to-use sections one by one with live controls.</td>
+              </tr>
+              <tr>
+                <td><code>/hub</code></td>
+                <td>Developer Route Index</td>
+                <td>Full internal map of all 33 generated static pages.</td>
+              </tr>
+              <tr>
+                <td><code>/hero-tools</code></td>
+                <td>Marketing Tools Hero</td>
+                <td>Isolated 4-corner grid 3D tools section.</td>
+              </tr>
+              <tr>
+                <td><code>/?debug-k</code></td>
+                <td>K-Morph Live Debugger</td>
+                <td>Floating HUD to freeze and tune letter folding.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="adding-new-preview">3. Adding a New Component to the Previewer</h2>
+        <p>
+          When you create a new section (e.g. <code>src/components/pricing/PricingSection.astro</code>), add it to <code>src/pages/preview.astro</code>:
+        </p>
+
+        <div class="code-header">
+          <span>src/pages/preview.astro</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>---
+import Layout from '../layouts/Layout.astro';
+import PricingSection from '../components/pricing/PricingSection.astro';
+---
+
+&lt;Layout title="KYNDEV - Component Preview"&gt;
+  &lt;div class="preview-stage"&gt;
+    &lt;div class="preview-item"&gt;
+      &lt;span class="preview-label"&gt;Pricing Section Matrix&lt;/span&gt;
+      &lt;PricingSection /&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/Layout&gt;</code></pre>
+
+        <div class="page-nav-footer">
+          <a href="./multi-page-architecture.html" class="nav-link-box">
+            <span class="nav-link-sub">&larr; Previous</span>
+            <span class="nav-link-title">Multi-Page & SPA Routing</span>
+          </a>
+          <a href="../index.html" class="nav-link-box">
+            <span class="nav-link-sub">Back to Start</span>
+            <span class="nav-link-title">Overview & Architecture &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right On-Page Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list">
+        <li class="toc-item active"><a href="#preview-page">1. Isolation Previewer</a></li>
+        <li class="toc-item"><a href="#developer-hub">2. Developer Hub</a></li>
+        <li class="toc-item"><a href="#adding-new-preview">3. Adding New Previews</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="../js/docs.js"></script>
+</body>
+</html>
