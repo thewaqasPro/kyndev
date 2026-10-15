@@ -8,12 +8,7 @@ import ease from '../core/Ease.js';
 import taskManager from '../core/TaskManager.js';
 import { MinSignal$2 } from '../loaders/QuickLoader.js';
 
-const LOADING_RECTS = [
-  1, 1, 1, 3, 2, 4, 2, 1, 6, 2, 1, 2, 7, 1, 1, 1, 7, 4, 1, 1, 8, 2, 1, 2, 11, 2,
-  1, 3, 13, 2, 1, 3, 12, 1, 1, 1, 16, 1, 2, 1, 18, 2, 1, 2, 16, 4, 2, 1, 22, 1,
-  1, 4, 26, 1, 1, 4, 27, 1, 1, 1, 28, 2, 1, 3, 32, 1, 1, 1, 33, 3, 1, 1, 31, 1,
-  1, 3, 32, 4, 2, 1,
-];
+const LOADING_RECTS = [];
 
 class TransitionOverlay {
   canvas = null;
@@ -79,105 +74,85 @@ class TransitionOverlay {
         (u.fillStyle = "#000"),
         u.fillRect(0, 0, t, r));
 
-      let f = ease.expoInOut(1 - this.activeRatio),
-        p = (1 + f * c) * n;
+      // Handle route navigation transition state
+      const isNavTransition = this.needsShowText || this.showTextRatio > 0;
 
-      if (
-        (u.translate(t * 0.5, r * 0.5),
-        u.rotate(f * (this.contentShowRatio == 0 ? -1 : 1)),
-        u.translate(n * f * c, -n * 0.5 * f * c),
-        u.scale(p, p),
-        l == 0)
-      ) {
-        ((u.fillStyle = "#333"),
-          u.fillRect(-2.7, -0.5, 5.4, 1),
-          (u.fillStyle = "#fff"),
-          u.fillRect(-2.7, -0.5, 5.4 * a, 1));
-      } else {
-        ((u.fillStyle = "#fff"),
-          this.needsShowText &&
-            ((this.showTextRatio = this.showTextRatio + e * 1.25),
-            this.showTextRatio >= 1 &&
-              ((this.showTextRatio = 1),
-              (this.needsShowText = !1),
-              this.onShowTextCompleted.dispatch())),
-          this.showTextRatio == 1 &&
-            ((this.waitTextRatio = Math.min(1, this.waitTextRatio + e * 3)),
-            this.waitTextRatio == 1 &&
-              this.needsHideText &&
-              taskManager.percent == 1 &&
-              ((this.hideTextRatio = this.hideTextRatio + e * 1.25),
-              this.hideTextRatio >= 1 &&
-                ((this.hideTextRatio = 1),
-                (this.needsHideText = !1),
-                this.onHideTextCompleted.dispatch()))));
-
-        let g = this.showTextRatio,
-          v = this.hideTextRatio,
-          _ = math.fit(Math.min(g, 1 - v), 0, 0.5, 1, 0.2, ease.expoInOut),
-          T = (ease.expoInOut(g) + ease.expoInOut(v)) * -15;
-
-        if (g > 0 && v < 1) {
-          (u.scale(_, _),
-            u.translate(-l, 1.5 * l),
-            u.translate(T, 0),
-            u.save(),
-            u.translate(-1.5, -4.5),
-            u.beginPath());
-          for (
-            let M = 0, S = LOADING_RECTS.length / 4, b = 0;
-            M < S;
-            M++, b += 4
-          ) {
-            u.fillStyle = "#fff";
-            let C = LOADING_RECTS[b + 0],
-              w = LOADING_RECTS[b + 1],
-              R = LOADING_RECTS[b + 2],
-              E = LOADING_RECTS[b + 3],
-              I = M / (S - 1),
-              F =
-                math.fit(g, I * 0.5, 0.5 + I * 0.5, 0, 1, ease.expoIn) *
-                math.fit(v, I * 0.5, 0.5 + I * 0.5, 1, 0, ease.expoOut);
-            (g < 1 ? M < 2 && (F = 1) : M >= S - 2 && (F = 1),
-              u.rect(
-                C + (1 - F) * R * 0.5,
-                w + (1 - F) * E * 0.5,
-                R * F,
-                E * F,
-              ));
-          }
-          (u.closePath(), u.fill(), u.restore());
-        } else {
-          // Kinetic origami transformation: morph from horizontal bar to brand "K"
-          const jX = -0.6;
-          const jY = 0;
-          u.translate(-0.35 * l, 0);
-
-          const drawSegment = (sx, sy, sw, sh, angle) => {
-            u.save();
-            u.translate(jX, jY);
-            if (angle !== 0) u.rotate(angle);
-            u.globalCompositeOperation = "xor";
-            u.fillRect(sx, sy, sw, sh);
-            u.globalCompositeOperation = "source-over";
-            u.globalAlpha = 1 - f;
-            u.fillRect(sx, sy, sw, sh);
-            u.restore();
-          };
-
-          // 1. Upper Vertical Stem (rotates 90 deg into upper spine)
-          drawSegment(-2.1, -0.5, 2.1, 1, l * Math.PI * 0.5);
-
-          // 2. Lower Vertical Stem (rotates -90 deg into lower spine)
-          drawSegment(-2.1, -0.5, 2.1, 1, -l * Math.PI * 0.5);
-
-          // 3. Upper Diagonal Arm (rotates upward by 42 deg)
-          drawSegment(0, -0.5, 3.2, 1, -l * (Math.PI * 0.233));
-
-          // 4. Lower Diagonal Arm (rotates downward by 42 deg)
-          drawSegment(0, -0.5, 3.2, 1, l * (Math.PI * 0.233));
+      if (this.needsShowText) {
+        this.showTextRatio = Math.min(1, this.showTextRatio + e * 1.5);
+        if (this.showTextRatio >= 1) {
+          this.needsShowText = false;
+          this.onShowTextCompleted.dispatch();
         }
       }
+
+      if (this.showTextRatio === 1) {
+        this.waitTextRatio = Math.min(1, this.waitTextRatio + e * 2.8);
+        if (
+          this.waitTextRatio === 1 &&
+          this.needsHideText &&
+          taskManager.percent === 1
+        ) {
+          this.hideTextRatio = Math.min(1, this.hideTextRatio + e * 1.5);
+          if (this.hideTextRatio >= 1) {
+            this.needsHideText = false;
+            this.onHideTextCompleted.dispatch();
+          }
+        }
+      }
+
+      // Unified progress bar & K-morph animation
+      let navProgress = this.showTextRatio;
+      let navMorph = this.showTextRatio >= 1 ? ease.expoInOut(this.waitTextRatio) : 0;
+      let navReveal = this.hideTextRatio > 0 ? ease.expoInOut(this.hideTextRatio) : 0;
+
+      let effMorph = isNavTransition ? navMorph : l;
+      let effProgress = isNavTransition ? navProgress : a;
+      let f = ease.expoInOut(1 - this.activeRatio);
+      let effReveal = isNavTransition ? navReveal : f;
+      let p = (1 + effReveal * c) * n;
+
+      u.translate(t * 0.5, r * 0.5);
+      u.rotate(effReveal * (this.contentShowRatio === 0 ? -1 : 1));
+      u.translate(n * effReveal * c, -n * 0.5 * effReveal * c);
+      u.scale(p, p);
+
+      if (effMorph === 0) {
+        // Sleek horizontal progress loading bar
+        u.fillStyle = "#333";
+        u.fillRect(-2.7, -0.5, 5.4, 1);
+        u.fillStyle = "#fff";
+        u.fillRect(-2.7, -0.5, 5.4 * effProgress, 1);
+      } else {
+        // Kinetic origami transformation: morph from horizontal bar to brand "K"
+        const jX = -0.6;
+        const jY = 0;
+        u.translate(-0.35 * effMorph, 0);
+
+        const drawSegment = (sx, sy, sw, sh, angle) => {
+          u.save();
+          u.translate(jX, jY);
+          if (angle !== 0) u.rotate(angle);
+          u.globalCompositeOperation = "xor";
+          u.fillRect(sx, sy, sw, sh);
+          u.globalCompositeOperation = "source-over";
+          u.globalAlpha = 1 - effReveal;
+          u.fillRect(sx, sy, sw, sh);
+          u.restore();
+        };
+
+        // 1. Upper Vertical Stem (rotates 90 deg into upper spine)
+        drawSegment(-2.1, -0.5, 2.1, 1, effMorph * Math.PI * 0.5);
+
+        // 2. Lower Vertical Stem (rotates -90 deg into lower spine)
+        drawSegment(-2.1, -0.5, 2.1, 1, -effMorph * Math.PI * 0.5);
+
+        // 3. Upper Diagonal Arm (rotates upward by 42 deg)
+        drawSegment(0, -0.5, 3.2, 1, -effMorph * (Math.PI * 0.233));
+
+        // 4. Lower Diagonal Arm (rotates downward by 42 deg)
+        drawSegment(0, -0.5, 3.2, 1, effMorph * (Math.PI * 0.233));
+      }
+
       u.restore();
       if (this.canvas && this.canvas.style.display !== "block") {
         this.canvas.style.display = "block";
