@@ -1,11 +1,4 @@
-/**
- * HeroToolsScene.ts
- *
- * Real-time 3D Marketing Tools Physics Playground
- * Features tactile 3D badges for Google Ads, Meta, HubSpot, Klaviyo, GA4, Shopify, TikTok, and ClickUp.
- * Includes interactive mouse raycasting, elastic collisions, tossing, and PBR lighting.
- */
-
+// src/components/home/HeroTools/HeroToolsScene.ts
 import * as THREE from 'three';
 
 export interface MarketingToolConfig {
@@ -50,6 +43,13 @@ export class HeroToolsScene {
   private isDestroyed = false;
   private clock = new THREE.Clock();
 
+  // Liquid Wave Post-processing Pipeline (Signature Kyndev Fluid Wave)
+  private postRenderTarget: THREE.WebGLRenderTarget | null = null;
+  private postScene: THREE.Scene | null = null;
+  private postCamera: THREE.OrthographicCamera | null = null;
+  private postMaterial: THREE.ShaderMaterial | null = null;
+  private postQuad: THREE.Mesh | null = null;
+
   public onToolSelect?: (tool: MarketingToolConfig) => void;
 
   constructor(container: HTMLElement) {
@@ -74,6 +74,7 @@ export class HeroToolsScene {
 
     this.setupLighting();
     this.createTools();
+    this.setupPostProcessing(width, height);
     this.bindEvents();
     this.startLoop();
   }
@@ -99,6 +100,136 @@ export class HeroToolsScene {
     this.scene.add(fillLight);
   }
 
+  private setupPostProcessing(width: number, height: number): void {
+    const dpr = Math.min(window.devicePixelRatio, 2);
+    this.postRenderTarget = new THREE.WebGLRenderTarget(
+      Math.max(1, Math.floor(width * dpr)),
+      Math.max(1, Math.floor(height * dpr)),
+      {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBAFormat,
+        stencilBuffer: false,
+      }
+    );
+
+    this.postScene = new THREE.Scene();
+    this.postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+    const vertexShader = `
+      varying vec2 v_uv;
+      void main() {
+        v_uv = uv;
+        gl_Position = vec4(position.xy, 0.0, 1.0);
+      }
+    `;
+
+    const fragmentShader = `
+      uniform sampler2D u_texture;
+      uniform sampler2D u_screenPaintTexture;
+      uniform int u_hasScreenPaint;
+      uniform vec4 u_containerRect;
+      uniform vec2 u_screenPaintTexelSize;
+      uniform vec2 u_localMouse;
+      uniform vec2 u_localVelocity;
+      uniform float u_amount;
+      uniform float u_rgbShift;
+      uniform float u_multiplier;
+      uniform float u_colorMultiplier;
+      uniform float u_shade;
+      uniform float u_time;
+      uniform vec2 u_resolution;
+      varying vec2 v_uv;
+
+      float hash12(vec2 p) {
+        vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+        p3 += dot(p3, p3.yzx + 33.33);
+        return fract((p3.x + p3.y) * p3.z);
+      }
+
+      void main() {
+        vec2 vel = vec2(0.0);
+        float weight = 0.0;
+
+        // 1. Global Kyndev screenPaint fluid simulation FBO
+        if (u_hasScreenPaint == 1) {
+          vec2 screenUv = vec2(
+            u_containerRect.x + v_uv.x * u_containerRect.z,
+            u_containerRect.y + v_uv.y * u_containerRect.w
+          );
+          vec4 data = texture2D(u_screenPaintTexture, clamp(screenUv, 0.0, 1.0));
+          float spWeight = (data.z + data.w) * 0.5;
+          if (spWeight > 0.003) {
+            vel = (0.5 - data.xy - 0.001) * 2.0 * spWeight;
+            weight = spWeight;
+          }
+        }
+
+        // 2. Local interactive mouse wave velocity over the 3D scene
+        float aspect = u_resolution.x / max(u_resolution.y, 1.0);
+        vec2 delta = (v_uv - u_localMouse) * vec2(aspect, 1.0);
+        float localDist = length(delta);
+        float localRadius = 0.32;
+        float localFalloff = smoothstep(localRadius, 0.0, localDist);
+        float localSpeed = length(u_localVelocity);
+        if (localSpeed > 0.0001 && localFalloff > 0.005) {
+          vec2 localVel = u_localVelocity * localFalloff * 4.0;
+          vel += localVel;
+          weight = max(weight, localFalloff * min(localSpeed * 30.0, 1.0));
+        }
+
+        // 3. Fluid refractive wave distortion
+        vec2 velocity = vel * (u_amount / 4.0) * u_screenPaintTexelSize * u_multiplier;
+        float noise = hash12(gl_FragCoord.xy + u_time * 12.0) * 0.5;
+        vec2 uv = v_uv + noise * velocity;
+        vec4 color = vec4(0.0);
+
+        for (int i = 0; i < 9; i++) {
+          color += texture2D(u_texture, clamp(uv, 0.0, 1.0));
+          uv += velocity;
+        }
+        color /= 9.0;
+
+        // 4. Iridescent spectral shimmer wave (signature Kyndev liquid wave chromatic sheen)
+        float speed = max(abs(vel.x), abs(vel.y));
+        if (speed > 0.0001) {
+          vec3 wavePhase = vec3(vel.x + vel.y) * 45.0 + vec3(0.0, 2.0, 4.0) * u_rgbShift;
+          vec3 shimmer = sin(wavePhase) * smoothstep(0.4, -0.9, weight) * u_shade * speed * u_colorMultiplier;
+          color.rgb += shimmer;
+        }
+
+        gl_FragColor = color;
+      }
+    `;
+
+    this.postMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        u_texture: { value: null },
+        u_screenPaintTexture: { value: null },
+        u_hasScreenPaint: { value: 0 },
+        u_containerRect: { value: new THREE.Vector4(0, 0, 1, 1) },
+        u_screenPaintTexelSize: { value: new THREE.Vector2(1 / 500, 1 / 500) },
+        u_localMouse: { value: new THREE.Vector2(0.5, 0.5) },
+        u_localVelocity: { value: new THREE.Vector2(0, 0) },
+        u_amount: { value: 3.5 },
+        u_rgbShift: { value: 0.5 },
+        u_multiplier: { value: 5.0 },
+        u_colorMultiplier: { value: 10.0 },
+        u_shade: { value: 1.25 },
+        u_time: { value: 0 },
+        u_resolution: { value: new THREE.Vector2(width, height) },
+      },
+      vertexShader,
+      fragmentShader,
+      depthTest: false,
+      depthWrite: false,
+    });
+
+    const geom = new THREE.PlaneGeometry(2, 2);
+    this.postQuad = new THREE.Mesh(geom, this.postMaterial);
+    this.postScene.add(this.postQuad);
+  }
+
   private getToolConfigs(): MarketingToolConfig[] {
     return [
       {
@@ -113,40 +244,47 @@ export class HeroToolsScene {
         thickness: 0.38,
         drawIcon: (ctx, size) => {
           const c = size / 2;
-          const r = size * 0.28;
+          const r = size * 0.36;
           ctx.save();
           ctx.translate(c, c);
 
-          // Google Ads Angled Pill / Loops
-          // 1. Blue pill
-          ctx.save();
-          ctx.rotate((-25 * Math.PI) / 180);
+          // Google "G" clean geometric vector path
+          ctx.lineWidth = r * 0.42;
+          ctx.lineCap = 'butt';
+
+          // Blue arc
+          ctx.beginPath();
+          ctx.strokeStyle = '#4285F4';
+          ctx.arc(0, 0, r * 0.78, (-45 * Math.PI) / 180, (45 * Math.PI) / 180, false);
+          ctx.stroke();
+
+          // Green arc
+          ctx.beginPath();
+          ctx.strokeStyle = '#34A853';
+          ctx.arc(0, 0, r * 0.78, (45 * Math.PI) / 180, (135 * Math.PI) / 180, false);
+          ctx.stroke();
+
+          // Yellow arc
+          ctx.beginPath();
+          ctx.strokeStyle = '#FBBC05';
+          ctx.arc(0, 0, r * 0.78, (135 * Math.PI) / 180, (225 * Math.PI) / 180, false);
+          ctx.stroke();
+
+          // Red arc
+          ctx.beginPath();
+          ctx.strokeStyle = '#EA4335';
+          ctx.arc(0, 0, r * 0.78, (225 * Math.PI) / 180, (315 * Math.PI) / 180, false);
+          ctx.stroke();
+
+          // Crossbar
           ctx.fillStyle = '#4285F4';
-          ctx.beginPath();
-          ctx.roundRect(-r * 0.3, -r * 1.1, r * 0.6, r * 2.2, r * 0.3);
-          ctx.fill();
-          ctx.restore();
-
-          // 2. Green pill
-          ctx.save();
-          ctx.rotate((35 * Math.PI) / 180);
-          ctx.fillStyle = '#34A853';
-          ctx.beginPath();
-          ctx.roundRect(-r * 0.3, -r * 1.1, r * 0.6, r * 2.2, r * 0.3);
-          ctx.fill();
-          ctx.restore();
-
-          // 3. Yellow circle
-          ctx.fillStyle = '#FBBC04';
-          ctx.beginPath();
-          ctx.arc(-r * 0.65, r * 0.5, r * 0.38, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.fillRect(0, -r * 0.21, r * 0.84, r * 0.42);
 
           ctx.restore();
         },
       },
       {
-        id: 'meta',
+        id: 'meta-ads',
         name: 'Meta Ads',
         subtitle: 'Paid Social & Retargeting',
         primaryColor: '#0081FB',
@@ -154,59 +292,56 @@ export class HeroToolsScene {
         metalness: 0.5,
         roughness: 0.2,
         radius: 1.6,
-        thickness: 0.38,
+        thickness: 0.4,
         drawIcon: (ctx, size) => {
           const c = size / 2;
-          const r = size * 0.35;
+          const r = size * 0.34;
           ctx.save();
           ctx.translate(c, c);
 
-          // Meta Infinity Emblem
-          ctx.lineWidth = size * 0.085;
+          // Meta infinity loop gradient
+          const grad = ctx.createLinearGradient(-r, 0, r, 0);
+          grad.addColorStop(0, '#0064E0');
+          grad.addColorStop(0.5, '#0081FB');
+          grad.addColorStop(1, '#00C6FF');
+
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = r * 0.38;
           ctx.lineCap = 'round';
           ctx.lineJoin = 'round';
 
-          const grad = ctx.createLinearGradient(-r, -r, r, r);
-          grad.addColorStop(0, '#0081FB');
-          grad.addColorStop(0.5, '#0064E0');
-          grad.addColorStop(1, '#00B2FF');
-          ctx.strokeStyle = grad;
-
           ctx.beginPath();
-          for (let t = 0; t <= Math.PI * 2; t += 0.05) {
-            const a = r * 1.1;
-            const x = (a * Math.cos(t)) / (1 + Math.sin(t) * Math.sin(t));
-            const y = (a * Math.sin(t) * Math.cos(t)) / (1 + Math.sin(t) * Math.sin(t));
-            if (t === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-          ctx.closePath();
+          ctx.moveTo(-r * 0.9, 0);
+          ctx.bezierCurveTo(-r * 0.9, -r * 0.8, -r * 0.3, -r * 0.8, 0, 0);
+          ctx.bezierCurveTo(r * 0.3, r * 0.8, r * 0.9, r * 0.8, r * 0.9, 0);
+          ctx.bezierCurveTo(r * 0.9, -r * 0.8, r * 0.3, -r * 0.8, 0, 0);
+          ctx.bezierCurveTo(-r * 0.3, r * 0.8, -r * 0.9, r * 0.8, -r * 0.9, 0);
           ctx.stroke();
+
           ctx.restore();
         },
       },
       {
         id: 'hubspot',
         name: 'HubSpot',
-        subtitle: 'Inbound & CRM Automation',
+        subtitle: 'Inbound CRM & Automation',
         primaryColor: '#FF7A59',
-        accentColor: '#2D3E50',
+        accentColor: '#FF5C35',
         metalness: 0.35,
         roughness: 0.3,
         radius: 1.5,
-        thickness: 0.36,
+        thickness: 0.35,
         drawIcon: (ctx, size) => {
           const c = size / 2;
-          const r = size * 0.16;
+          const r = size * 0.32;
           ctx.save();
           ctx.translate(c, c);
 
           ctx.strokeStyle = '#FF7A59';
           ctx.fillStyle = '#FF7A59';
-          ctx.lineWidth = size * 0.055;
-          ctx.lineCap = 'round';
+          ctx.lineWidth = r * 0.22;
 
-          // Hub central ring
+          // Main central node
           ctx.beginPath();
           ctx.arc(0, 0, r * 1.1, 0, Math.PI * 2);
           ctx.stroke();
@@ -259,62 +394,24 @@ export class HeroToolsScene {
         thickness: 0.35,
         drawIcon: (ctx, size) => {
           const c = size / 2;
-          const w = size * 0.32;
-          ctx.save();
-          ctx.translate(c, c);
-
-          // Klaviyo Dynamic Chevron / Flag
-          ctx.fillStyle = '#12B76A';
-          ctx.beginPath();
-          ctx.moveTo(-w, -w * 0.9);
-          ctx.lineTo(w * 0.8, -w * 0.9);
-          ctx.lineTo(w * 0.4, w * 0.9);
-          ctx.lineTo(-w, w * 0.9);
-          ctx.closePath();
-          ctx.fill();
-
-          // Crisp K cutout
-          ctx.fillStyle = '#FFFFFF';
-          ctx.font = `900 ${size * 0.32}px sans-serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText('K', -w * 0.1, 0);
-
-          ctx.restore();
-        },
-      },
-      {
-        id: 'ga4',
-        name: 'Google Analytics',
-        subtitle: 'Attribution & Conversion',
-        primaryColor: '#F9AB00',
-        accentColor: '#E37400',
-        metalness: 0.45,
-        roughness: 0.22,
-        radius: 1.5,
-        thickness: 0.36,
-        drawIcon: (ctx, size) => {
-          const c = size / 2;
-          const w = size * 0.11;
+          const w = size * 0.65;
           const h = size * 0.48;
           ctx.save();
           ctx.translate(c, c);
 
-          // Ascending Analytics Pillars
-          ctx.fillStyle = '#F9AB00';
-          // Bar 1 (short)
+          // Klaviyo signature right-facing modern flag / pennant
+          ctx.fillStyle = '#12B76A';
           ctx.beginPath();
-          ctx.roundRect(-w * 2.2, h * 0.1, w, h * 0.4, w * 0.4);
+          ctx.moveTo(-w * 0.45, -h * 0.45);
+          ctx.lineTo(w * 0.45, 0);
+          ctx.lineTo(-w * 0.45, h * 0.45);
+          ctx.closePath();
           ctx.fill();
 
-          // Bar 2 (medium)
+          // Inner cutout detail
+          ctx.fillStyle = '#0a0d16';
           ctx.beginPath();
-          ctx.roundRect(-w * 0.5, -h * 0.15, w, h * 0.65, w * 0.4);
-          ctx.fill();
-
-          // Bar 3 (tall)
-          ctx.beginPath();
-          ctx.roundRect(w * 1.2, -h * 0.5, w, h * 1.0, w * 0.4);
+          ctx.arc(-w * 0.1, 0, h * 0.22, 0, Math.PI * 2);
           ctx.fill();
 
           ctx.restore();
@@ -323,122 +420,38 @@ export class HeroToolsScene {
       {
         id: 'shopify',
         name: 'Shopify Plus',
-        subtitle: 'E-Commerce Infrastructure',
-        primaryColor: '#96BF48',
+        subtitle: 'High-Scale Checkout',
+        primaryColor: '#95BF47',
         accentColor: '#5E8E3E',
-        metalness: 0.4,
-        roughness: 0.28,
+        metalness: 0.45,
+        roughness: 0.22,
         radius: 1.5,
         thickness: 0.36,
         drawIcon: (ctx, size) => {
           const c = size / 2;
-          const s = size * 0.38;
+          const r = size * 0.38;
           ctx.save();
           ctx.translate(c, c);
 
-          // Shopify Bag Silhouette
-          ctx.fillStyle = '#96BF48';
+          // Shopping bag silhouette
+          ctx.fillStyle = '#95BF47';
           ctx.beginPath();
-          ctx.moveTo(-s * 0.6, -s * 0.5);
-          ctx.lineTo(s * 0.6, -s * 0.5);
-          ctx.lineTo(s * 0.8, s * 0.8);
-          ctx.lineTo(-s * 0.8, s * 0.8);
-          ctx.closePath();
+          ctx.roundRect(-r * 0.8, -r * 0.5, r * 1.6, r * 1.5, [r * 0.25, r * 0.25, r * 0.15, r * 0.15]);
           ctx.fill();
 
           // Bag handle
           ctx.strokeStyle = '#5E8E3E';
-          ctx.lineWidth = size * 0.05;
+          ctx.lineWidth = r * 0.22;
           ctx.beginPath();
-          ctx.arc(0, -s * 0.5, s * 0.3, Math.PI, 0);
+          ctx.arc(0, -r * 0.5, r * 0.45, Math.PI, 0, false);
           ctx.stroke();
 
-          // Monogram 'S'
-          ctx.fillStyle = '#FFFFFF';
-          ctx.font = `900 ${size * 0.3}px sans-serif`;
+          // Stylized "S"
+          ctx.fillStyle = '#ffffff';
+          ctx.font = `bold ${Math.round(r * 0.95)}px Space Grotesk, sans-serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText('S', 0, s * 0.2);
-
-          ctx.restore();
-        },
-      },
-      {
-        id: 'tiktok',
-        name: 'TikTok Ads',
-        subtitle: 'Short-Form Viral Reach',
-        primaryColor: '#00F2FE',
-        accentColor: '#FE2C55',
-        metalness: 0.6,
-        roughness: 0.18,
-        radius: 1.45,
-        thickness: 0.35,
-        drawIcon: (ctx, size) => {
-          const c = size / 2;
-          const s = size * 0.38;
-          ctx.save();
-          ctx.translate(c, c);
-
-          // Dark backing circle
-          ctx.fillStyle = '#08080C';
-          ctx.beginPath();
-          ctx.arc(0, 0, s * 0.9, 0, Math.PI * 2);
-          ctx.fill();
-
-          // Dual-Color Musical Note
-          ctx.lineWidth = size * 0.06;
-          ctx.lineCap = 'round';
-
-          // Cyan layer
-          ctx.strokeStyle = '#00F2FE';
-          ctx.beginPath();
-          ctx.arc(-s * 0.2, s * 0.3, s * 0.3, 0, Math.PI * 2);
-          ctx.stroke();
-
-          // Pink layer
-          ctx.strokeStyle = '#FE2C55';
-          ctx.beginPath();
-          ctx.moveTo(-s * 0.2, s * 0.3);
-          ctx.lineTo(-s * 0.2, -s * 0.5);
-          ctx.lineTo(s * 0.3, -s * 0.3);
-          ctx.stroke();
-
-          ctx.restore();
-        },
-      },
-      {
-        id: 'clickup',
-        name: 'ClickUp / CRM',
-        subtitle: 'Campaign Execution',
-        primaryColor: '#7B68EE',
-        accentColor: '#FF005A',
-        metalness: 0.45,
-        roughness: 0.25,
-        radius: 1.4,
-        thickness: 0.34,
-        drawIcon: (ctx, size) => {
-          const c = size / 2;
-          const s = size * 0.34;
-          ctx.save();
-          ctx.translate(c, c);
-
-          // Clickup Chevron
-          ctx.strokeStyle = '#7B68EE';
-          ctx.lineWidth = size * 0.08;
-          ctx.lineCap = 'round';
-          ctx.lineJoin = 'round';
-
-          ctx.beginPath();
-          ctx.moveTo(-s * 0.8, s * 0.2);
-          ctx.lineTo(0, -s * 0.4);
-          ctx.lineTo(s * 0.8, s * 0.2);
-          ctx.stroke();
-
-          // Pink Dot
-          ctx.fillStyle = '#FF005A';
-          ctx.beginPath();
-          ctx.arc(0, s * 0.6, s * 0.25, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.fillText('S', -r * 0.05, r * 0.28);
 
           ctx.restore();
         },
@@ -446,91 +459,80 @@ export class HeroToolsScene {
     ];
   }
 
-  private createBadgeTexture(
-    tool: MarketingToolConfig,
-    isBack = false,
-  ): THREE.CanvasTexture {
+  private createTexture(tool: MarketingToolConfig, isFront: boolean): THREE.CanvasTexture {
+    const size = 1024;
     const canvas = document.createElement('canvas');
-    canvas.width = 1024;
-    canvas.height = 1024;
+    canvas.width = size;
+    canvas.height = size;
     const ctx = canvas.getContext('2d')!;
 
-    const c = 512;
-    const r = 480;
+    const c = size / 2;
+    const r = c * 0.94;
 
-    // 1. Crisp background disk
-    const bgGrad = ctx.createRadialGradient(c, c * 0.85, 50, c, c, r);
-    if (!isBack) {
-      bgGrad.addColorStop(0, '#FFFFFF');
-      bgGrad.addColorStop(0.7, '#F4F5F8');
-      bgGrad.addColorStop(1, '#E6E8EF');
-    } else {
-      bgGrad.addColorStop(0, '#1E2028');
-      bgGrad.addColorStop(0.8, '#12141A');
-      bgGrad.addColorStop(1, '#0A0C10');
-    }
+    // Dark high-contrast token body background
+    const bgGrad = ctx.createRadialGradient(c, c, r * 0.1, c, c, r);
+    bgGrad.addColorStop(0, '#1c2236');
+    bgGrad.addColorStop(0.7, '#111422');
+    bgGrad.addColorStop(1, '#090b12');
 
     ctx.fillStyle = bgGrad;
     ctx.beginPath();
     ctx.arc(c, c, r, 0, Math.PI * 2);
     ctx.fill();
 
-    // 2. Beveled metallic border ring
-    const borderGrad = ctx.createLinearGradient(0, 0, 1024, 1024);
-    borderGrad.addColorStop(0, tool.primaryColor);
-    borderGrad.addColorStop(0.5, tool.accentColor || tool.primaryColor);
-    borderGrad.addColorStop(1, '#FFFFFF');
-
-    ctx.lineWidth = 32;
-    ctx.strokeStyle = borderGrad;
-    ctx.stroke();
-
-    // Subtle inner ring shadow
-    ctx.lineWidth = 8;
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.08)';
+    // Metallic beveled perimeter rings
+    ctx.strokeStyle = tool.primaryColor;
+    ctx.lineWidth = 14;
     ctx.beginPath();
-    ctx.arc(c, c, r - 24, 0, Math.PI * 2);
+    ctx.arc(c, c, r - 10, 0, Math.PI * 2);
     ctx.stroke();
 
-    if (!isBack) {
-      // FRONT FACE: Official Tool Logo & Title
-      tool.drawIcon(ctx, 1024);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(c, c, r - 26, 0, Math.PI * 2);
+    ctx.stroke();
 
-      // Tool Name Pill at bottom
+    if (isFront) {
+      // Draw platform icon
+      tool.drawIcon(ctx, size * 0.72);
+
+      // Tool Name text
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 64px Space Grotesk, sans-serif';
+      ctx.fillText(tool.name.toUpperCase(), c, 800);
+
+      // Subtitle
       ctx.fillStyle = tool.primaryColor;
-      ctx.font = 'bold 54px Space Grotesk, sans-serif';
+      ctx.font = '600 32px IBMPlexMono, monospace';
+      ctx.fillText(tool.subtitle.toUpperCase(), c, 860);
+    } else {
+      // Back Face: Kyndev Verified Performance Badge
+      ctx.save();
+      ctx.translate(c, c);
+
+      // Inner glow ring
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.arc(0, 0, r * 0.65, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.fillStyle = tool.primaryColor;
+      ctx.font = '800 110px Space Grotesk, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(tool.name.toUpperCase(), c, 860);
+      ctx.fillText('KYNDEV', 0, -40);
 
-      // Micro badge
-      ctx.fillStyle = '#6E7485';
-      ctx.font = '500 32px IBMPlexMono, monospace';
-      ctx.fillText(tool.subtitle, c, 920);
-    } else {
-      // BACK FACE: Capability Description & Agency Branding
-      ctx.fillStyle = tool.primaryColor;
-      ctx.beginPath();
-      ctx.arc(c, 340, 100, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '700 42px Space Grotesk, sans-serif';
+      ctx.fillText('OPTIMIZED STACK', 0, 50);
 
-      // Brand Icon Micro on Back
-      tool.drawIcon(ctx, 680);
+      ctx.restore();
 
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = 'bold 58px Space Grotesk, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText(tool.name, c, 530);
-
-      ctx.fillStyle = '#A0AEC0';
-      ctx.font = '400 38px IBMPlexMono, monospace';
-      ctx.fillText(tool.subtitle, c, 610);
-
-      ctx.fillStyle = tool.primaryColor;
-      ctx.font = 'bold 36px IBMPlexMono, monospace';
-      ctx.fillText('KYNDEV GROWTH STACK', c, 760);
-
-      ctx.fillStyle = '#4A5568';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
       ctx.font = '500 28px IBMPlexMono, monospace';
       ctx.fillText('ACTIVE PERFORMANCE ENGINE', c, 810);
     }
@@ -556,34 +558,35 @@ export class HeroToolsScene {
   }
 
   private createTools(): void {
-    const tools = this.getToolConfigs();
-    const count = tools.length * 2; // 16 interactive 3D tool badges
+    const configs = this.getToolConfigs();
 
-    for (let i = 0; i < count; i++) {
-      const tool = tools[i % tools.length];
+    configs.forEach((tool) => {
       const geom = new THREE.CylinderGeometry(
         tool.radius,
         tool.radius,
         tool.thickness,
         64,
-        1,
+        2
       );
+      // Align cylinder axis to face camera
+      geom.rotateX(Math.PI / 2);
 
-      // Multi-material: [rim, front, back]
+      const frontTexture = this.createTexture(tool, true);
+      const backTexture = this.createTexture(tool, false);
+
+      // Materials: 0 = perimeter rim, 1 = front face, 2 = back face
       const rimMaterial = new THREE.MeshStandardMaterial({
-        color: tool.primaryColor,
-        metalness: tool.metalness,
-        roughness: tool.roughness,
+        color: new THREE.Color(tool.accentColor),
+        metalness: 0.85,
+        roughness: 0.2,
       });
 
-      const frontTexture = this.createBadgeTexture(tool, false);
       const frontMaterial = new THREE.MeshStandardMaterial({
         map: frontTexture,
         metalness: 0.2,
         roughness: 0.35,
       });
 
-      const backTexture = this.createBadgeTexture(tool, true);
       const backMaterial = new THREE.MeshStandardMaterial({
         map: backTexture,
         metalness: 0.2,
@@ -607,39 +610,48 @@ export class HeroToolsScene {
 
       mesh.position.set(x, y, z);
       mesh.rotation.set(
-        Math.random() * Math.PI,
-        Math.random() * Math.PI,
-        Math.random() * Math.PI,
+        (Math.random() - 0.5) * 0.6,
+        (Math.random() - 0.5) * 0.6,
+        (Math.random() - 0.5) * 0.4
       );
 
       this.scene.add(mesh);
 
-      this.bodies.push({
+      const body: PhysicsBody = {
         mesh,
         tool,
         position: mesh.position,
         velocity: new THREE.Vector3(
-          (Math.random() - 0.5) * 1.5,
-          (Math.random() - 0.5) * 1.5,
-          (Math.random() - 0.5) * 1.0,
+          (Math.random() - 0.5) * 0.8,
+          (Math.random() - 0.5) * 0.8,
+          (Math.random() - 0.5) * 0.3
         ),
         angularVelocity: new THREE.Vector3(
-          (Math.random() - 0.5) * 2.5,
-          (Math.random() - 0.5) * 2.5,
-          (Math.random() - 0.5) * 2.5,
+          (Math.random() - 0.5) * 0.7,
+          (Math.random() - 0.5) * 0.7,
+          (Math.random() - 0.5) * 0.4
         ),
         rotation: mesh.rotation,
         radius: tool.radius,
-        mass: 1.0 + Math.random() * 0.5,
+        mass: tool.radius * 2.0,
         isDragging: false,
-      });
-    }
+      };
+
+      this.bodies.push(body);
+    });
   }
 
-  private onPointerMove = (e: MouseEvent) => {
-    if (!this.renderer || !this.renderer.domElement) return;
+  private bindEvents(): void {
     const el = this.renderer.domElement;
-    const rect = el.getBoundingClientRect();
+    el.addEventListener('mousemove', this.onPointerMove);
+    el.addEventListener('mousedown', this.onPointerDown);
+    window.addEventListener('mouseup', this.onPointerUp);
+    window.addEventListener('resize', this.onResize);
+  }
+
+  private onPointerMove = (e: MouseEvent): void => {
+    if (!this.container) return;
+    const rect = this.container.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
@@ -652,7 +664,7 @@ export class HeroToolsScene {
     if (this.draggedBody) {
       if (this.raycaster.ray.intersectPlane(this.plane, this.intersectionPoint)) {
         const { boundX, boundY } = this.getBounds();
-        const maxR = this.draggedBody.radius + this.draggedBody.thickness * 0.5;
+        const maxR = this.draggedBody.radius + this.draggedBody.tool.thickness * 0.5;
         const limitX = Math.max(boundX - maxR, 0.5);
         const limitY = Math.max(boundY - maxR, 0.5);
 
@@ -661,18 +673,23 @@ export class HeroToolsScene {
         const clampedTarget = new THREE.Vector3(targetX, targetY, this.draggedBody.position.z);
 
         this.draggedBody.velocity.copy(
-          clampedTarget.sub(this.draggedBody.position).multiplyScalar(15),
+          clampedTarget.sub(this.draggedBody.position).multiplyScalar(15)
         );
+        this.draggedBody.position.set(targetX, targetY, this.draggedBody.position.z);
       }
     }
   };
 
-  private onPointerDown = (e: MouseEvent) => {
-    this.onPointerMove(e);
+  private onPointerDown = (e: MouseEvent): void => {
+    if (!this.container) return;
+    const rect = this.container.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    this.mouse.set(x, y);
+
     this.raycaster.setFromCamera(this.mouse, this.camera);
-    const intersects = this.raycaster.intersectObjects(
-      this.bodies.map((b) => b.mesh),
-    );
+    const meshes = this.bodies.map((b) => b.mesh);
+    const intersects = this.raycaster.intersectObjects(meshes);
 
     if (intersects.length > 0) {
       const hitMesh = intersects[0].object as THREE.Mesh;
@@ -682,51 +699,50 @@ export class HeroToolsScene {
         body.isDragging = true;
         this.plane.setFromNormalAndCoplanarPoint(
           new THREE.Vector3(0, 0, 1),
-          body.position,
+          body.position
         );
-        this.onToolSelect?.(body.tool);
-        this.applyImpulseToAll(body.position);
+
+        if (this.onToolSelect) {
+          this.onToolSelect(body.tool);
+        }
+
+        // Spin burst on pickup
+        body.angularVelocity.set(
+          (Math.random() - 0.5) * 4.0,
+          (Math.random() - 0.5) * 4.0,
+          (Math.random() - 0.5) * 2.0
+        );
       }
     }
   };
 
-  private onPointerUp = () => {
+  private onPointerUp = (): void => {
     if (this.draggedBody) {
       this.draggedBody.isDragging = false;
-      this.draggedBody.velocity.add(
-        new THREE.Vector3(
-          this.mouseVelocity.x * 25,
-          this.mouseVelocity.y * 25,
-          (Math.random() - 0.5) * 5,
-        ),
-      );
       this.draggedBody = null;
     }
   };
 
-  private bindEvents(): void {
-    const el = this.renderer.domElement;
-    el.addEventListener('mousemove', this.onPointerMove);
-    el.addEventListener('mousedown', this.onPointerDown);
-    window.addEventListener('mouseup', this.onPointerUp);
-    window.addEventListener('resize', this.onResize);
-  }
-
-  public applyImpulseToAll(origin?: THREE.Vector3): void {
-    const center = origin || new THREE.Vector3(0, 0, 0);
+  public applyImpulseToAll(): void {
+    const { boundX, boundY } = this.getBounds();
     this.bodies.forEach((b) => {
-      const diff = b.position.clone().sub(center);
-      const dist = Math.max(diff.length(), 0.5);
-      const dir = diff.normalize();
-      const force = 12 / dist;
-      b.velocity.add(dir.multiplyScalar(force));
-      b.angularVelocity.add(
-        new THREE.Vector3(
-          (Math.random() - 0.5) * 10,
-          (Math.random() - 0.5) * 10,
-          (Math.random() - 0.5) * 10,
-        ),
+      const maxR = b.radius + (b.tool?.thickness || 0.35) * 0.5;
+      const limitX = Math.max(boundX - maxR, 0.5);
+      const limitY = Math.max(boundY - maxR, 0.5);
+
+      b.velocity.set(
+        (Math.random() - 0.5) * 16,
+        (Math.random() - 0.5) * 16,
+        (Math.random() - 0.5) * 8
       );
+      b.angularVelocity.set(
+        (Math.random() - 0.5) * 6,
+        (Math.random() - 0.5) * 6,
+        (Math.random() - 0.5) * 4
+      );
+      // Ensure clamp immediately
+      b.position.x = Math.max(-limitX, Math.min(limitX, b.position.x));
+      b.position.y = Math.max(-limitY, Math.min(limitY, b.position.y));
     });
   }
 
@@ -734,10 +750,21 @@ export class HeroToolsScene {
     if (this.isDestroyed || !this.container) return;
     const width = this.container.clientWidth || window.innerWidth;
     const height = this.container.clientHeight || window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio, 2);
 
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
+
+    if (this.postRenderTarget) {
+      this.postRenderTarget.setSize(
+        Math.max(1, Math.floor(width * dpr)),
+        Math.max(1, Math.floor(height * dpr))
+      );
+    }
+    if (this.postMaterial) {
+      this.postMaterial.uniforms.u_resolution.value.set(width, height);
+    }
   };
 
   private updatePhysics(dt: number): void {
@@ -831,7 +858,55 @@ export class HeroToolsScene {
       const dt = Math.min(this.clock.getDelta(), 0.05);
 
       this.updatePhysics(dt);
-      this.renderer.render(this.scene, this.camera);
+
+      // Liquid Wave Post-processing Pass
+      if (this.postRenderTarget && this.postScene && this.postCamera && this.postMaterial) {
+        this.renderer.setRenderTarget(this.postRenderTarget);
+        this.renderer.render(this.scene, this.camera);
+        this.renderer.setRenderTarget(null);
+
+        const uniforms = this.postMaterial.uniforms;
+        uniforms.u_texture.value = this.postRenderTarget.texture;
+        uniforms.u_time.value = this.clock.getElapsedTime();
+
+        // Connect to global ScreenPaint FBO if active
+        const sp = (window as any).screenPaint;
+        const spTexture = sp?.sharedUniforms?.u_currPaintTexture?.value;
+        if (spTexture) {
+          uniforms.u_screenPaintTexture.value = spTexture;
+          uniforms.u_hasScreenPaint.value = 1;
+          if (sp.sharedUniforms?.u_paintTexelSize?.value) {
+            uniforms.u_screenPaintTexelSize.value.copy(sp.sharedUniforms.u_paintTexelSize.value);
+          }
+        } else {
+          uniforms.u_hasScreenPaint.value = 0;
+        }
+
+        // Map container bounding box into screen UV space
+        const rect = this.container.getBoundingClientRect();
+        const winW = window.innerWidth || 1;
+        const winH = window.innerHeight || 1;
+        uniforms.u_containerRect.value.set(
+          rect.left / winW,
+          (winH - rect.bottom) / winH,
+          rect.width / winW,
+          rect.height / winH
+        );
+
+        // Local pointer tracking
+        uniforms.u_localMouse.value.set(
+          this.mouse.x * 0.5 + 0.5,
+          this.mouse.y * 0.5 + 0.5
+        );
+        uniforms.u_localVelocity.value.copy(this.mouseVelocity);
+
+        // Dampen local mouse velocity smoothly
+        this.mouseVelocity.multiplyScalar(0.92);
+
+        this.renderer.render(this.postScene, this.postCamera);
+      } else {
+        this.renderer.render(this.scene, this.camera);
+      }
 
       this.animationFrameId = requestAnimationFrame(animate);
     };
@@ -844,6 +919,18 @@ export class HeroToolsScene {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
+    }
+    if (this.postRenderTarget) {
+      this.postRenderTarget.dispose();
+      this.postRenderTarget = null;
+    }
+    if (this.postMaterial) {
+      this.postMaterial.dispose();
+      this.postMaterial = null;
+    }
+    if (this.postQuad) {
+      this.postQuad.geometry.dispose();
+      this.postQuad = null;
     }
     if (this.renderer && this.renderer.domElement) {
       const el = this.renderer.domElement;

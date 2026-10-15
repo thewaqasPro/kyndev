@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Hero Tools Section Styles (Kyndev Framed Dark Deck on Light Canvas)
+   Hero Tools Section Styles (Kyndev Framed Dark Deck on Pure White Canvas)
    ========================================================================== */
 
 #home-hero-tools {
@@ -13,8 +13,8 @@
   justify-content: flex-start;
   align-items: stretch;
   box-sizing: border-box;
-  /* Light overall background as requested */
-  background: var(--color-off-white, #f0f1fa);
+  /* Completely pure white background as requested */
+  background: #ffffff;
   color: #11141d;
   /* Width matching header and other sections: padding-x uses var(--base-padding-x) */
   /* Top spacing placed below the fixed header (which extends to ~148px) */
