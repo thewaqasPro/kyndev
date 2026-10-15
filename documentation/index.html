@@ -50,13 +50,10 @@
       </div>
 
       <div class="sidebar-group">
-        <div class="sidebar-title">Runtime & WebGL</div>
+        <div class="sidebar-title">3D Scenes & Shaders</div>
         <ul class="sidebar-nav-list">
           <li class="sidebar-nav-item">
-            <a href="./pages/k-preloader-debugger.html">Brand "K" & ?debug-k</a>
-          </li>
-          <li class="sidebar-nav-item">
-            <a href="./pages/components-lifecycle.html">Components Lifecycle</a>
+            <a href="./pages/project-depth-maps.html">2.5D Depth Maps Guide <span class="nav-tag">New</span></a>
           </li>
           <li class="sidebar-nav-item">
             <a href="./pages/marketing-tools-hero.html">Marketing Tools Hero (/hero-tools)</a>
@@ -65,8 +62,14 @@
       </div>
 
       <div class="sidebar-group">
-        <div class="sidebar-title">Routing & Previews</div>
+        <div class="sidebar-title">Runtime & Transitions</div>
         <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./pages/k-preloader-debugger.html">Brand "K" & ?debug-k</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./pages/components-lifecycle.html">Components Lifecycle</a>
+          </li>
           <li class="sidebar-nav-item">
             <a href="./pages/multi-page-architecture.html">Multi-Page & SPA Routing</a>
           </li>
@@ -79,6 +82,9 @@
       <div class="sidebar-group">
         <div class="sidebar-title">Live Testing</div>
         <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="http://localhost:4321/projects" target="_blank">🖼️ Projects Gallery ↗</a>
+          </li>
           <li class="sidebar-nav-item">
             <a href="http://localhost:4321/?debug-k" target="_blank">⚡ Live ?debug-k HUD ↗</a>
           </li>
@@ -135,6 +141,15 @@
         <p>Access the specialized technical documentation pages below:</p>
 
         <div class="cards-grid">
+          <a href="./pages/project-depth-maps.html" class="doc-card" style="border-color: var(--brand-blue); box-shadow: 0 4px 20px var(--brand-blue-glow);">
+            <div class="doc-card-icon">🖼️</div>
+            <div class="doc-card-title">2.5D Project Depth Maps (home_depth.webp) <span class="nav-tag" style="vertical-align: middle; margin-left: 6px;">New</span></div>
+            <div class="doc-card-desc">
+              Why each project has 2 images, how the WebGL raymarching parallax shader works, and 4 practical methods to generate depth maps for new projects.
+            </div>
+            <div class="doc-card-footer">Read Guide &rarr;</div>
+          </a>
+
           <a href="./pages/project-overview-structure.html" class="doc-card">
             <div class="doc-card-icon">🏗️</div>
             <div class="doc-card-title">Project & File Structure</div>
@@ -211,6 +226,11 @@
             </thead>
             <tbody>
               <tr>
+                <td><code>/projects</code></td>
+                <td>Projects Portfolio</td>
+                <td>Interactive 2.5D depth cards with raymarching parallax and kinetic tilt.</td>
+              </tr>
+              <tr>
                 <td><code>?debug-k</code></td>
                 <td>Transition Overlay</td>
                 <td>Injects the floating HUD to freeze, test morph fold, zoom dissolve, and corner radius live.</td>
@@ -241,9 +261,9 @@
 
         <div class="page-nav-footer">
           <div></div>
-          <a href="./pages/project-overview-structure.html" class="nav-link-box">
+          <a href="./pages/project-depth-maps.html" class="nav-link-box">
             <span class="nav-link-sub">Next Guide</span>
-            <span class="nav-link-title">Project & File Structure &rarr;</span>
+            <span class="nav-link-title">2.5D Project Depth Maps Guide &rarr;</span>
           </a>
         </div>
       </div>

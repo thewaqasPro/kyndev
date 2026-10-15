@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creating 2.5D Project Depth Maps (home_depth.webp) - KYNDEV Docs</title>
+  <link rel="stylesheet" href="../css/docs.css">
+  <link rel="icon" type="image/png" href="../../public/assets/meta/favicon-32x32.png">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="docs-header">
+    <div class="header-left">
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+      <a href="../index.html" class="brand-badge">
+        <div class="brand-logo-mark">K</div>
+        <span>KYNDEV DOCS</span>
+      </a>
+      <span class="brand-version">v2.4.0 &bull; Modular</span>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or debug keys..." />
+    </div>
+
+    <div class="header-right">
+      <button class="theme-toggle-btn" id="theme-toggle" title="Switch Theme">☀️</button>
+      <a href="http://localhost:4321/projects" target="_blank" class="live-site-link">View Projects Live ↗</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="../index.html">Overview & Hub</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./project-overview-structure.html">Project & File Structure</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./design-system-tokens.html">Design System & Tokens</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">3D Scenes & Shaders</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item active">
+            <a href="./project-depth-maps.html">2.5D Depth Maps Guide <span class="nav-tag">New</span></a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools)</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Runtime & Transitions</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./k-preloader-debugger.html">Brand "K" & ?debug-k</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./components-lifecycle.html">Components Lifecycle</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./multi-page-architecture.html">Multi-Page & SPA Routing</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./component-preview-hub.html">Component Preview & Hub</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Live Testing</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="http://localhost:4321/projects" target="_blank">🖼️ Projects Gallery ↗</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="http://localhost:4321/?debug-k" target="_blank">⚡ Live ?debug-k HUD ↗</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-content">
+      <div class="article-header">
+        <div class="article-breadcrumbs">
+          <a href="../index.html">KYNDEV</a> / <span>3D Scenes & Shaders</span> / <span>2.5D Depth Maps</span>
+        </div>
+        <h1 class="article-title">Creating 2.5D Project Depth Maps (home_depth.webp)</h1>
+        <p class="article-lead">
+          Complete guide to how the two-image system works for portfolio projects, the WebGL parallax raymarching shader, and 4 practical methods to generate depth maps for new projects.
+        </p>
+      </div>
+
+      <div class="prose">
+        <div class="callout tip">
+          <div class="callout-title">💡 The Two-Image System at a Glance</div>
+          <div class="callout-body">
+            Every project in <code>public/assets/projects/{slug}/</code> requires two synchronized images:
+            <ul>
+              <li><strong><code>home.webp</code></strong>: The full-color hero artwork (1200 &times; 900 px).</li>
+              <li><strong><code>home_depth.webp</code></strong>: The grayscale spatial depth map (1200 &times; 900 px).</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2 id="why-depth-maps">1. Why Are There 2 Images for Each Project?</h2>
+        <p>
+          When browsing the portfolio gallery at <a href="http://localhost:4321/projects" target="_blank"><code>/projects</code></a>, each project card is not a flat 2D picture. Instead, it is rendered as a dynamic, interactive <strong>2.5D spatial hologram</strong> using Three.js and a custom GLSL fragment shader (<code>frag$l</code> in <code>src/scripts/runtime/navigation/pages/ProjectsPage.js</code>).
+        </p>
+        <p>
+          As the user moves their mouse or scrolls, the camera angle shifts and the shader calculates real-time perspective distortion, depth of field (DoF blur), and optical parallax.
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>File Name</th>
+                <th>Channel Data</th>
+                <th>Role in WebGL Pipeline</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>home.webp</code></td>
+                <td>RGB Color (24-bit)</td>
+                <td>Provides the base photographic or 3D rendered surface visual (<code>u_texture</code>).</td>
+              </tr>
+              <tr>
+                <td><code>home_depth.webp</code></td>
+                <td>Grayscale Luminance (8-bit)</td>
+                <td>Provides the spatial depth coordinates (<code>u_depthTexture</code>) for raymarching parallax.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="shader-mechanics">2. How the Raymarching Parallax Shader Works</h2>
+        <p>
+          Inside <code>ProjectsPage.js</code>, each project card instantiates a custom <code>UfxMesh</code> configured with:
+        </p>
+        <pre><code>(this.ufxMesh.material.defines.PARALLAX_SAMPLES = 12),
+(this.ufxMesh.material.defines.BLUR_SAMPLES = 6);</code></pre>
+
+        <p>
+          The fragment shader marches a ray through 12 virtual depth layers to locate the exact surface intersection:
+        </p>
+
+        <div class="code-header">
+          <span>src/scripts/runtime/navigation/pages/ProjectsPage.js (GLSL Shader excerpt)</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>// 12-step raymarching depth loop
+for (int i = 0; i &lt; PARALLAX_SAMPLES; i++) {
+  // Sample the red channel (.r) of home_depth.webp
+  float currZ = -texture2D(u_depthTexture, rayPos.xy * toUvSpace + .5).r * zMultiplier;
+  if (currZ &gt; rayPos.z) {
+    break; // Ray hit the geometry surface!
+  }
+  rayPos += rayStep;
+  dist += stepDist;
+}
+
+// Compute depth-of-field blur based on focus distance
+float depth = texture2D(u_depthTexture, uv + .5).r;
+float blurriness = mix(0.0, 0.01, u_zoomRatio) * linearStep(0.0, 0.5, abs(depth - u_focusPos.z) + u_dofRangeOffset);</code></pre>
+
+        <div class="callout info">
+          <div class="callout-title">Luminance Rule: White vs Black</div>
+          <div class="callout-body">
+            <ul>
+              <li><strong>Pure White (<code>#ffffff</code>, value 1.0)</strong> = <strong>Foreground / Closest to screen</strong>. These elements shift the most with mouse movements and pop outward.</li>
+              <li><strong>Pure Black (<code>#000000</code>, value 0.0)</strong> = <strong>Background / Deepest distance</strong>. Stays anchored far behind in the scene.</li>
+              <li><strong>Intermediate Grays</strong> = Continuous linear transition from foreground to background.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2 id="specifications">3. Image Specifications & Requirements</h2>
+        <p>For optimal visual clarity and zero artifacting in WebGL, adhere to these technical specs:</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Specification</th>
+                <th>Why It Matters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Dimensions</strong></td>
+                <td><code>1200 &times; 900 px</code> (4:3 ratio)</td>
+                <td>Must match <code>home.webp</code> pixel-for-pixel so depth lines align with color contours.</td>
+              </tr>
+              <tr>
+                <td><strong>File Format</strong></td>
+                <td><code>.webp</code></td>
+                <td>Lossless or high-quality lossy (quality &ge; 85) for minimal file size and rapid network delivery.</td>
+              </tr>
+              <tr>
+                <td><strong>Color Space</strong></td>
+                <td>Grayscale (sRGB)</td>
+                <td>The shader samples the <code>.r</code> channel; single grayscale maintains 1:1 color mapping.</td>
+              </tr>
+              <tr>
+                <td><strong>Target Path</strong></td>
+                <td><code>public/assets/projects/{slug}/home_depth.webp</code></td>
+                <td>Loaded dynamically by <code>ProjectsPage.js</code> via <code>settings.PROJECT_PATH + this.id + "/home_depth.webp"</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="generation-methods">4. Step-by-Step: 4 Ways to Create a New Depth Image</h2>
+
+        <h3>Method 1: Free Online AI Estimator (Recommended &mdash; 15 Seconds)</h3>
+        <p>
+          Modern AI depth models produce photorealistic depth maps from any 2D image without needing 3D models or manual painting:
+        </p>
+        <ol>
+          <li>Open the free <a href="https://huggingface.co/spaces/depth-anything/Depth-Anything-V2" target="_blank"><strong>Depth Anything V2 Space on Hugging Face</strong> ↗</a>.</li>
+          <li>Upload your <code>home.webp</code> (or high-res JPG/PNG artwork).</li>
+          <li>Select the model: <strong><code>Depth-Anything-V2-Large</code></strong> (best quality and sharpest silhouettes).</li>
+          <li>Click <strong>Generate</strong>. Within 3&ndash;5 seconds, your grayscale depth map is ready.</li>
+          <li>Download the output image (PNG or JPG).</li>
+          <li>Convert and resize it to <code>1200x900</code> WebP using the terminal:
+            <pre><code># Using cwebp (installed on your system):
+cwebp -q 90 -resize 1200 900 depth_output.png -o public/assets/projects/your_project/home_depth.webp
+
+# Or using ImageMagick:
+magick depth_output.png -resize 1200x900^ -gravity center -extent 1200x900 -colorspace Gray public/assets/projects/your_project/home_depth.webp</code></pre>
+          </li>
+        </ol>
+
+        <h3>Method 2: 3D Renders (Blender / Cinema 4D / Maya)</h3>
+        <p>If your project artwork is created in a 3D application:</p>
+        <ol>
+          <li>In <strong>Blender</strong>:
+            <ul>
+              <li>Go to <strong>View Layer Properties</strong> &rarr; Enable <strong>Z</strong> or <strong>Mist</strong> pass.</li>
+              <li>In the <strong>Compositor</strong>, connect the <code>Depth</code> output to a <code>Normalize</code> node or <code>Map Range</code> node.</li>
+              <li>Invert if necessary so closest objects are white (1.0) and far background is black (0.0).</li>
+              <li>Render at <code>1200x900</code> and export as <code>home_depth.webp</code>.</li>
+            </ul>
+          </li>
+          <li>In <strong>Cinema 4D</strong>:
+            <ul>
+              <li>Open <strong>Render Settings</strong> &rarr; <strong>Multi-Pass</strong> &rarr; Add <strong>Depth</strong> pass.</li>
+              <li>Configure the Camera <strong>Focus Distance</strong> and <strong>Depth Target</strong>.</li>
+              <li>Export the pass as 16-bit or 8-bit grayscale.</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h3>Method 3: Adobe Photoshop / Photopea (Neural Filters or Painting)</h3>
+        <ol>
+          <li><strong>Using Neural Filters</strong>:
+            <ul>
+              <li>Open your project image in Photoshop.</li>
+              <li>Go to <strong>Filter</strong> &rarr; <strong>Neural Filters</strong> &rarr; Toggle on <strong>Depth Blur</strong>.</li>
+              <li>Check the box at the bottom: <strong>Output Depth Map Only</strong>.</li>
+              <li>Click OK, flatten the image, invert colors if background is white (Ctrl/Cmd + I), and save.</li>
+            </ul>
+          </li>
+          <li><strong>Manual Painted Depth Mask</strong>:
+            <ul>
+              <li>Create a new layer above your image.</li>
+              <li>Fill the background with solid black (<code>#000000</code>).</li>
+              <li>Select your foreground subjects and paint them solid white (<code>#ffffff</code>).</li>
+              <li>Paint midground elements with intermediate grays (e.g., <code>#808080</code>).</li>
+              <li>Apply a slight <strong>Gaussian Blur (1&ndash;2px)</strong> to prevent jagged step-shearing in the raymarching shader.</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h3>Method 4: Automated Terminal / Python Script</h3>
+        <p>
+          If you want to automate depth map creation locally, you can use Python with the <code>transformers</code> library:
+        </p>
+        <div class="code-header">
+          <span>generate_depth.py</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code># Install prerequisites once:
+# pip install torch torchvision transformers pillow
+
+import sys
+from PIL import Image
+import torch
+from transformers import pipeline
+
+if len(sys.argv) &lt; 3:
+    print("Usage: python generate_depth.py input_image.png output_depth.webp")
+    sys.exit(1)
+
+input_path, output_path = sys.argv[1], sys.argv[2]
+pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-base-hf")
+image = Image.open(input_path).convert("RGB")
+depth = pipe(image)["depth"]
+
+# Resize to standard KYNDEV 1200x900 dimensions
+depth = depth.resize((1200, 900), Image.Resampling.LANCZOS)
+depth.save(output_path, "WEBP", quality=90)
+print(f"✓ Saved depth map to {output_path}")</code></pre>
+
+        <h2 id="registering-project">5. Registering Your New Project in the Codebase</h2>
+        <p>Once you have created <code>home.webp</code> and <code>home_depth.webp</code>:</p>
+
+        <h3>Step 1: Place Assets in the Public Folder</h3>
+        <p>Create a new folder under <code>public/assets/projects/{slug}/</code>:</p>
+        <pre><code>public/assets/projects/my_new_project/
+├── home.webp          # 1200x900 color image
+└── home_depth.webp    # 1200x900 grayscale depth map</code></pre>
+
+        <h3>Step 2: Create the Project Data File</h3>
+        <p>Create <code>src/data/projects/my_new_project.ts</code>:</p>
+        <div class="code-header">
+          <span>src/data/projects/my_new_project.ts</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>import type { ProjectData } from './types';
+
+export const myNewProject: ProjectData = {
+  slug: 'my_new_project',
+  title: 'My New Project',
+  tags: 'Web / 3D / Brand',
+  theme: {
+    style: '--project-details-bg: #0d0f17; --project-details-highlight: #0081fb;',
+    shadow: 'rgba(0, 129, 251, 0.3)',
+    colorBg: '#0d0f17',
+    colorHighlight: '#0081fb',
+    colorBtnBg: '#0081fb',
+    colorBtnText: '#ffffff',
+    colorIconBg: '#161a29',
+    colorIconColor: '#ffffff',
+    colorText: '#f0f3fa',
+    colorBtnBgHover: '#006ed6',
+    colorBtnTextHover: '#ffffff',
+  },
+  descHtml: '&lt;p&gt;Interactive digital experience designed and engineered by KYNDEV.&lt;/p&gt;',
+  launchUrl: 'https://example.com',
+  launchLabel: 'Launch Project',
+  services: ['Creative Direction', '3D WebGL', 'Engineering'],
+  links: [{ label: 'Live Website', url: 'https://example.com' }],
+  items: [
+    { type: 'image', filename: 'main.webp', width: 1920, height: 1080, fullscreen: true },
+  ],
+  nextProject: {
+    id: 'oryzo_ai',
+    title: 'Oryzo AI',
+    colorBg: '#121420',
+    colorText: '#ffffff',
+    shadow: 'rgba(0, 0, 0, 0.4)',
+  },
+};</code></pre>
+
+        <h3>Step 3: Export from Index</h3>
+        <p>In <code>src/data/projects/index.ts</code>, add:</p>
+        <pre><code>export { myNewProject } from './my_new_project';</code></pre>
+        <p>
+          And add <code>myNewProject</code> into the projects list array. Your project will immediately appear on <a href="http://localhost:4321/projects" target="_blank"><code>/projects</code></a> with full 3D interactive tilting, raymarched depth, and kinetic card hover physics!
+        </p>
+
+        <h2 id="troubleshooting-depth">6. Troubleshooting & Common Pitfalls</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Symptom</th>
+                <th>Root Cause</th>
+                <th>Solution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Background moves forward, foreground moves backward</strong></td>
+                <td>Inverted depth map (white background, black foreground).</td>
+                <td>Invert the image in Photoshop (Ctrl/Cmd + I) or ImageMagick (<code>-negate</code>). White must be nearest.</td>
+              </tr>
+              <tr>
+                <td><strong>Jagged edges or pixel tearing on card tilt</strong></td>
+                <td>Hard, 1-pixel stair-stepped depth edges.</td>
+                <td>Apply a gentle 1.0&ndash;2.0px Gaussian blur along high-contrast silhouettes.</td>
+              </tr>
+              <tr>
+                <td><strong>Image looks stretched or misaligned</strong></td>
+                <td>Dimension mismatch between <code>home.webp</code> and <code>home_depth.webp</code>.</td>
+                <td>Ensure both files are exactly <code>1200 &times; 900 px</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="page-nav-footer">
+          <a href="./design-system-tokens.html" class="nav-link-box">
+            <span class="nav-link-sub">&larr; Previous</span>
+            <span class="nav-link-title">Design System & Tokens</span>
+          </a>
+          <a href="./k-preloader-debugger.html" class="nav-link-box">
+            <span class="nav-link-sub">Next Guide</span>
+            <span class="nav-link-title">Brand "K" & ?debug-k &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right On-Page Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list">
+        <li class="toc-item active"><a href="#why-depth-maps">1. Why 2 Images?</a></li>
+        <li class="toc-item"><a href="#shader-mechanics">2. Parallax Shader</a></li>
+        <li class="toc-item"><a href="#specifications">3. Image Specifications</a></li>
+        <li class="toc-item"><a href="#generation-methods">4. 4 Generation Methods</a></li>
+        <li class="toc-item"><a href="#registering-project">5. Registering Projects</a></li>
+        <li class="toc-item"><a href="#troubleshooting-depth">6. Troubleshooting</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="../js/docs.js"></script>
+</body>
+</html>

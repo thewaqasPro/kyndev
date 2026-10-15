@@ -10,6 +10,7 @@ This guide covers:
 5. [Complete Component Elimination / Tree-Shaking](#5-complete-component-elimination--tree-shaking)
 6. [Loader & Landing Animation Stability Fix](#6-loader--landing-animation-stability-fix)
 7. [Brand "K" Preloader Morph & Live Transition Debugger](#7-brand-k-preloader-morph--live-transition-debugger)
+8. [2.5D Project Depth Maps (home.webp + home_depth.webp) Generation Guide](#8-25d-project-depth-maps-homewebp--home_depthwebp-generation-guide)
 
 ---
 
@@ -316,3 +317,36 @@ drawSegment(sx, -0.6, sw, 1.2, rad, angle);
   this.hideTextRatio = Math.min(1, this.hideTextRatio + e * 1.5);
   ```
 Increase multipliers to speed up navigation transitions, or decrease for a slower, more deliberate transition.
+
+---
+
+## 8. 2.5D Project Depth Maps (`home.webp` + `home_depth.webp`) Generation Guide
+
+### Overview
+Every project card displayed on `/projects` is powered by a WebGL spatial raymarching shader that creates 3D optical parallax and mouse-following perspective. This requires two synchronized image assets located in `public/assets/projects/{slug}/`:
+1. `home.webp`: 24-bit RGB full-color artwork (1200 &times; 900 px).
+2. `home_depth.webp`: 8-bit grayscale depth texture (1200 &times; 900 px).
+
+### Luminance Channel Mapping
+The custom fragment shader (`frag$l` in `ProjectsPage.js`) reads the red/grayscale channel:
+- **Pure White (`#ffffff`, 1.0)**: Foreground (closest to viewer, maximum parallax shift).
+- **Pure Black (`#000000`, 0.0)**: Background (deepest infinity plane, zero shift).
+- **Intermediate Grays**: Continuous smooth depth gradient.
+
+### Fast Depth Map Generation Workflow
+1. **Free Online AI (Recommended &mdash; 15s)**:
+   - Go to [Depth Anything V2 on Hugging Face](https://huggingface.co/spaces/depth-anything/Depth-Anything-V2).
+   - Upload your `home.webp` artwork.
+   - Select model `Depth-Anything-V2-Large` and click **Generate**.
+   - Download the grayscale depth image.
+2. **Convert & Resize to 1200x900 WebP**:
+   ```bash
+   cwebp -q 90 -resize 1200 900 depth_download.png -o public/assets/projects/{slug}/home_depth.webp
+   ```
+   Or using ImageMagick:
+   ```bash
+   magick depth_download.png -resize 1200x900^ -gravity center -extent 1200x900 -colorspace Gray public/assets/projects/{slug}/home_depth.webp
+   ```
+3. **Register Project**:
+   - Add data file `src/data/projects/{slug}.ts` and re-export in `src/data/projects/index.ts`.
+   - Your project automatically appears on `/projects` with live 2.5D depth parallax.
