@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superpowers for Coding Agents - KYNDEV Docs</title>
+  <link rel="stylesheet" href="../css/docs.css">
+  <link rel="icon" type="image/png" href="../../public/assets/meta/favicon-32x32.png">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="docs-header">
+    <div class="header-left">
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+      <a href="../index.html" class="brand-badge">
+        <div class="brand-logo-mark">K</div>
+        <span>KYNDEV DOCS</span>
+      </a>
+      <span class="brand-version">v2.4.0 &bull; Modular</span>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or debug keys..." />
+    </div>
+
+    <div class="header-right">
+      <button class="theme-toggle-btn" id="theme-toggle" title="Switch Theme">☀️</button>
+      <a href="https://github.com/obra/superpowers" target="_blank" class="live-site-link">Superpowers Repo ↗</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="../index.html">Overview & Hub</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./project-overview-structure.html">Project & File Structure</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./design-system-tokens.html">Design System & Tokens</a>
+          </li>
+          <li class="sidebar-nav-item active">
+            <a href="./superpowers-guide.html">Superpowers Methodology <span class="nav-tag">Active</span></a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">3D Scenes & Shaders</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./project-depth-maps.html">2.5D Depth Maps Guide</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools)</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Runtime & Transitions</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./k-preloader-debugger.html">Brand "K" & ?debug-k</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./components-lifecycle.html">Components Lifecycle</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./multi-page-architecture.html">Multi-Page & SPA Routing</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./component-preview-hub.html">Component Preview & Hub</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-content">
+      <div class="article-header">
+        <div class="article-breadcrumbs">
+          <a href="../index.html">KYNDEV</a> / <span>Agent Methodology</span> / <span>Superpowers</span>
+        </div>
+        <h1 class="article-title">Superpowers for Coding Agents</h1>
+        <p class="article-lead">
+          Overview of the installed <strong>Superpowers</strong> software development methodology, composable skills library, and Antigravity tool mappings for KYNDEV.
+        </p>
+      </div>
+
+      <div class="prose">
+        <div class="callout tip">
+          <div class="callout-title">⚡ Installed in KYNDEV</div>
+          <div class="callout-body">
+            Superpowers is installed locally in this repository under <code>.gemini/skills/</code> and <code>.agents/skills/</code>, and automatically loaded on agent session startup via <code>GEMINI.md</code> and <code>AGENTS.md</code>.
+          </div>
+        </div>
+
+        <h2 id="what-is-superpowers">1. What is Superpowers?</h2>
+        <p>
+          <a href="https://github.com/obra/superpowers" target="_blank">Superpowers</a> is a software development methodology for coding agents. Instead of prematurely writing speculative code, agents follow structured engineering workflows:
+        </p>
+        <ol>
+          <li><strong>Brainstorming & Spec Extraction</strong>: Teases out user requirements and clarifies design decisions before touching code.</li>
+          <li><strong>Architecture Planning</strong>: Drafts concise, structured implementation plans with test verification steps.</li>
+          <li><strong>Disciplined Execution</strong>: Emphasizes Test-Driven Development (TDD), YAGNI (You Aren't Gonna Need It), and DRY principles.</li>
+          <li><strong>Verification Before Completion</strong>: Confirms real evidence of success (e.g. clean builds, passing tests) before claiming completion.</li>
+        </ol>
+
+        <h2 id="skills-catalog">2. Installed Skills Catalog</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Skill Name</th>
+                <th>Trigger Moment</th>
+                <th>Core Workflow</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>using-superpowers</code></td>
+                <td>Session Start</td>
+                <td>Establishes skill enforcement rules and tool platform adaptations.</td>
+              </tr>
+              <tr>
+                <td><code>brainstorming</code></td>
+                <td>New Features / Ideas</td>
+                <td>Explores alternatives, specifies interfaces, and validates requirements.</td>
+              </tr>
+              <tr>
+                <td><code>writing-plans</code></td>
+                <td>Multi-step Tasks</td>
+                <td>Produces clear, actionable implementation task lists with test criteria.</td>
+              </tr>
+              <tr>
+                <td><code>executing-plans</code></td>
+                <td>Plan Execution</td>
+                <td>Coordinates step-by-step implementation, review, and verification.</td>
+              </tr>
+              <tr>
+                <td><code>systematic-debugging</code></td>
+                <td>Bugs & Broken Builds</td>
+                <td>Root-cause isolation before applying targeted, minimal fixes.</td>
+              </tr>
+              <tr>
+                <td><code>test-driven-development</code></td>
+                <td>Writing New Logic</td>
+                <td>Red-Green-Refactor testing cycles.</td>
+              </tr>
+              <tr>
+                <td><code>verification-before-completion</code></td>
+                <td>Finishing Tasks</td>
+                <td>Guarantees commands have run and outputs verified before reporting done.</td>
+              </tr>
+              <tr>
+                <td><code>subagent-driven-development</code></td>
+                <td>Large Refactors</td>
+                <td>Dispatches focused subagents to work through engineering tasks.</td>
+              </tr>
+              <tr>
+                <td><code>using-git-worktrees</code></td>
+                <td>Feature Isolation</td>
+                <td>Creates isolated git worktrees without duplicating disk storage.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="antigravity-mapping">3. Antigravity Tool Mapping</h2>
+        <p>
+          When Superpowers skills request actions, the Antigravity agent harness maps them to native capabilities:
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Action Requested by Skill</th>
+                <th>Antigravity Native Tool</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Dispatch Subagent</strong></td>
+                <td><code>invoke_subagent</code> (using <code>TypeName: "self"</code> for full capability, or <code>"research"</code> for read-only).</td>
+              </tr>
+              <tr>
+                <td><strong>Task Tracking / Todos</strong></td>
+                <td>Maintains a <strong>task artifact</strong> (markdown checklist saved to conversation brain, updated as steps finish).</td>
+              </tr>
+              <tr>
+                <td><strong>Code Inspection</strong></td>
+                <td><code>client_view_file</code> for project workspace files.</td>
+              </tr>
+              <tr>
+                <td><strong>File Modifications</strong></td>
+                <td><code>client_create_file</code> and <code>client_edit_file</code>.</td>
+              </tr>
+              <tr>
+                <td><strong>Command Execution</strong></td>
+                <td><code>run_command</code> (shell commands, <code>npm run build</code>, git commands).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="project-configuration">4. Project Configuration & Bootstrap Files</h2>
+        <ul>
+          <li><strong><code>GEMINI.md</code></strong>: Bootstraps <code>@./.gemini/skills/using-superpowers/SKILL.md</code> and the Antigravity tool mappings for Gemini / Antigravity harnesses.</li>
+          <li><strong><code>AGENTS.md</code></strong>: Provides project guidelines and skill references for Cursor, Codex, Devin, and Claude Code.</li>
+          <li><strong><code>.gemini/skills/</code> & <code>.agents/skills/</code></strong>: Project-local skill storage ensuring anyone running this repository has access to the full Superpowers skill suite.</li>
+        </ul>
+
+        <div class="page-nav-footer">
+          <a href="./design-system-tokens.html" class="nav-link-box">
+            <span class="nav-link-sub">&larr; Previous</span>
+            <span class="nav-link-title">Design System & Tokens</span>
+          </a>
+          <a href="./project-depth-maps.html" class="nav-link-box">
+            <span class="nav-link-sub">Next Guide</span>
+            <span class="nav-link-title">2.5D Depth Maps Guide &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right On-Page Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list">
+        <li class="toc-item active"><a href="#what-is-superpowers">1. What is Superpowers?</a></li>
+        <li class="toc-item"><a href="#skills-catalog">2. Installed Skills Catalog</a></li>
+        <li class="toc-item"><a href="#antigravity-mapping">3. Antigravity Tool Mapping</a></li>
+        <li class="toc-item"><a href="#project-configuration">4. Project Configuration</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="../js/docs.js"></script>
+</body>
+</html>

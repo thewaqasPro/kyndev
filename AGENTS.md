@@ -1,34 +1,19 @@
-## Development
+# KYNDEV Agent Workflow Guidelines (Superpowers)
 
-When starting the dev server, use background mode:
+This project has **Superpowers** installed for coding agents.
 
-```
-astro dev --background
-```
+## Superpowers Bootstrap
+- Skills directory: `.gemini/skills/` and `.agents/skills/`
+- Bootstrap skill: `.gemini/skills/using-superpowers/SKILL.md`
+- Tool mapping: `.gemini/skills/using-superpowers/references/antigravity-tools.md`
 
-Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
+## The Core Rule
+Invoke relevant skills **BEFORE** taking any response or action:
+- **Starting new features or architecture**: Invoke `brainstorming` first.
+- **Executing multi-step work**: Invoke `writing-plans` and `executing-plans`.
+- **Debugging issues**: Invoke `systematic-debugging` first.
+- **Before claiming completion**: Invoke `verification-before-completion`.
 
-## Documentation
-
-Full documentation: https://docs.astro.build
-
-Consult these guides before working on related tasks:
-
-- [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
-- [Working with Astro components](https://docs.astro.build/en/basics/astro-components/)
-- [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
-- [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
-- [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
-- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
-
-## Architecture & Codebase Guidelines
-
-1. **Modular 3D / WebGL Runtime**: The production WebGL engine lives in [`src/scripts/runtime/`](file:///Users/waqas/DEV/kyndev.com/src/scripts/runtime/) with modular submodules for:
-   - `core/`: Properties, MathUtils, ScrollDomRange, Tween, Line
-   - `webgl/`: Stage3D, FboHelper, postprocessing, shaders, geometry
-   - `navigation/`: PageManager, ScrollManager, page controllers (`HomePage`, `AboutPage`, `ProjectsPage`, `ProjectPage`)
-   - `scenes/`: 3D interactive stages (`hero/HomeBalloons`, `tunnels/GoalTunnels`, `lunar/AboutHero`, `fluid/FlipFluid`, `product/ProjectDetails`)
-   - `ui/`: Header, FooterSection, VideoOverlay, sound controls
-   - `audio/`: WebAudio system and page sound controllers
-2. **Components**: All Astro markup, component-scoped CSS, and local controllers live in [`src/components/`](file:///Users/waqas/DEV/kyndev.com/src/components/).
-3. **Reference Integrity**: Keep [`src/scripts/runtime.js`](file:///Users/waqas/DEV/kyndev.com/src/scripts/runtime.js) untouched as the reference source. All modifications belong in `src/scripts/runtime/` and `src/components/`.
+## Project Conventions
+- **Build Verification**: Run `npm run build` to ensure static page generation passes (all 34 static routes).
+- **Documentation Integrity**: When modifying architecture or components, update `docs/MULTI_PAGE_AND_COMPONENT_GUIDE.md` and `documentation/`.
