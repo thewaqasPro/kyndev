@@ -5,7 +5,6 @@
 import Page from "./Page.js";
 import heroToolsSection from "../../sections/HeroToolsSection.js";
 import { homeBalloons } from "../../scenes/hero/HomeBalloons.js";
-import header from "../../ui/Header.js";
 
 class HeroToolsPage extends Page {
   path = "hero-tools";
@@ -29,9 +28,6 @@ class HeroToolsPage extends Page {
   show(e, t, r) {
     this.showDuration = 1;
     this.useGenericTransition = !0;
-    if (header) {
-      header.forceWhite = true;
-    }
     // Ensure original balloons scene is deactivated while tools page is active
     if (homeBalloons) {
       homeBalloons.isActive = false;
@@ -44,9 +40,6 @@ class HeroToolsPage extends Page {
   hide(e, t, r) {
     this.hideDuration = 1;
     this.useGenericTransition = !0;
-    if (header) {
-      header.forceWhite = false;
-    }
     heroToolsSection.hide();
     super.hide(e, t, r);
   }

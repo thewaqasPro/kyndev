@@ -16,19 +16,19 @@ const {
 ---
 
 <div id="home-hero-tools" class="section">
-  {showReturnBanner && (
-    <div id="hero-tools-preview-banner">
-      <span class="pulse-dot"></span>
-      <span>3D Marketing Tools Prototype</span>
-      <span>•</span>
-      <a href="/hub" data-link-type="internal">Component Hub</a>
-      <span>•</span>
-      <a href="/" data-link-type="internal">View Original Balloons Hero →</a>
-    </div>
-  )}
-
   <!-- Bounded Deck Stage Container: All elements & 3D badges stay strictly inside -->
   <div id="hero-tools-deck">
+    {showReturnBanner && (
+      <div id="hero-tools-preview-banner">
+        <span class="pulse-dot"></span>
+        <span>3D Marketing Tools Prototype</span>
+        <span>•</span>
+        <a href="/hub" data-link-type="internal">Component Hub</a>
+        <span>•</span>
+        <a href="/" data-link-type="internal">Balloons Hero →</a>
+      </div>
+    )}
+
     <!-- Header with tag and title -->
     <div id="hero-tools-header">
       <span id="hero-tools-tag">{tag}</span>

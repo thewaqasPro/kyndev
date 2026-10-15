@@ -1,38 +1,61 @@
 /* ==========================================================================
-   Hero Tools Section Styles (Kyndev Dark Marketing Deck Stage)
+   Hero Tools Section Styles (Kyndev Framed Dark Deck on Light Canvas)
    ========================================================================== */
 
 #home-hero-tools {
   position: relative;
   width: 100%;
   height: calc(var(--vh, 1vh) * 100);
-  min-height: 750px;
+  min-height: 780px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 5.5rem 2.5rem 2rem;
-  background: radial-gradient(circle at 50% 25%, #151827 0%, #0a0c14 55%, #05060a 100%);
+  justify-content: flex-start;
+  align-items: stretch;
+  box-sizing: border-box;
+  /* Light overall background as requested */
+  background: var(--color-off-white, #f0f1fa);
+  color: #11141d;
+  /* Width matching header and other sections: padding-x uses var(--base-padding-x) */
+  /* Top spacing placed below the fixed header (which extends to ~148px) */
+  padding: calc(var(--base-padding-y) + 7.25rem) var(--base-padding-x) var(--base-padding-y);
+}
+
+/* Framed Dark Deck Container: Dark background, matching exact page width between base paddings */
+#hero-tools-deck {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, #121626 0%, #0a0c14 55%, #05060a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 3.5rem 2.5rem;
   color: #f0f3fa;
 }
 
 #hero-tools-preview-banner {
   position: absolute;
-  top: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 2rem;
+  right: 2.5rem;
   z-index: 50;
   display: flex;
   align-items: center;
-  gap: 0.9rem;
-  padding: 0.5rem 1.25rem;
+  gap: 0.75rem;
+  padding: 0.45rem 1.15rem;
   background: rgba(18, 22, 34, 0.85);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 9999px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   font-family: IBMPlexMono, monospace;
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -61,28 +84,10 @@
   cursor: pointer;
 }
 
-/* Framed Deck Container: Constrains all UI and 3D simulation strictly within bounds */
-#hero-tools-deck {
-  position: relative;
-  width: 100%;
-  max-width: 1440px;
-  height: 100%;
-  max-height: calc(100% - 1rem);
-  background: linear-gradient(180deg, rgba(16, 20, 32, 0.8) 0%, rgba(9, 11, 17, 0.95) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 28px;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 3rem 3.5rem 2.5rem;
-}
-
 #hero-tools-header {
   position: relative;
   z-index: 10;
-  max-width: 54rem;
+  max-width: 52rem;
   pointer-events: none;
 }
 
@@ -102,8 +107,8 @@
 
 #hero-tools-title {
   font-family: Syne, sans-serif;
-  font-size: clamp(2.2rem, 4vw, 3.8rem);
-  line-height: 1.08;
+  font-size: clamp(2rem, 3.6vw, 3.5rem);
+  line-height: 1.1;
   letter-spacing: -0.03em;
   font-weight: 800;
   color: #ffffff;
@@ -246,24 +251,69 @@
 
 @media (max-width: 992px) {
   #home-hero-tools {
-    padding: 4.5rem 1rem 1rem;
+    padding: calc(var(--base-padding-y) + 5rem) var(--base-padding-x) var(--base-padding-y);
+    min-height: 700px;
   }
   #hero-tools-deck {
-    padding: 2.5rem 2rem 2rem;
+    padding: 2.25rem 2rem 2rem;
     border-radius: 20px;
   }
   #hero-tools-canvas-container {
     border-radius: 20px;
   }
+  #hero-tools-preview-banner {
+    top: 1.25rem;
+    right: 1.5rem;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.9rem;
+  }
   #hero-tools-hud {
-    bottom: 6rem;
+    bottom: 5.75rem;
     left: 2rem;
     max-width: calc(100% - 4rem);
   }
   #hero-tools-controls {
-    bottom: 1.75rem;
+    bottom: 1.5rem;
     right: 2rem;
     left: 2rem;
     justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  #home-hero-tools {
+    padding: calc(var(--base-padding-y) + 4.5rem) var(--base-padding-x) var(--base-padding-y);
+    min-height: 660px;
+  }
+  #hero-tools-deck {
+    padding: 1.75rem 1.25rem 1.5rem;
+    border-radius: 16px;
+  }
+  #hero-tools-canvas-container {
+    border-radius: 16px;
+  }
+  #hero-tools-preview-banner {
+    position: static;
+    margin-bottom: 1rem;
+    align-self: flex-start;
+  }
+  #hero-tools-header {
+    max-width: 100%;
+  }
+  #hero-tools-title {
+    font-size: 1.75rem;
+  }
+  #hero-tools-hud {
+    display: none; /* Keep clean touch surface on small mobile */
+  }
+  #hero-tools-controls {
+    bottom: 1.25rem;
+    left: 1.25rem;
+    right: 1.25rem;
+    flex-direction: column;
+  }
+  .hero-tools-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
