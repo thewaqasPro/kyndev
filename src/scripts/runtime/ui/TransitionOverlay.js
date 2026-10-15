@@ -176,13 +176,28 @@ class TransitionOverlay {
         u.translate(n * effReveal * c, -n * 0.5 * effReveal * c);
         u.scale(p, p);
 
-        // Rounded rectangle drawing helper
+        // Rounded rectangle drawing helper with individual corner radius support [tl, tr, br, bl]
         const drawRoundedRect = (ctx, sx, sy, sw, sh, rad) => {
           ctx.beginPath();
           if (typeof ctx.roundRect === "function") {
             ctx.roundRect(sx, sy, sw, sh, rad);
           } else {
-            ctx.rect(sx, sy, sw, sh);
+            let tl = 0, tr = 0, br = 0, bl = 0;
+            if (Array.isArray(rad)) {
+              [tl, tr, br, bl] = rad;
+            } else if (typeof rad === "number") {
+              tl = tr = br = bl = rad;
+            }
+            ctx.moveTo(sx + tl, sy);
+            ctx.lineTo(sx + sw - tr, sy);
+            if (tr > 0) ctx.arcTo(sx + sw, sy, sx + sw, sy + sh, tr);
+            ctx.lineTo(sx + sw, sy + sh - br);
+            if (br > 0) ctx.arcTo(sx + sw, sy + sh, sx, sy + sh, br);
+            ctx.lineTo(sx + bl, sy + sh);
+            if (bl > 0) ctx.arcTo(sx, sy + sh, sx, sy, bl);
+            ctx.lineTo(sx, sy + tl);
+            if (tl > 0) ctx.arcTo(sx, sy, sx + sw, sy, tl);
+            ctx.closePath();
           }
           ctx.fill();
         };
@@ -223,17 +238,24 @@ class TransitionOverlay {
             kCtx.restore();
           };
 
-          // 1. Upper Vertical Stem (rotates 90 deg into upper spine)
-          drawSegment(-2.1, -0.5, 2.1, 1, strokeRadius, effMorph * Math.PI * 0.5);
+          // Corner radius definitions:
+          // Vertical stem: outer ends (top of upper, bottom of lower) have strokeRadius.
+          // The junction in the middle has RADIUS ZERO, making the vertical column completely straight and continuous!
+          const stemRadii = [strokeRadius, 0, 0, strokeRadius];
+          // Diagonal arms: outer tips have strokeRadius, inner junction side has radius zero
+          const armRadii = [0, strokeRadius, strokeRadius, 0];
 
-          // 2. Lower Vertical Stem (rotates -90 deg into lower spine)
-          drawSegment(-2.1, -0.5, 2.1, 1, strokeRadius, -effMorph * Math.PI * 0.5);
+          // 1. Upper Vertical Stem (rotates 90 deg into upper spine; top is rounded, bottom/middle is flat)
+          drawSegment(-2.1, -0.5, 2.1, 1, stemRadii, effMorph * Math.PI * 0.5);
 
-          // 3. Upper Diagonal Arm (rotates upward into upper wing)
-          drawSegment(0, -0.5, 3.2, 1, strokeRadius, -effMorph * (Math.PI * armAngle));
+          // 2. Lower Vertical Stem (rotates -90 deg into lower spine; bottom is rounded, top/middle is flat)
+          drawSegment(-2.1, -0.5, 2.1, 1, stemRadii, -effMorph * Math.PI * 0.5);
 
-          // 4. Lower Diagonal Arm (rotates downward into lower wing)
-          drawSegment(0, -0.5, 3.2, 1, strokeRadius, effMorph * (Math.PI * armAngle));
+          // 3. Upper Diagonal Arm (rotates upward into upper wing; outer tip rounded, junction flat)
+          drawSegment(0, -0.5, 3.2, 1, armRadii, -effMorph * (Math.PI * armAngle));
+
+          // 4. Lower Diagonal Arm (rotates downward into lower wing; outer tip rounded, junction flat)
+          drawSegment(0, -0.5, 3.2, 1, armRadii, effMorph * (Math.PI * armAngle));
 
           kCtx.restore();
 
