@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marketing Tools Hero 3D Architecture (/hero-tools) - KYNDEV Docs</title>
+  <title>Marketing Tools Hero 3D Architecture & Customization - KYNDEV Docs</title>
   <link rel="stylesheet" href="../css/docs.css">
   <link rel="icon" type="image/png" href="../../public/assets/meta/favicon-32x32.png">
 </head>
@@ -22,7 +22,7 @@
 
     <div class="header-search">
       <span class="search-icon">🔍</span>
-      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or debug keys..." />
+      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or physics keys..." />
     </div>
 
     <div class="header-right">
@@ -59,7 +59,7 @@
             <a href="./components-lifecycle.html">Components Lifecycle</a>
           </li>
           <li class="sidebar-nav-item active">
-            <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools) <span class="nav-tag">Active</span></a>
+            <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools) <span class="nav-tag">Updated</span></a>
           </li>
         </ul>
       </div>
@@ -83,92 +83,238 @@
         <div class="article-breadcrumbs">
           <a href="../index.html">KYNDEV</a> / <span>3D Scenes</span> / <span>Marketing Tools Hero</span>
         </div>
-        <h1 class="article-title">Marketing Tools Hero 3D Architecture (/hero-tools)</h1>
+        <h1 class="article-title">Marketing Tools Hero 3D Architecture & Customization Guide</h1>
         <p class="article-lead">
-          Architecture, grid alignment, official vector brand SVGs, and 3D canvas layering for the Marketing Tools Hero section.
+          Comprehensive guide for configuring marketing tool chips, swapping image and vector icons, fine-tuning 3D physics forces, adjusting speeds and tumbling behavior, and customizing the WebGL background shade transitions.
         </p>
       </div>
 
       <div class="prose">
-        <h2 id="overview">1. Section Overview</h2>
+        <h2 id="overview">1. Section & File Architecture</h2>
         <p>
-          Located at <a href="http://localhost:4321/hero-tools" target="_blank"><code>/hero-tools</code></a> (implemented in <code>src/pages/hero-tools.astro</code>), this section presents floating 3D marketing badges (Meta Ads, Google Ads, TikTok, Shopify, Klaviyo, GA4) alongside the agency value proposition.
-        </p>
-
-        <h2 id="four-corner-grid">2. The 4-Corner Grid System</h2>
-        <p>
-          The layout uses a 4-corner CSS Grid layout where textual content and key agency metrics occupy the four perimeter corners, leaving the center area unobstructed for the interactive 3D WebGL canvas:
+          The 3D Marketing Tools Hero section simulates 12 floating, colliding, and tumble-responsive brand chips within a framed deck container. The implementation is cleanly separated across four key files:
         </p>
 
         <div class="table-wrapper">
           <table>
             <thead>
               <tr>
-                <th>Corner Position</th>
-                <th>Element / Content</th>
-                <th>Layout Class</th>
+                <th>File Path</th>
+                <th>Role & Responsibility</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td><strong>Top-Left</strong></td>
-                <td>Main Headline: <em>"MARKETING THAT SCALES REVENUE"</em></td>
-                <td><code>.hero-corner-tl</code></td>
+                <td><code>src/components/home/HeroTools/HeroToolsScene.ts</code></td>
+                <td><strong>Core 3D Engine:</strong> Three.js setup, tool definitions, vector icon rendering, physics loop, collision solver, and WebGL vignette background shader.</td>
               </tr>
               <tr>
-                <td><strong>Top-Right</strong></td>
-                <td>Technical Overview & Core Capabilities Subtext</td>
-                <td><code>.hero-corner-tr</code></td>
+                <td><code>src/components/home/HeroTools/HeroTools.astro</code></td>
+                <td><strong>Astro Component:</strong> HTML structure, HUD card, action buttons, layout toggle banner, and client hydration scripts.</td>
               </tr>
               <tr>
-                <td><strong>Bottom-Left</strong></td>
-                <td>Primary CTA: <em>"SCALE YOUR CAMPAIGNS"</em></td>
-                <td><code>.hero-corner-bl</code></td>
+                <td><code>src/components/home/HeroTools/heroTools.css</code></td>
+                <td><strong>Styling:</strong> Pure white canvas styling, 40/60 split grid, responsive stacking for mobile/tablets, and HUD badge glassmorphism.</td>
               </tr>
               <tr>
-                <td><strong>Bottom-Right</strong></td>
-                <td>Interactive 3D Tool Inspector & Metric Readout</td>
-                <td><code>.hero-corner-br</code></td>
+                <td><code>src/scripts/runtime/sections/HeroToolsSection.js</code></td>
+                <td><strong>Runtime Controller:</strong> Manages lifecycle hooks (<code>preInit</code>, <code>init</code>, <code>resize</code>, <code>hide</code>), layout switching, and sound dispatch.</td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <h2 id="layering">3. Z-Index Layering Hierarchy</h2>
+        <h2 id="modifying-icons">2. Customizing & Swapping Chip Icons</h2>
         <p>
-          To ensure HTML text remains sharp, selectable, and crisp above the Three.js canvas:
+          All chip configurations live inside <code>HeroToolsScene.ts</code> in the <code>getToolConfigs()</code> method. Each tool is defined by a <code>MarketingToolConfig</code> object:
         </p>
-        <pre><code>/* 1. Base 3D Canvas (Background) */
-.hero-canvas-container {
-  position: absolute;
-  inset: 0;
-  z-index: 1; /* Below text overlays */
-}
 
-/* 2. Four Corner Text Grid (Foreground) */
-.hero-grid-overlay {
-  position: relative;
-  z-index: 10; /* Crisp interactive typography above 3D */
-  pointer-events: none;
-}
-
-.hero-grid-overlay a, 
-.hero-grid-overlay button {
-  pointer-events: auto; /* Re-enable pointer events for CTAs */
+        <pre><code>interface MarketingToolConfig {
+  id: string;                                                      // Unique key (e.g. 'google-ads')
+  name: string;                                                    // Front badge title
+  subtitle: string;                                                // Front badge subtext / tag
+  primaryColor: string;                                            // Accent & border glow color
+  accentColor: string;                                             // Metallic rim color
+  metalness: number;                                               // Rim reflectivity (0.0 - 1.0)
+  roughness: number;                                               // Rim sheen (0.0 - 1.0)
+  radius: number;                                                  // 3D Disc radius (default: 1.24 - 1.30)
+  thickness: number;                                               // 3D Disc depth (default: 0.30 - 0.34)
+  drawIcon: (ctx: CanvasRenderingContext2D, size: number) => void; // Vector icon drawer
 }</code></pre>
 
-        <h2 id="official-svgs">4. Official Vector Brand SVGs</h2>
+        <h3>Option A: Drawing with Canvas 2D Vector Paths (Recommended)</h3>
         <p>
-          All 3D tools in the scene use official, high-resolution vector SVGs to avoid artifacting or pixelation:
+          The built-in vector drawer produces crisp, resolution-independent icons at any zoom or angle without network latency or image loading glitches:
+        </p>
+        <pre><code>{
+  id: 'my-custom-tool',
+  name: 'OpenAI',
+  subtitle: 'LLM & Generative Intelligence',
+  primaryColor: '#10A37F',
+  accentColor: '#008764',
+  metalness: 0.45,
+  roughness: 0.22,
+  radius: 1.26,
+  thickness: 0.32,
+  drawIcon: (ctx, size) => {
+    const c = size / 2;
+    const r = size * 0.35;
+    ctx.save();
+    ctx.translate(c, c);
+    
+    // Draw your vector path here
+    ctx.fillStyle = '#10A37F';
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+}</code></pre>
+
+        <h3>Option B: Using an External PNG, WebP, or SVG Image File</h3>
+        <p>
+          To use an image file (e.g., from <code>public/assets/...</code>) instead of procedural vector drawing, modify the <code>createTexture</code> method in <code>HeroToolsScene.ts</code> to draw an image onto the canvas texture:
+        </p>
+        <pre><code>// Example: Loading an image inside createTexture() in HeroToolsScene.ts
+if (tool.imageSrc) {
+  const img = new Image();
+  img.src = tool.imageSrc;
+  img.onload = () => {
+    // Draw centered on 1024x1024 badge face
+    ctx.drawImage(img, c - 180, c - 240, 360, 360);
+    texture.needsUpdate = true;
+  };
+}</code></pre>
+
+        <h2 id="physics-tuning">3. Adjusting Physics, Speeds & 3D Behavior</h2>
+        <p>
+          The physics engine in <code>HeroToolsScene.ts</code> runs in the <code>updatePhysics(dt)</code> method and pointer event handlers. You can fine-tune every physical force:
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Behavior / Feature</th>
+                <th>Code Location</th>
+                <th>Parameter & Default</th>
+                <th>How to Adjust</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Centering Gravity (Orbit)</strong></td>
+                <td><code>updatePhysics()</code></td>
+                <td><code>b.velocity.x += -b.position.x * 0.38 * dt</code><br><code>b.velocity.z += -b.position.z * 0.55 * dt</code></td>
+                <td>Increase multipliers (e.g. <code>0.8</code>) to snap chips faster toward center; decrease (e.g. <code>0.15</code>) for wider, looser floating orbits.</td>
+              </tr>
+              <tr>
+                <td><strong>Air Drag (Deceleration)</strong></td>
+                <td><code>updatePhysics()</code></td>
+                <td><code>b.velocity.multiplyScalar(Math.pow(0.88, dt))</code></td>
+                <td>Change <code>0.88</code>: <code>0.75</code> makes chips slow down quickly; <code>0.95</code> lets chips coast smoothly for longer distances.</td>
+              </tr>
+              <tr>
+                <td><strong>3D Tumbling & Spin Speed</strong></td>
+                <td><code>applyImpulseToAll()</code> & <code>onPointerDown</code></td>
+                <td><code>b.angularVelocity.set((rand - 0.5) * 9.0, ...)</code></td>
+                <td>Multiply or divide the multiplier (e.g. change <code>9.0</code> to <code>16.0</code> for high-spin action or <code>4.0</code> for gentle roll).</td>
+              </tr>
+              <tr>
+                <td><strong>Spin Damping</strong></td>
+                <td><code>updatePhysics()</code></td>
+                <td><code>b.angularVelocity.multiplyScalar(Math.pow(0.86, dt))</code></td>
+                <td>Controls how long a chip continues to tumble after being struck before it settles.</td>
+              </tr>
+              <tr>
+                <td><strong>Upright Spring Factor</strong></td>
+                <td><code>updatePhysics()</code></td>
+                <td><code>b.angularVelocity.x += -tiltX * 0.55 * dt</code></td>
+                <td>Controls how strongly a chip coaxes itself back to face the camera after tumbling. Higher = snaps upright fast; lower = stays tilted longer.</td>
+              </tr>
+              <tr>
+                <td><strong>Collision Bounciness</strong></td>
+                <td><code>updatePhysics()</code></td>
+                <td><code>const restitution = 0.82;</code></td>
+                <td>Set between <code>0.1</code> (completely inelastic thud) to <code>0.95</code> (super elastic bouncing).</td>
+              </tr>
+              <tr>
+                <td><strong>Collision Spin Torque</strong></td>
+                <td><code>updatePhysics()</code></td>
+                <td><code>const torqueMag = impulseMagnitude * 0.18;</code></td>
+                <td>Controls how much angular spin is transferred when two chips strike each other in 3D.</td>
+              </tr>
+              <tr>
+                <td><strong>Maximum Speed Cap</strong></td>
+                <td><code>updatePhysics()</code></td>
+                <td><code>b.velocity.clampLength(0, 18.0);</code></td>
+                <td>Prevents chips from escaping the container during rapid consecutive mouse tosses or multiple scatter clicks.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="z-depth">4. 3D Depth & Container Boundaries</h2>
+        <p>
+          The boundary box is calculated dynamically in <code>getBounds()</code> in <code>HeroToolsScene.ts</code>:
+        </p>
+        <pre><code>public getBounds(): { boundX: number; boundY: number; minZ: number; maxZ: number } {
+  const vFov = (this.camera.fov * Math.PI) / 180;
+  const visibleHeightAtZero = 2 * Math.tan(vFov / 2) * this.camera.position.z;
+  const visibleWidthAtZero = visibleHeightAtZero * this.camera.aspect;
+
+  const boundX = (visibleWidthAtZero * 0.5) * 0.84;
+  const boundY = (visibleHeightAtZero * 0.5) * 0.80;
+  
+  // 3D Depth boundaries
+  const minZ = -5.5; // Deepest distance away from camera (smaller scale)
+  const maxZ = 4.2;  // Closest approach to camera (larger scale)
+
+  return { boundX, boundY, minZ, maxZ };
+}</code></pre>
+
+        <h2 id="background-shader">5. Background Vignette Shader & Color Palettes</h2>
+        <p>
+          The background is rendered inside WebGL using a custom vignette shader quad (<code>bgMesh</code>) with noise dithering and mouse interaction. Clicking any chip or the deck canvas advances through the <code>palettes</code> array:
+        </p>
+
+        <pre><code>private palettes = [
+  { c0: new THREE.Color('#141d3d'), c1: new THREE.Color('#05070f') }, // Midnight Navy
+  { c0: new THREE.Color('#0c2b25'), c1: new THREE.Color('#030e0c') }, // Emerald Obsidian
+  { c0: new THREE.Color('#24113a'), c1: new THREE.Color('#0b0514') }, // Imperial Violet
+  { c0: new THREE.Color('#2b0e1d'), c1: new THREE.Color('#0e0409') }, // Crimson Velvet
+  { c0: new THREE.Color('#261a0c'), c1: new THREE.Color('#0e0803') }, // Royal Bronze / Amber
+  { c0: new THREE.Color('#0c2534'), c1: new THREE.Color('#030d15') }, // Cyan Abyss
+  { c0: new THREE.Color('#1b1e28'), c1: new THREE.Color('#080a0e') }, // Graphite Slate
+];</code></pre>
+
+        <p>
+          <strong>To add or customize palettes:</strong> Add or edit hex values in the array above. <code>c0</code> controls the center spotlight color, and <code>c1</code> controls the outer edge vignette shadow. The transition speed is set in <code>startLoop()</code>:
+        </p>
+        <pre><code>// Adjust color interpolation speed (dt * 3.5 = ~0.3s transition)
+this.currentColor0.lerp(this.targetColor0, dt * 3.5);
+this.currentColor1.lerp(this.targetColor1, dt * 3.5);</code></pre>
+
+        <h2 id="layout-modes">6. Layout Modes: Full Deck vs 40/60 Split</h2>
+        <p>
+          The section supports two display modes without breaking existing pages:
         </p>
         <ul>
-          <li><strong>Meta Ads</strong>: Official Meta infinity loop gradient vector.</li>
-          <li><strong>Google Ads</strong>: Tri-color yellow, blue, and green polygon vector.</li>
-          <li><strong>TikTok Ads</strong>: Precision cyan/red chromatic offset music note vector.</li>
-          <li><strong>Shopify Plus</strong>: Official Shopify bag vector.</li>
-          <li><strong>Klaviyo</strong>: Minimalist chevron flag vector.</li>
-          <li><strong>Google Analytics 4</strong>: Orange and yellow bar/pie analytics logo.</li>
+          <li><strong>Full Deck (Default)</strong>: Full-bleed 3D physics stage with header and HUD overlay cards.</li>
+          <li><strong>40/60 Split Mode</strong>: Left 40% column dedicated to title, subtitle, CTAs, and active HUD card; right 60% column dedicated to the 3D scene.</li>
         </ul>
+        <p>
+          To change the default layout in Astro:
+        </p>
+        <pre><code>&lt;!-- Full Deck (Default) --&gt;
+&lt;HeroTools layout="full" /&gt;
+
+&lt;!-- 40/60 Two-Column Split Mode --&gt;
+&lt;HeroTools layout="split" /&gt;</code></pre>
+        <p>
+          You can also test split mode interactively at any time by appending <code>?layout=split</code> to the URL: <a href="http://localhost:4321/hero-tools?layout=split" target="_blank"><code>http://localhost:4321/hero-tools?layout=split</code></a>, or using the interactive toggle buttons in the top-right preview banner.
+        </p>
 
         <div class="page-nav-footer">
           <a href="./components-lifecycle.html" class="nav-link-box">
@@ -187,10 +333,12 @@
     <aside class="docs-toc">
       <div class="toc-title">On this page</div>
       <ul class="toc-list">
-        <li class="toc-item active"><a href="#overview">1. Section Overview</a></li>
-        <li class="toc-item"><a href="#four-corner-grid">2. 4-Corner Grid System</a></li>
-        <li class="toc-item"><a href="#layering">3. Z-Index Layering</a></li>
-        <li class="toc-item"><a href="#official-svgs">4. Official Brand SVGs</a></li>
+        <li class="toc-item active"><a href="#overview">1. Section & File Architecture</a></li>
+        <li class="toc-item"><a href="#modifying-icons">2. Customizing Chip Icons</a></li>
+        <li class="toc-item"><a href="#physics-tuning">3. Physics, Speeds & Behavior</a></li>
+        <li class="toc-item"><a href="#z-depth">4. 3D Depth & Boundaries</a></li>
+        <li class="toc-item"><a href="#background-shader">5. Background Vignette Shader</a></li>
+        <li class="toc-item"><a href="#layout-modes">6. Full Deck vs 40/60 Split</a></li>
       </ul>
     </aside>
   </div>
