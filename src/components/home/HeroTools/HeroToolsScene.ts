@@ -43,13 +43,6 @@ export class HeroToolsScene {
   private isDestroyed = false;
   private clock = new THREE.Clock();
 
-  // Liquid Wave Post-processing Pipeline (Signature Kyndev Fluid Wave)
-  public postRenderTarget: THREE.WebGLRenderTarget | null = null;
-  public postScene: THREE.Scene | null = null;
-  public postCamera: THREE.OrthographicCamera | null = null;
-  public postMaterial: THREE.ShaderMaterial | null = null;
-  public postQuad: THREE.Mesh | null = null;
-
   public onToolSelect?: (tool: MarketingToolConfig) => void;
 
   constructor(container: HTMLElement) {
@@ -74,7 +67,6 @@ export class HeroToolsScene {
 
     this.setupLighting();
     this.createTools();
-    this.setupPostProcessing(width, height);
     this.bindEvents();
     this.startLoop();
   }
@@ -98,136 +90,6 @@ export class HeroToolsScene {
     const fillLight = new THREE.DirectionalLight(0xfff0dd, 0.8);
     fillLight.position.set(-10, 12, 10);
     this.scene.add(fillLight);
-  }
-
-  private setupPostProcessing(width: number, height: number): void {
-    const dpr = Math.min(window.devicePixelRatio, 2);
-    this.postRenderTarget = new THREE.WebGLRenderTarget(
-      Math.max(1, Math.floor(width * dpr)),
-      Math.max(1, Math.floor(height * dpr)),
-      {
-        minFilter: THREE.LinearFilter,
-        magFilter: THREE.LinearFilter,
-        format: THREE.RGBAFormat,
-        stencilBuffer: false,
-      }
-    );
-
-    this.postScene = new THREE.Scene();
-    this.postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
-    const vertexShader = `
-      varying vec2 v_uv;
-      void main() {
-        v_uv = uv;
-        gl_Position = vec4(position.xy, 0.0, 1.0);
-      }
-    `;
-
-    const fragmentShader = `
-      uniform sampler2D u_texture;
-      uniform sampler2D u_screenPaintTexture;
-      uniform int u_hasScreenPaint;
-      uniform vec4 u_containerRect;
-      uniform vec2 u_screenPaintTexelSize;
-      uniform vec2 u_localMouse;
-      uniform vec2 u_localVelocity;
-      uniform float u_amount;
-      uniform float u_rgbShift;
-      uniform float u_multiplier;
-      uniform float u_colorMultiplier;
-      uniform float u_shade;
-      uniform float u_time;
-      uniform vec2 u_resolution;
-      varying vec2 v_uv;
-
-      float hash12(vec2 p) {
-        vec3 p3 = fract(vec3(p.xyx) * 0.1031);
-        p3 += dot(p3, p3.yzx + 33.33);
-        return fract((p3.x + p3.y) * p3.z);
-      }
-
-      void main() {
-        vec2 vel = vec2(0.0);
-        float weight = 0.0;
-
-        // 1. Global Kyndev screenPaint fluid simulation FBO
-        if (u_hasScreenPaint == 1) {
-          vec2 screenUv = vec2(
-            u_containerRect.x + v_uv.x * u_containerRect.z,
-            u_containerRect.y + v_uv.y * u_containerRect.w
-          );
-          vec4 data = texture2D(u_screenPaintTexture, clamp(screenUv, 0.0, 1.0));
-          float spWeight = (data.z + data.w) * 0.5;
-          if (spWeight > 0.003) {
-            vel = (0.5 - data.xy - 0.001) * 2.0 * spWeight;
-            weight = spWeight;
-          }
-        }
-
-        // 2. Local interactive mouse wave velocity over the 3D scene
-        float aspect = u_resolution.x / max(u_resolution.y, 1.0);
-        vec2 delta = (v_uv - u_localMouse) * vec2(aspect, 1.0);
-        float localDist = length(delta);
-        float localRadius = 0.32;
-        float localFalloff = smoothstep(localRadius, 0.0, localDist);
-        float localSpeed = length(u_localVelocity);
-        if (localSpeed > 0.0001 && localFalloff > 0.005) {
-          vec2 localVel = u_localVelocity * localFalloff * 4.0;
-          vel += localVel;
-          weight = max(weight, localFalloff * min(localSpeed * 30.0, 1.0));
-        }
-
-        // 3. Fluid refractive wave distortion
-        vec2 velocity = vel * (u_amount / 4.0) * u_screenPaintTexelSize * u_multiplier;
-        float noise = hash12(gl_FragCoord.xy + u_time * 12.0) * 0.5;
-        vec2 uv = v_uv + noise * velocity;
-        vec4 color = vec4(0.0);
-
-        for (int i = 0; i < 9; i++) {
-          color += texture2D(u_texture, clamp(uv, 0.0, 1.0));
-          uv += velocity;
-        }
-        color /= 9.0;
-
-        // 4. Iridescent spectral shimmer wave (signature Kyndev liquid wave chromatic sheen)
-        float speed = max(abs(vel.x), abs(vel.y));
-        if (speed > 0.0001) {
-          vec3 wavePhase = vec3(vel.x + vel.y) * 45.0 + vec3(0.0, 2.0, 4.0) * u_rgbShift;
-          vec3 shimmer = sin(wavePhase) * smoothstep(0.4, -0.9, weight) * u_shade * speed * u_colorMultiplier;
-          color.rgb += shimmer;
-        }
-
-        gl_FragColor = color;
-      }
-    `;
-
-    this.postMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        u_texture: { value: null },
-        u_screenPaintTexture: { value: null },
-        u_hasScreenPaint: { value: 0 },
-        u_containerRect: { value: new THREE.Vector4(0, 0, 1, 1) },
-        u_screenPaintTexelSize: { value: new THREE.Vector2(1 / 500, 1 / 500) },
-        u_localMouse: { value: new THREE.Vector2(0.5, 0.5) },
-        u_localVelocity: { value: new THREE.Vector2(0, 0) },
-        u_amount: { value: 3.5 },
-        u_rgbShift: { value: 0.5 },
-        u_multiplier: { value: 5.0 },
-        u_colorMultiplier: { value: 10.0 },
-        u_shade: { value: 1.25 },
-        u_time: { value: 0 },
-        u_resolution: { value: new THREE.Vector2(width, height) },
-      },
-      vertexShader,
-      fragmentShader,
-      depthTest: false,
-      depthWrite: false,
-    });
-
-    const geom = new THREE.PlaneGeometry(2, 2);
-    this.postQuad = new THREE.Mesh(geom, this.postMaterial);
-    this.postScene.add(this.postQuad);
   }
 
   private getToolConfigs(): MarketingToolConfig[] {
@@ -724,21 +586,10 @@ export class HeroToolsScene {
     if (this.isDestroyed || !this.container) return;
     const width = this.container.clientWidth || window.innerWidth;
     const height = this.container.clientHeight || window.innerHeight;
-    const dpr = Math.min(window.devicePixelRatio, 2);
 
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
-
-    if (this.postRenderTarget) {
-      this.postRenderTarget.setSize(
-        Math.max(1, Math.floor(width * dpr)),
-        Math.max(1, Math.floor(height * dpr))
-      );
-    }
-    if (this.postMaterial) {
-      this.postMaterial.uniforms.u_resolution.value.set(width, height);
-    }
   };
 
   private updatePhysics(dt: number): void {
@@ -850,55 +701,7 @@ export class HeroToolsScene {
       const dt = Math.min(this.clock.getDelta(), 0.05);
 
       this.updatePhysics(dt);
-
-      // Liquid Wave Post-processing Pass
-      if (this.postRenderTarget && this.postScene && this.postCamera && this.postMaterial) {
-        this.renderer.setRenderTarget(this.postRenderTarget);
-        this.renderer.render(this.scene, this.camera);
-        this.renderer.setRenderTarget(null);
-
-        const uniforms = this.postMaterial.uniforms;
-        uniforms.u_texture.value = this.postRenderTarget.texture;
-        uniforms.u_time.value = this.clock.getElapsedTime();
-
-        // Connect to global ScreenPaint FBO if active
-        const sp = (window as any).screenPaint;
-        const spTexture = sp?.sharedUniforms?.u_currPaintTexture?.value;
-        if (spTexture) {
-          uniforms.u_screenPaintTexture.value = spTexture;
-          uniforms.u_hasScreenPaint.value = 1;
-          if (sp.sharedUniforms?.u_paintTexelSize?.value) {
-            uniforms.u_screenPaintTexelSize.value.copy(sp.sharedUniforms.u_paintTexelSize.value);
-          }
-        } else {
-          uniforms.u_hasScreenPaint.value = 0;
-        }
-
-        // Map container bounding box into screen UV space
-        const rect = this.container.getBoundingClientRect();
-        const winW = window.innerWidth || 1;
-        const winH = window.innerHeight || 1;
-        uniforms.u_containerRect.value.set(
-          rect.left / winW,
-          (winH - rect.bottom) / winH,
-          rect.width / winW,
-          rect.height / winH
-        );
-
-        // Local pointer tracking
-        uniforms.u_localMouse.value.set(
-          this.mouse.x * 0.5 + 0.5,
-          this.mouse.y * 0.5 + 0.5
-        );
-        uniforms.u_localVelocity.value.copy(this.mouseVelocity);
-
-        // Dampen local mouse velocity smoothly
-        this.mouseVelocity.multiplyScalar(0.92);
-
-        this.renderer.render(this.postScene, this.postCamera);
-      } else {
-        this.renderer.render(this.scene, this.camera);
-      }
+      this.renderer.render(this.scene, this.camera);
 
       this.animationFrameId = requestAnimationFrame(animate);
     };
@@ -911,18 +714,6 @@ export class HeroToolsScene {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
-    }
-    if (this.postRenderTarget) {
-      this.postRenderTarget.dispose();
-      this.postRenderTarget = null;
-    }
-    if (this.postMaterial) {
-      this.postMaterial.dispose();
-      this.postMaterial = null;
-    }
-    if (this.postQuad) {
-      this.postQuad.geometry.dispose();
-      this.postQuad = null;
     }
     if (this.renderer && this.renderer.domElement) {
       const el = this.renderer.domElement;
