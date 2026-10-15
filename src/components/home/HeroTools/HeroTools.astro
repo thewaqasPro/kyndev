@@ -21,39 +21,46 @@ const {
       <span class="pulse-dot"></span>
       <span>3D Marketing Tools Prototype</span>
       <span>•</span>
-      <a href="/hub" data-link-type="internal" style="text-decoration: underline; font-weight: 600;">Component Hub</a>
+      <a href="/hub" data-link-type="internal">Component Hub</a>
       <span>•</span>
       <a href="/" data-link-type="internal">View Original Balloons Hero →</a>
     </div>
   )}
 
-  <div id="hero-tools-header">
-    <span id="hero-tools-tag">{tag}</span>
-    <h1 id="hero-tools-title">
-      We engineer high-converting campaigns across <span class="accent">Google, Meta, HubSpot & Klaviyo</span>.
-    </h1>
-  </div>
-
-  <div id="hero-tools-canvas-container" aria-label="Interactive 3D Marketing Tools Simulation"></div>
-
-  <div id="hero-tools-hud">
-    <div id="hero-tools-hud-icon">G</div>
-    <div id="hero-tools-hud-content">
-      <h3 id="hero-tools-hud-name">Google Ads</h3>
-      <span id="hero-tools-hud-sub">PPC & Search Scaling</span>
-      <span id="hero-tools-hud-hint">Click or drag any 3D tool badge to toss & inspect</span>
+  <!-- Bounded Deck Stage Container: All elements & 3D badges stay strictly inside -->
+  <div id="hero-tools-deck">
+    <!-- Header with tag and title -->
+    <div id="hero-tools-header">
+      <span id="hero-tools-tag">{tag}</span>
+      <h1 id="hero-tools-title">
+        We engineer high-converting campaigns across <span class="accent">Google, Meta, HubSpot & Klaviyo</span>.
+      </h1>
     </div>
-  </div>
 
-  <div id="hero-tools-controls">
-    <button id="hero-tools-impulse-btn" class="hero-tools-btn" type="button">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
-      </svg>
-      Scatter Stack
-    </button>
-    <a href="/services" class="hero-tools-btn hero-tools-btn-secondary" data-link-type="internal">
-      Explore Our Services →
-    </a>
+    <!-- 3D Physics Canvas Container -->
+    <div id="hero-tools-canvas-container" aria-label="Interactive 3D Marketing Tools Simulation"></div>
+
+    <!-- HUD Card -->
+    <div id="hero-tools-hud">
+      <div id="hero-tools-hud-icon">G</div>
+      <div id="hero-tools-hud-content">
+        <h3 id="hero-tools-hud-name">Google Ads</h3>
+        <span id="hero-tools-hud-sub">PPC & Search Scaling</span>
+        <span id="hero-tools-hud-hint">Click or drag any 3D tool badge to toss & inspect</span>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div id="hero-tools-controls">
+      <button id="hero-tools-impulse-btn" class="hero-tools-btn" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+        </svg>
+        Scatter Stack
+      </button>
+      <a href="/services" class="hero-tools-btn hero-tools-btn-secondary" data-link-type="internal">
+        Explore Our Services →
+      </a>
+    </div>
   </div>
 </div>

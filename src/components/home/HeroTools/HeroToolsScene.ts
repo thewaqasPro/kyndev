@@ -541,6 +541,20 @@ export class HeroToolsScene {
     return texture;
   }
 
+  private getBounds(): { boundX: number; boundY: number; boundZ: number } {
+    const vFov = (this.camera.fov * Math.PI) / 180;
+    const visibleHeightAtZero = 2 * Math.tan(vFov / 2) * this.camera.position.z;
+    const visibleWidthAtZero = visibleHeightAtZero * this.camera.aspect;
+
+    // Strict containment inside the visible deck container
+    // Inset safely by 14% so all badges bounce off interior walls and never touch container edge
+    const boundX = (visibleWidthAtZero * 0.5) * 0.86;
+    const boundY = (visibleHeightAtZero * 0.5) * 0.82;
+    const boundZ = 2.5;
+
+    return { boundX, boundY, boundZ };
+  }
+
   private createTools(): void {
     const tools = this.getToolConfigs();
     const count = tools.length * 2; // 16 interactive 3D tool badges
@@ -581,12 +595,15 @@ export class HeroToolsScene {
       mesh.castShadow = true;
       mesh.receiveShadow = true;
 
-      // Position in viewport spread
-      const spreadX = 14;
-      const spreadY = 8;
-      const x = (Math.random() - 0.5) * spreadX;
-      const y = (Math.random() - 0.5) * spreadY;
-      const z = (Math.random() - 0.5) * 4;
+      // Position within safe inner deck bounds
+      const { boundX, boundY } = this.getBounds();
+      const maxR = tool.radius + tool.thickness * 0.5;
+      const limitX = Math.max(boundX - maxR, 0.5) * 0.85;
+      const limitY = Math.max(boundY - maxR, 0.5) * 0.75;
+
+      const x = (Math.random() - 0.5) * 2 * limitX;
+      const y = (Math.random() - 0.5) * 2 * limitY;
+      const z = (Math.random() - 0.5) * 2.0;
 
       mesh.position.set(x, y, z);
       mesh.rotation.set(
@@ -634,8 +651,17 @@ export class HeroToolsScene {
 
     if (this.draggedBody) {
       if (this.raycaster.ray.intersectPlane(this.plane, this.intersectionPoint)) {
+        const { boundX, boundY } = this.getBounds();
+        const maxR = this.draggedBody.radius + this.draggedBody.thickness * 0.5;
+        const limitX = Math.max(boundX - maxR, 0.5);
+        const limitY = Math.max(boundY - maxR, 0.5);
+
+        const targetX = Math.max(-limitX, Math.min(limitX, this.intersectionPoint.x));
+        const targetY = Math.max(-limitY, Math.min(limitY, this.intersectionPoint.y));
+        const clampedTarget = new THREE.Vector3(targetX, targetY, this.draggedBody.position.z);
+
         this.draggedBody.velocity.copy(
-          this.intersectionPoint.clone().sub(this.draggedBody.position).multiplyScalar(15),
+          clampedTarget.sub(this.draggedBody.position).multiplyScalar(15),
         );
       }
     }
@@ -715,12 +741,13 @@ export class HeroToolsScene {
   };
 
   private updatePhysics(dt: number): void {
-    const boundX = (this.camera.aspect * 18 * Math.tan((40 * Math.PI) / 360)) * 0.95;
-    const boundY = (18 * Math.tan((40 * Math.PI) / 360)) * 0.95;
-    const boundZ = 3.5;
+    const { boundX, boundY, boundZ } = this.getBounds();
 
     for (let i = 0; i < this.bodies.length; i++) {
       const b = this.bodies[i];
+      const maxR = b.radius + (b.tool?.thickness || 0.35) * 0.5;
+      const limitX = Math.max(boundX - maxR, 0.5);
+      const limitY = Math.max(boundY - maxR, 0.5);
 
       if (!b.isDragging) {
         // Subtle drift toward gentle floating orbit
@@ -738,29 +765,29 @@ export class HeroToolsScene {
         b.rotation.y += b.angularVelocity.y * dt;
         b.rotation.z += b.angularVelocity.z * dt;
 
-        // Wall collisions (Elastic Bounce)
-        if (b.position.x > boundX - b.radius) {
-          b.position.x = boundX - b.radius;
-          b.velocity.x *= -0.85;
-        } else if (b.position.x < -boundX + b.radius) {
-          b.position.x = -boundX + b.radius;
-          b.velocity.x *= -0.85;
+        // Wall collisions (Elastic Bounce strictly within Deck Container walls)
+        if (b.position.x > limitX) {
+          b.position.x = limitX;
+          b.velocity.x = -Math.abs(b.velocity.x) * 0.85;
+        } else if (b.position.x < -limitX) {
+          b.position.x = -limitX;
+          b.velocity.x = Math.abs(b.velocity.x) * 0.85;
         }
 
-        if (b.position.y > boundY - b.radius) {
-          b.position.y = boundY - b.radius;
-          b.velocity.y *= -0.85;
-        } else if (b.position.y < -boundY + b.radius) {
-          b.position.y = -boundY + b.radius;
-          b.velocity.y *= -0.85;
+        if (b.position.y > limitY) {
+          b.position.y = limitY;
+          b.velocity.y = -Math.abs(b.velocity.y) * 0.85;
+        } else if (b.position.y < -limitY) {
+          b.position.y = -limitY;
+          b.velocity.y = Math.abs(b.velocity.y) * 0.85;
         }
 
         if (b.position.z > boundZ) {
           b.position.z = boundZ;
-          b.velocity.z *= -0.8;
+          b.velocity.z = -Math.abs(b.velocity.z) * 0.8;
         } else if (b.position.z < -boundZ) {
           b.position.z = -boundZ;
-          b.velocity.z *= -0.8;
+          b.velocity.z = Math.abs(b.velocity.z) * 0.8;
         }
       }
 
