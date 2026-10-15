@@ -1,5 +1,6 @@
 // src/data/projects/index.ts
 import type { ProjectData } from './types';
+import { aguy_contracting } from './aguy_contracting';
 import { oryzo_ai } from './oryzo_ai';
 import { atlas_motion } from './atlas_motion';
 import { devin_ai } from './devin_ai';
@@ -21,6 +22,7 @@ import { the_turn_of_the_screw } from './the_turn_of_the_screw';
 import { maxmara_bearings_gifts } from './maxmara_bearings_gifts';
 
 export * from './types';
+export { aguy_contracting } from './aguy_contracting';
 export { oryzo_ai } from './oryzo_ai';
 export { atlas_motion } from './atlas_motion';
 export { devin_ai } from './devin_ai';
@@ -42,6 +44,7 @@ export { the_turn_of_the_screw } from './the_turn_of_the_screw';
 export { maxmara_bearings_gifts } from './maxmara_bearings_gifts';
 
 export const projectsData: Record<string, ProjectData> = {
+  aguy_contracting: aguy_contracting,
   oryzo_ai: oryzo_ai,
   atlas_motion: atlas_motion,
   devin_ai: devin_ai,
