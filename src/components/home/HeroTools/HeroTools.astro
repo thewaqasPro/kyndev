@@ -94,3 +94,18 @@ const {
     </div>
   </div>
 </div>
+
+<script>
+  import { heroToolsSection } from "../../../scripts/runtime/sections/HeroToolsSection.js";
+  if (typeof window !== "undefined") {
+    const init = () => {
+      heroToolsSection.preInit();
+      heroToolsSection.init();
+    };
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  }
+</script>

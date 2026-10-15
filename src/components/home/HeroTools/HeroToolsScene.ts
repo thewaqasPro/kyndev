@@ -31,7 +31,7 @@ export class HeroToolsScene {
   private scene: THREE.Scene;
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
-  private bodies: PhysicsBody[] = [];
+  public bodies: PhysicsBody[] = [];
   private animationFrameId: number | null = null;
   private raycaster = new THREE.Raycaster();
   private mouse = new THREE.Vector2(-999, -999);
@@ -72,7 +72,7 @@ export class HeroToolsScene {
   }
 
   private setupLighting(): void {
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
     this.scene.add(ambientLight);
 
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
@@ -102,14 +102,13 @@ export class HeroToolsScene {
         accentColor: '#FBBC04',
         metalness: 0.4,
         roughness: 0.25,
-        radius: 1.55,
-        thickness: 0.38,
+        radius: 1.28,
+        thickness: 0.32,
         drawIcon: (ctx, size) => {
           const c = size / 2;
           const r = size * 0.36;
           ctx.save();
           ctx.translate(c, c);
-
           ctx.lineWidth = r * 0.42;
           ctx.lineCap = 'butt';
 
@@ -152,8 +151,8 @@ export class HeroToolsScene {
         accentColor: '#0064E0',
         metalness: 0.5,
         roughness: 0.2,
-        radius: 1.6,
-        thickness: 0.4,
+        radius: 1.30,
+        thickness: 0.34,
         drawIcon: (ctx, size) => {
           const c = size / 2;
           const r = size * 0.34;
@@ -189,8 +188,8 @@ export class HeroToolsScene {
         accentColor: '#FF5C35',
         metalness: 0.35,
         roughness: 0.3,
-        radius: 1.5,
-        thickness: 0.35,
+        radius: 1.26,
+        thickness: 0.30,
         drawIcon: (ctx, size) => {
           const c = size / 2;
           const r = size * 0.32;
@@ -246,8 +245,8 @@ export class HeroToolsScene {
         accentColor: '#1A382B',
         metalness: 0.4,
         roughness: 0.25,
-        radius: 1.45,
-        thickness: 0.35,
+        radius: 1.25,
+        thickness: 0.30,
         drawIcon: (ctx, size) => {
           const c = size / 2;
           const w = size * 0.65;
@@ -279,8 +278,8 @@ export class HeroToolsScene {
         accentColor: '#5E8E3E',
         metalness: 0.45,
         roughness: 0.22,
-        radius: 1.5,
-        thickness: 0.36,
+        radius: 1.28,
+        thickness: 0.32,
         drawIcon: (ctx, size) => {
           const c = size / 2;
           const r = size * 0.38;
@@ -303,6 +302,252 @@ export class HeroToolsScene {
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText('S', -r * 0.05, r * 0.28);
+
+          ctx.restore();
+        },
+      },
+      {
+        id: 'tiktok',
+        name: 'TikTok Ads',
+        subtitle: 'Viral UGC & Social Commerce',
+        primaryColor: '#00F2FE',
+        accentColor: '#FE2C55',
+        metalness: 0.5,
+        roughness: 0.2,
+        radius: 1.26,
+        thickness: 0.30,
+        drawIcon: (ctx, size) => {
+          const c = size / 2;
+          const r = size * 0.34;
+          ctx.save();
+          ctx.translate(c, c);
+
+          const drawNote = (color: string, offsetX: number, offsetY: number) => {
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(-r * 0.25, r * 0.3, r * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillRect(-r * 0.05, -r * 0.7, r * 0.2, r * 1.0);
+
+            ctx.beginPath();
+            ctx.arc(r * 0.35, -r * 0.5, r * 0.45, (Math.PI * 3) / 2, Math.PI * 2);
+            ctx.lineWidth = r * 0.22;
+            ctx.strokeStyle = color;
+            ctx.stroke();
+            ctx.restore();
+          };
+
+          ctx.globalCompositeOperation = 'screen';
+          drawNote('#00F2FE', -r * 0.08, -r * 0.04);
+          drawNote('#FE2C55', r * 0.08, r * 0.04);
+          ctx.globalCompositeOperation = 'source-over';
+
+          ctx.restore();
+        },
+      },
+      {
+        id: 'stripe',
+        name: 'Stripe',
+        subtitle: 'Global Payments & Billing',
+        primaryColor: '#635BFF',
+        accentColor: '#00D4FF',
+        metalness: 0.45,
+        roughness: 0.22,
+        radius: 1.25,
+        thickness: 0.30,
+        drawIcon: (ctx, size) => {
+          const c = size / 2;
+          const r = size * 0.38;
+          ctx.save();
+          ctx.translate(c, c);
+
+          ctx.fillStyle = '#635BFF';
+          ctx.font = `italic 900 ${Math.round(r * 1.7)}px Space Grotesk, sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('S', 0, 0);
+
+          ctx.restore();
+        },
+      },
+      {
+        id: 'ga4',
+        name: 'Google Analytics',
+        subtitle: 'GA4 Attribution & Tracking',
+        primaryColor: '#F9AB00',
+        accentColor: '#E37400',
+        metalness: 0.4,
+        roughness: 0.25,
+        radius: 1.24,
+        thickness: 0.30,
+        drawIcon: (ctx, size) => {
+          const c = size / 2;
+          const r = size * 0.34;
+          ctx.save();
+          ctx.translate(c, c);
+
+          ctx.fillStyle = '#F9AB00';
+          ctx.beginPath();
+          ctx.roundRect(-r * 0.8, r * 0.1, r * 0.42, r * 0.7, [r * 0.2]);
+          ctx.fill();
+
+          ctx.fillStyle = '#E37400';
+          ctx.beginPath();
+          ctx.roundRect(-r * 0.2, -r * 0.35, r * 0.42, r * 1.15, [r * 0.2]);
+          ctx.fill();
+
+          ctx.fillStyle = '#F9AB00';
+          ctx.beginPath();
+          ctx.roundRect(r * 0.4, -r * 0.8, r * 0.42, r * 1.6, [r * 0.2]);
+          ctx.fill();
+
+          ctx.restore();
+        },
+      },
+      {
+        id: 'figma',
+        name: 'Figma',
+        subtitle: 'Creative Systems & UI',
+        primaryColor: '#A259FF',
+        accentColor: '#F24E1E',
+        metalness: 0.4,
+        roughness: 0.25,
+        radius: 1.25,
+        thickness: 0.30,
+        drawIcon: (ctx, size) => {
+          const c = size / 2;
+          const r = size * 0.26;
+          ctx.save();
+          ctx.translate(c, c);
+
+          const w = r * 0.9;
+          // Top Left: Orange
+          ctx.fillStyle = '#F24E1E';
+          ctx.beginPath();
+          ctx.roundRect(-w, -w * 1.5, w, w, [w / 2, 0, 0, w / 2]);
+          ctx.fill();
+
+          // Top Right: Pink
+          ctx.fillStyle = '#FF7262';
+          ctx.beginPath();
+          ctx.roundRect(0, -w * 1.5, w, w, [0, w / 2, w / 2, 0]);
+          ctx.fill();
+
+          // Middle Left: Purple
+          ctx.fillStyle = '#A259FF';
+          ctx.beginPath();
+          ctx.roundRect(-w, -w * 0.5, w, w, [w / 2, 0, 0, w / 2]);
+          ctx.fill();
+
+          // Middle Right: Blue circle
+          ctx.fillStyle = '#1ABCFE';
+          ctx.beginPath();
+          ctx.arc(w / 2, 0, w / 2, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Bottom Left: Green teardrop
+          ctx.fillStyle = '#0ACF83';
+          ctx.beginPath();
+          ctx.roundRect(-w, w * 0.5, w, w, [w / 2, 0, w / 2, w / 2]);
+          ctx.fill();
+
+          ctx.restore();
+        },
+      },
+      {
+        id: 'linkedin',
+        name: 'LinkedIn Ads',
+        subtitle: 'B2B Demand Generation',
+        primaryColor: '#0A66C2',
+        accentColor: '#004182',
+        metalness: 0.45,
+        roughness: 0.22,
+        radius: 1.25,
+        thickness: 0.30,
+        drawIcon: (ctx, size) => {
+          const c = size / 2;
+          const r = size * 0.35;
+          ctx.save();
+          ctx.translate(c, c);
+
+          ctx.fillStyle = '#0A66C2';
+          ctx.beginPath();
+          ctx.roundRect(-r * 0.9, -r * 0.9, r * 1.8, r * 1.8, [r * 0.3]);
+          ctx.fill();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.font = `bold ${Math.round(r * 1.15)}px Space Grotesk, sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('in', 0, 0);
+
+          ctx.restore();
+        },
+      },
+      {
+        id: 'pinterest',
+        name: 'Pinterest',
+        subtitle: 'Visual Shopping Ads',
+        primaryColor: '#E60023',
+        accentColor: '#AD081B',
+        metalness: 0.45,
+        roughness: 0.22,
+        radius: 1.24,
+        thickness: 0.30,
+        drawIcon: (ctx, size) => {
+          const c = size / 2;
+          const r = size * 0.36;
+          ctx.save();
+          ctx.translate(c, c);
+
+          ctx.fillStyle = '#E60023';
+          ctx.beginPath();
+          ctx.arc(0, 0, r * 0.95, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.font = `italic bold ${Math.round(r * 1.25)}px Space Grotesk, sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('P', 0, -r * 0.05);
+
+          ctx.restore();
+        },
+      },
+      {
+        id: 'posthog',
+        name: 'PostHog',
+        subtitle: 'Funnel & Product Analytics',
+        primaryColor: '#F54E00',
+        accentColor: '#9B2C00',
+        metalness: 0.4,
+        roughness: 0.25,
+        radius: 1.24,
+        thickness: 0.30,
+        drawIcon: (ctx, size) => {
+          const c = size / 2;
+          const r = size * 0.35;
+          ctx.save();
+          ctx.translate(c, c);
+
+          ctx.fillStyle = '#F54E00';
+          ctx.beginPath();
+          ctx.moveTo(-r * 0.85, -r * 0.6);
+          ctx.lineTo(r * 0.85, -r * 0.6);
+          ctx.lineTo(r * 0.4, r * 0.1);
+          ctx.lineTo(r * 0.4, r * 0.7);
+          ctx.lineTo(-r * 0.4, r * 0.7);
+          ctx.lineTo(-r * 0.4, r * 0.1);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(0, 0, r * 0.22, 0, Math.PI * 2);
+          ctx.fill();
 
           ctx.restore();
         },
@@ -404,7 +649,7 @@ export class HeroToolsScene {
   private createTools(): void {
     const configs = this.getToolConfigs();
 
-    configs.forEach((tool) => {
+    configs.forEach((tool, index) => {
       const geom = new THREE.CylinderGeometry(
         tool.radius,
         tool.radius,
@@ -442,11 +687,23 @@ export class HeroToolsScene {
 
       const { boundX, boundY } = this.getBounds();
       const maxR = tool.radius + tool.thickness * 0.5;
-      const limitX = Math.max(boundX - maxR, 0.5) * 0.85;
-      const limitY = Math.max(boundY - maxR, 0.5) * 0.75;
+      const limitX = Math.max(boundX - maxR, 0.5) * 0.88;
+      const limitY = Math.max(boundY - maxR, 0.5) * 0.82;
 
-      const x = (Math.random() - 0.5) * 2 * limitX;
-      const y = (Math.random() - 0.5) * 2 * limitY;
+      // Distribute evenly across grid cells to prevent initial overlap
+      const total = configs.length;
+      const cols = 4;
+      const rows = Math.ceil(total / cols);
+      const col = index % cols;
+      const row = Math.floor(index / cols);
+
+      const cellX = ((col + 0.5) / cols - 0.5) * 2 * limitX;
+      const cellY = ((row + 0.5) / rows - 0.5) * 2 * limitY;
+      const jitterX = (Math.random() - 0.5) * (limitX / cols) * 0.6;
+      const jitterY = (Math.random() - 0.5) * (limitY / rows) * 0.6;
+
+      const x = Math.max(-limitX, Math.min(limitX, cellX + jitterX));
+      const y = Math.max(-limitY, Math.min(limitY, cellY + jitterY));
       const z = (Math.random() - 0.5) * 1.5;
 
       mesh.position.set(x, y, z);

@@ -5,6 +5,7 @@
  */
 import { HeroToolsScene } from "../../../components/home/HeroTools/HeroToolsScene.ts";
 import audios from "../audio/Audios.js";
+import { sectionRegistry } from "./SectionRegistry.js";
 
 class HeroToolsSection {
   domContainer = null;
@@ -151,4 +152,5 @@ class HeroToolsSection {
 
 export const heroToolsSection = new HeroToolsSection();
 globalThis.heroToolsSection = heroToolsSection;
+sectionRegistry.register("#home-hero-tools", () => heroToolsSection);
 export default heroToolsSection;
