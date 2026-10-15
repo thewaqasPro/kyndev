@@ -63,8 +63,6 @@ class TransitionOverlay {
 
   update(e) {
     if (this.activeRatio > 0) {
-
-
       if (!this.ctx) this.init();
       if (!this.ctx) return;
 
@@ -92,9 +90,9 @@ class TransitionOverlay {
         l == 0)
       ) {
         ((u.fillStyle = "#333"),
-          u.fillRect(-2.5, -0.5, 5, 1),
+          u.fillRect(-2.7, -0.5, 5.4, 1),
           (u.fillStyle = "#fff"),
-          u.fillRect(-2.5, -0.5, 5 * a, 1));
+          u.fillRect(-2.7, -0.5, 5.4 * a, 1));
       } else {
         ((u.fillStyle = "#fff"),
           this.needsShowText &&
@@ -150,24 +148,34 @@ class TransitionOverlay {
           }
           (u.closePath(), u.fill(), u.restore());
         } else {
-          (u.translate(-l, 1.5 * l),
-            u.save(),
-            u.translate(0.5, -0.5),
-            u.rotate(l * Math.PI * 0.5),
-            (u.globalCompositeOperation = "xor"),
-            u.fillRect(-3, 0, 3, 1),
-            (u.globalCompositeOperation = "source-over"),
-            (u.globalAlpha = 1 - f),
-            u.fillRect(-3, 0, 3, 1),
-            u.restore(),
-            u.save(),
-            u.translate(0.5, -0.5),
-            (u.globalCompositeOperation = "xor"),
-            u.fillRect(0, 0, 2, 1),
-            (u.globalCompositeOperation = "source-over"),
-            (u.globalAlpha = 1 - f),
-            u.fillRect(0, 0, 2, 1),
-            u.restore());
+          // Kinetic origami transformation: morph from horizontal bar to brand "K"
+          const jX = -0.6;
+          const jY = 0;
+          u.translate(-0.35 * l, 0);
+
+          const drawSegment = (sx, sy, sw, sh, angle) => {
+            u.save();
+            u.translate(jX, jY);
+            if (angle !== 0) u.rotate(angle);
+            u.globalCompositeOperation = "xor";
+            u.fillRect(sx, sy, sw, sh);
+            u.globalCompositeOperation = "source-over";
+            u.globalAlpha = 1 - f;
+            u.fillRect(sx, sy, sw, sh);
+            u.restore();
+          };
+
+          // 1. Upper Vertical Stem (rotates 90 deg into upper spine)
+          drawSegment(-2.1, -0.5, 2.1, 1, l * Math.PI * 0.5);
+
+          // 2. Lower Vertical Stem (rotates -90 deg into lower spine)
+          drawSegment(-2.1, -0.5, 2.1, 1, -l * Math.PI * 0.5);
+
+          // 3. Upper Diagonal Arm (rotates upward by 42 deg)
+          drawSegment(0, -0.5, 3.2, 1, -l * (Math.PI * 0.233));
+
+          // 4. Lower Diagonal Arm (rotates downward by 42 deg)
+          drawSegment(0, -0.5, 3.2, 1, l * (Math.PI * 0.233));
         }
       }
       u.restore();
@@ -175,7 +183,6 @@ class TransitionOverlay {
         this.canvas.style.display = "block";
       }
     } else {
-
       if (this.canvas && this.canvas.style.display !== "none") {
         this.canvas.style.display = "none";
         if (this.ctx) {
