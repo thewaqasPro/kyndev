@@ -335,57 +335,55 @@ class ProjectDetailsData {
   domLinkSideListItems;
   itemDataList = [];
   constructor(e, t) {
-    ((this.id = e),
-      (this.title = t.querySelector("#project-details-title").innerHTML),
-      (this.desc = t.querySelector("#project-details-desc").innerHTML),
-      (this.ctaTitle = t.querySelector(
-        "#project-details-launch-cta-text",
-      ).textContent),
-      (this.ctaUrl = t.querySelector("#project-details-launch-cta").href));
-    let r = { ...t.querySelector("#project-details").dataset };
-    ((this.colorBg = r.colorBg),
-      (this.colorBtnBg = r.colorBtnBg),
-      (this.colorBtnBgHover = r.colorBtnBgHover),
-      (this.colorBtnText = r.colorBtnText),
-      (this.colorBtnTextHover = r.colorBtnTextHover),
-      (this.colorHighlight = r.colorHighlight),
-      (this.colorIconBg = r.colorIconBg),
-      (this.colorIconColor = r.colorIconColor),
-      (this.colorText = r.colorText),
-      (this.shadow = parseFloat(r.shadow)),
-      (this.domServiceSideListItems = Array.from(
-        t.querySelectorAll("#project-details-side-list-services > *"),
-      )).forEach((l) => {
-        l.remove();
-      }),
-      (this.domLinkSideListItems = Array.from(
-        t.querySelectorAll("#project-details-side-list-links > *"),
-      )).forEach((l) => {
-        l.remove();
-      }));
+    this.id = e;
+    this.title = t.querySelector("#project-details-title")?.innerHTML || "";
+    this.desc = t.querySelector("#project-details-desc")?.innerHTML || "";
+    this.ctaTitle = t.querySelector("#project-details-launch-cta-text")?.textContent || "";
+    this.ctaUrl = t.querySelector("#project-details-launch-cta")?.href || "";
+    let r = { ...(t.querySelector("#project-details")?.dataset || {}) };
+    this.colorBg = r.colorBg || "#000";
+    this.colorBtnBg = r.colorBtnBg || "#000";
+    this.colorBtnBgHover = r.colorBtnBgHover || "#000";
+    this.colorBtnText = r.colorBtnText || "#000";
+    this.colorBtnTextHover = r.colorBtnTextHover || "#000";
+    this.colorHighlight = r.colorHighlight || "#fff";
+    this.colorIconBg = r.colorIconBg || "#000";
+    this.colorIconColor = r.colorIconColor || "#000";
+    this.colorText = r.colorText || "#fff";
+    this.shadow = parseFloat(r.shadow || "0") || 0;
+    this.domServiceSideListItems = Array.from(
+      t.querySelectorAll("#project-details-side-list-services > *"),
+    );
+    this.domServiceSideListItems.forEach((l) => {
+      l.remove();
+    });
+    this.domLinkSideListItems = Array.from(
+      t.querySelectorAll("#project-details-side-list-links > *"),
+    );
+    this.domLinkSideListItems.forEach((l) => {
+      l.remove();
+    });
     let n = Array.from(t.querySelectorAll(".project-details-item"));
     for (let l = 0; l < n.length; l++) {
       let c = n[l],
         u = { ...c.dataset };
-      (c.classList.contains("is-text")
-        ? (u.content = c.querySelector(
-            ".project-details-item-text",
-          ).textContent)
-        : ((u.width = parseFloat(u.width)),
-          (u.height = parseFloat(u.height)),
-          (u.parallax = parseFloat(u.parallax || 1)),
-          (u.fullscreen = u.fullscreen !== void 0)),
-        this.itemDataList.push(u),
-        c.remove());
+      if (c.classList.contains("is-text")) {
+        u.content = c.querySelector(".project-details-item-text")?.textContent || "";
+      } else {
+        u.width = parseFloat(u.width) || 1200;
+        u.height = parseFloat(u.height) || 800;
+        u.parallax = parseFloat(u.parallax || "1") || 1;
+        u.fullscreen = u.fullscreen !== void 0;
+      }
+      this.itemDataList.push(u);
+      c.remove();
     }
-    let a = { ...t.querySelector("#project-details-preview").dataset };
-    ((this.nextColorBg = a.nextColorBg),
-      (this.nextColorText = a.nextColorText),
-      (this.nextId = a.nextId),
-      (this.nextShadow = parseFloat(a.nextShadow)),
-      (this.nextTitle = t.querySelector(
-        "#project-details-preview-title",
-      ).textContent));
+    let a = { ...(t.querySelector("#project-details-preview")?.dataset || {}) };
+    this.nextColorBg = a.nextColorBg || "#000";
+    this.nextColorText = a.nextColorText || "#fff";
+    this.nextId = a.nextId || "";
+    this.nextShadow = parseFloat(a.nextShadow || "0") || 0;
+    this.nextTitle = t.querySelector("#project-details-preview-title")?.textContent || "";
   }
 }
 class UfxTextMesh extends UfxMesh {
@@ -962,66 +960,85 @@ class ProjectDetailsSection {
   }
   _disposeLayout() {
     let e = this.projectDetailsData;
-    (projectDetailsItems.deactivateAll(),
-      e ||
-        window.addEventListener("wheel", this._onWindowWheel.bind(this), {
-          once: !0,
-        }),
-      e &&
-        (e.domServiceSideListItems.forEach((t) => {
-          t.remove();
-        }),
-        e.domLinkSideListItems.forEach((t) => {
-          t.remove();
-        })));
+    projectDetailsItems.deactivateAll();
+    if (!e) {
+      window.addEventListener("wheel", this._onWindowWheel.bind(this), {
+        once: !0,
+      });
+    } else {
+      e.domServiceSideListItems?.forEach((t) => {
+        t.remove();
+      });
+      e.domLinkSideListItems?.forEach((t) => {
+        t.remove();
+      });
+    }
   }
   _initLayout(e) {
     let t = (this.projectDetailsData = this.projectDetailsDatas[e]);
-    (routeManager.preFetch("/projects/" + t.nextId),
-      (this.domTitle.innerHTML = t.title),
-      (this.domDesc.innerHTML = t.desc),
-      (this.domCtaText.textContent = t.ctaTitle),
-      (this.domCtaMobileText.textContent = t.ctaTitle),
-      routeManager.parseUrl(t.ctaUrl)
-        ? ((this.domCta.href = t.ctaUrl),
-          (this.domCtaMobile.href = t.ctaUrl),
-          this.domContainer.classList.add("has-cta"))
-        : this.domContainer.classList.remove("has-cta"),
-      (this.domSideListService.style.visibility =
-        t.domServiceSideListItems.length > 1 ? "visible" : "hidden"),
-      (this.domSideListLinks.style.visibility =
-        t.domLinkSideListItems.length > 1 ? "visible" : "hidden"),
-      t.domServiceSideListItems.forEach((r) => {
+    if (!t) return;
+    if (t.nextId) {
+      routeManager.preFetch("/projects/" + t.nextId);
+    }
+    if (this.domTitle) this.domTitle.innerHTML = t.title || "";
+    if (this.domDesc) this.domDesc.innerHTML = t.desc || "";
+    if (this.domCtaText) this.domCtaText.textContent = t.ctaTitle || "";
+    if (this.domCtaMobileText) this.domCtaMobileText.textContent = t.ctaTitle || "";
+    if (this.domCta) {
+      if (routeManager.parseUrl(t.ctaUrl)) {
+        this.domCta.href = t.ctaUrl;
+        if (this.domCtaMobile) this.domCtaMobile.href = t.ctaUrl;
+        this.domContainer?.classList.add("has-cta");
+      } else {
+        this.domContainer?.classList.remove("has-cta");
+      }
+    }
+    if (this.domSideListService) {
+      this.domSideListService.style.visibility =
+        t.domServiceSideListItems && t.domServiceSideListItems.length > 1 ? "visible" : "hidden";
+      t.domServiceSideListItems?.forEach((r) => {
         this.domSideListService.appendChild(r);
-      }),
-      t.domLinkSideListItems.forEach((r) => {
+      });
+    }
+    if (this.domSideListLinks) {
+      this.domSideListLinks.style.visibility =
+        t.domLinkSideListItems && t.domLinkSideListItems.length > 1 ? "visible" : "hidden";
+      t.domLinkSideListItems?.forEach((r) => {
         this.domSideListLinks.appendChild(r);
-      }),
-      this.sharedUniforms.u_highlightColor.value.setStyle(t.colorHighlight),
-      this.sharedUniforms.u_textColor.value.setStyle(t.colorText),
-      this.sharedUniforms.u_bgColor.value.setStyle(t.colorBg),
+      });
+    }
+    if (t.colorHighlight) this.sharedUniforms.u_highlightColor.value.setStyle(t.colorHighlight);
+    if (t.colorText) this.sharedUniforms.u_textColor.value.setStyle(t.colorText);
+    if (t.colorBg) this.sharedUniforms.u_bgColor.value.setStyle(t.colorBg);
+    if (this.domHeaderBackBtn) {
       this.domHeaderBackBtn.addEventListener(
         "click",
         this._onBackBtnClick.bind(this),
-      ));
-    for (let r in t)
-      r.replace(/^color(.+)/g, (n, a) => {
-        ((a = a
+      );
+    }
+    for (let r in t) {
+      if (typeof t[r] === "string" && r.startsWith("color")) {
+        let a = r
+          .replace(/^color/, "")
           .replace(/([a-z\xE0-\xFF])([A-Z\xC0\xDF])/g, (l, c, u) => c + "-" + u)
-          .toLowerCase()),
-          properties.domRoot.style.setProperty("--project-details-" + a, t[r]));
-      });
-    (properties.domRoot.style.setProperty("--header-color", t.colorHighlight),
-      properties.domRoot.style.setProperty(
-        "--header-text-color",
-        t.colorBtnText,
-      ),
-      (header.domContainer.style.color = t.colorHighlight),
-      t.itemDataList.forEach((r) => {
+          .toLowerCase();
+        properties.domRoot.style.setProperty("--project-details-" + a, t[r]);
+      }
+    }
+    if (t.colorHighlight) {
+      properties.domRoot.style.setProperty("--header-color", t.colorHighlight);
+      if (header?.domContainer) header.domContainer.style.color = t.colorHighlight;
+    }
+    if (t.colorBtnText) {
+      properties.domRoot.style.setProperty("--header-text-color", t.colorBtnText);
+    }
+    if (this.domDetailsItemsMoveContainer) {
+      t.itemDataList?.forEach((r) => {
         let n = projectDetailsItems.useItem(r);
-        (n.activate(r),
-          this.domDetailsItemsMoveContainer.appendChild(n.domWrapper));
-      }));
+        n.activate(r);
+        this.domDetailsItemsMoveContainer.appendChild(n.domWrapper);
+      });
+    }
   }
   _onBackBtnClick() {
     this.scrollPane.isActive &&
@@ -1169,62 +1186,71 @@ class ProjectDetailsSection {
       this.domMeta.classList.toggle("is-active", v > 0.5),
       (this.domTitle.style.transform = `translate3d(${this.scrollPane.x / 2}px, ${math.fit(projectPage.contentShowRatio, 0, 0.65, this.titleCenterOffsetY, 0, ease.expoInOut)}px, 0)`),
       (this.domTitle.style.opacity = v));
-    let T;
-    if (
-      ((T = math.fit(
-        projectPage.contentShowRatio,
-        0.4,
-        0.85,
-        0,
-        1,
-        ease.expoOut,
-      )),
-      (this.domDesc.style.transform = `translate3d(${this.scrollPane.x / 3}px, ${(1 - T) * 30}px, 0)`),
-      (this.domDesc.style.opacity = Math.min(v, T)),
-      (T = math.fit(
-        projectPage.contentShowRatio,
-        0.45,
-        0.9,
-        0,
-        1,
-        ease.expoOut,
-      )),
-      (this.domCta.style.transform = `translate3d(0, ${(1 - T) * 30}px, 0)`),
-      (this.domCta.style.opacity = Math.min(v, T)),
-      (T = math.fit(
-        projectPage.contentShowRatio,
-        0.5,
-        0.95,
-        0,
-        1,
-        ease.expoOut,
-      )),
-      (this.domSideListService.style.transform = `translate3d(${this.scrollPane.x / 5}px, ${(1 - T) * 30}px, 0)`),
-      (this.domSideListService.style.opacity = Math.min(v, T)),
-      (T = math.fit(projectPage.contentShowRatio, 0.55, 1, 0, 1, ease.expoOut)),
-      (this.domSideListLinks.style.transform = `translate3d(${this.scrollPane.x / 4}px, ${(1 - T) * 30}px, 0)`),
-      (this.domSideListLinks.style.opacity = Math.min(v, T)),
-      (this.domHeaderInfo._ratio = math.saturate(
+    let T = math.fit(
+      projectPage.contentShowRatio,
+      0.4,
+      0.85,
+      0,
+      1,
+      ease.expoOut,
+    );
+    if (this.domDesc) {
+      this.domDesc.style.transform = `translate3d(${this.scrollPane.x / 3}px, ${(1 - T) * 30}px, 0)`;
+      this.domDesc.style.opacity = Math.min(v, T);
+    }
+    T = math.fit(
+      projectPage.contentShowRatio,
+      0.45,
+      0.9,
+      0,
+      1,
+      ease.expoOut,
+    );
+    if (this.domCta) {
+      this.domCta.style.transform = `translate3d(0, ${(1 - T) * 30}px, 0)`;
+      this.domCta.style.opacity = Math.min(v, T);
+    }
+    T = math.fit(
+      projectPage.contentShowRatio,
+      0.5,
+      0.95,
+      0,
+      1,
+      ease.expoOut,
+    );
+    if (this.domSideListService) {
+      this.domSideListService.style.transform = `translate3d(${this.scrollPane.x / 5}px, ${(1 - T) * 30}px, 0)`;
+      this.domSideListService.style.opacity = Math.min(v, T);
+    }
+    T = math.fit(projectPage.contentShowRatio, 0.55, 1, 0, 1, ease.expoOut);
+    if (this.domSideListLinks) {
+      this.domSideListLinks.style.transform = `translate3d(${this.scrollPane.x / 4}px, ${(1 - T) * 30}px, 0)`;
+      this.domSideListLinks.style.opacity = Math.min(v, T);
+    }
+    if (this.domHeaderInfo) {
+      this.domHeaderInfo._ratio = math.saturate(
         this.domHeaderInfo._ratio + (this.domHeaderInfo._hide ? e : -e),
-      )),
-      (this.domHeaderInfo.style.opacity =
-        T - ease.expoOut(this.domHeaderInfo._ratio)),
-      (this.sharedUniforms.u_opacity.value = g),
-      projectDetailsItems.update(e, a, l),
-      t || projectDetailsScreen.update(e),
-      this.scrollPane.isActive && pagesManager.isIdle)
-    ) {
+      );
+      this.domHeaderInfo.style.opacity =
+        T - ease.expoOut(this.domHeaderInfo._ratio);
+    }
+    this.sharedUniforms.u_opacity.value = g;
+    projectDetailsItems.update(e, a, l);
+    if (!t) projectDetailsScreen.update(e);
+
+    if (this.scrollPane.isActive && pagesManager.isIdle) {
       let M =
-          this.scrollPane.targetScrollPixel >=
-          this.scrollPane.contentSize * this.scrollPane.viewSizePixel - 1,
+        this.scrollPane.targetScrollPixel >=
+        this.scrollPane.contentSize * this.scrollPane.viewSizePixel - 1,
         S = properties.useMobileLayout
           ? input.deltaDragScrollY + input.deltaWheel
           : input.deltaDragScrollX + input.deltaWheel;
-      ((this.overScrollRatio = math.saturate(
+      this.overScrollRatio = math.saturate(
         this.overScrollRatio + e * (M && S > 0 ? 3 : S < 0 ? -5 : -0.2),
-      )),
-        this.overScrollRatio == 1 &&
-          routeManager.setPath("/projects/" + r.nextId));
+      );
+      if (this.overScrollRatio === 1) {
+        routeManager.setPath("/projects/" + r.nextId);
+      }
     }
   }
   _onWindowWheel() {

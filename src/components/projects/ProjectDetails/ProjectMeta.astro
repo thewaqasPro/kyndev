@@ -9,7 +9,7 @@ interface Props {
   links: Array<{ label: string; url: string }>;
 }
 
-const { title, descHtml, launchUrl, launchLabel = 'Launch Project', services, links } = Astro.props;
+const { title, descHtml, launchUrl, launchLabel = 'Launch Project', services = [], links = [] } = Astro.props;
 ---
 
 <div id="project-details-meta">
@@ -41,24 +41,20 @@ const { title, descHtml, launchUrl, launchLabel = 'Launch Project', services, li
   </div>
   <div id="project-details-right">
     <div id="project-details-side-list">
-      {services.length > 0 && (
-        <div id="project-details-side-list-services">
-          <h4 class="project-details-side-list-title">Services</h4>
-          {services.map((service) => (
-            <div class="project-details-side-list-item">{service}</div>
-          ))}
-        </div>
-      )}
-      {links.length > 0 && (
-        <div id="project-details-side-list-links">
-          <h4 class="project-details-side-list-title">Links</h4>
-          {links.map((link) => (
-            <a class="project-details-side-list-item" href={link.url} target="_blank">
-              {link.label}
-            </a>
-          ))}
-        </div>
-      )}
+      <div id="project-details-side-list-services">
+        <h4 class="project-details-side-list-title">Services</h4>
+        {services && services.map((service) => (
+          <div class="project-details-side-list-item">{service}</div>
+        ))}
+      </div>
+      <div id="project-details-side-list-links">
+        <h4 class="project-details-side-list-title">Links</h4>
+        {links && links.map((link) => (
+          <a class="project-details-side-list-item" href={link.url} target="_blank">
+            {link.label}
+          </a>
+        ))}
+      </div>
     </div>
     {launchUrl && (
       <a

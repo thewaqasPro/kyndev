@@ -108,11 +108,24 @@ class TransitionOverlay {
 
         if (this.showTextRatio === 1) {
           this.waitTextRatio = Math.min(1, this.waitTextRatio + e * 2.8);
+          if (this.needsHideText && !this._safetyWatchdog) {
+            this._safetyWatchdog = setTimeout(() => {
+              if (this.needsHideText) {
+                console.warn("[TransitionOverlay watchdog]: auto-completing hide");
+                taskManager.percent = 1;
+              }
+              this._safetyWatchdog = null;
+            }, 1200);
+          }
           if (
             this.waitTextRatio === 1 &&
             this.needsHideText &&
-            taskManager.percent === 1
+            taskManager.percent >= 0.99
           ) {
+            if (this._safetyWatchdog) {
+              clearTimeout(this._safetyWatchdog);
+              this._safetyWatchdog = null;
+            }
             this.hideTextRatio = Math.min(1, this.hideTextRatio + e * 1.5);
             if (this.hideTextRatio >= 1) {
               this.needsHideText = false;

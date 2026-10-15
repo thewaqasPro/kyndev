@@ -28,10 +28,16 @@ class Route {
         break;
       }
     }
-    (t ||
-      (console.error("route not found for path: " + this.path),
-      (window.location.href = window.location.origin)),
-      (this.target = t.target));
+    if (t) {
+      this.target = t.target;
+    } else {
+      console.warn("[RouteManager]: No custom page controller for path: " + this.path + ", using generic page controller fallback.");
+      const GenericPageClass = globalThis.Page || class GenericPage {};
+      const fallback = new GenericPageClass();
+      fallback.id = (this.path || "generic").replace(/[^a-zA-Z0-9_-]/g, "_");
+      fallback.useGenericTransition = true;
+      this.target = fallback;
+    }
   }
 }
 let loc = window.location,

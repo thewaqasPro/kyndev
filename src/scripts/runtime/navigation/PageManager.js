@@ -93,6 +93,22 @@ class PageManager {
         t.preInitContent(this.currRoute);
       }
       if (properties.hasInitialized) {
+        if (this._transitionSafetyTimeout) clearTimeout(this._transitionSafetyTimeout);
+        this._transitionSafetyTimeout = setTimeout(() => {
+          if (this._isHiding || !this._hasPreloaded || this._isShowing || this._needsShowLoading) {
+            console.warn("[PageManager watchdog]: Auto-completing stalled transition for", this.currRoute?.path);
+            this._isHiding = false;
+            this._hasPreloaded = true;
+            this._needsShowLoading = false;
+            this._isShowing = false;
+            transitionOverlay.needsShowText = false;
+            transitionOverlay.needsHideText = false;
+            transitionOverlay.hideTextRatio = 1;
+            transitionOverlay.contentShowRatio = 1;
+            if (transitionOverlay.canvas) transitionOverlay.canvas.style.display = "none";
+            this._showPage();
+          }
+        }, 2500);
         ((transitionOverlay.showTextRatio = 0),
           (transitionOverlay.waitTextRatio = 0),
           (transitionOverlay.hideTextRatio = 0),
@@ -201,6 +217,10 @@ class PageManager {
       e.useGenericTransition && audios.countPlay("page"));
   }
   _onShowComplete() {
+    if (this._transitionSafetyTimeout) {
+      clearTimeout(this._transitionSafetyTimeout);
+      this._transitionSafetyTimeout = null;
+    }
     transitionOverlay.contentShowRatio = 1;
     if (transitionOverlay.canvas) {
       transitionOverlay.canvas.style.display = "none";

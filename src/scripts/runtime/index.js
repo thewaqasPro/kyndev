@@ -237,13 +237,17 @@ function loop() {
   _lastLoopTime = performance.now();
   let o = performance.now(),
     e = (o - dateTime) / 1e3;
-  ((dateTime = o),
-    (e = Math.min(e, 1 / 20)),
-    _needsResize && _onResize(),
-    properties.hasStarted && (properties.startTime += e),
-    Tween.autoUpdate(e),
-    update(e),
-    (_needsResize = !1));
+  dateTime = o;
+  e = Math.min(e, 1 / 20);
+  _needsResize && _onResize();
+  properties.hasStarted && (properties.startTime += e);
+  Tween.autoUpdate(e);
+  try {
+    update(e);
+  } catch (err) {
+    console.error("[Runtime update error]", err);
+  }
+  _needsResize = !1;
 }
 
 
