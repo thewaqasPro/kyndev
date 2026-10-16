@@ -2,12 +2,17 @@
 // src/components/common/Header/Header.astro
 import './header.css';
 import HeaderMenu from './HeaderMenu.astro';
+import { headerData, type HeaderData } from '../../../data/common/header';
 
 interface Props {
   email?: string;
+  logoText?: string;
 }
 
-const { email = 'hello@kyndev.com' } = Astro.props;
+const {
+  email = headerData.email,
+  logoText = headerData.logoText,
+} = Astro.props;
 ---
 
 <header id="header">
@@ -32,7 +37,7 @@ const { email = 'hello@kyndev.com' } = Astro.props;
             letter-spacing="-0.02em"
             fill="currentColor"
           >
-            KYNDEV
+            {logoText}
           </text>
         </g>
       </svg>

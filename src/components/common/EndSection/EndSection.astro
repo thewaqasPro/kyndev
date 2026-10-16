@@ -1,5 +1,6 @@
 ---
 import './endSection.css';
+import { endSectionData, type EndSectionData } from '../../../data/common/endSection';
 
 export interface Props {
   subtitle?: string;
@@ -9,10 +10,10 @@ export interface Props {
 }
 
 const {
-  subtitle = 'Is Your Big Idea Ready to Go Wild?',
-  titleLine1 = "Let's work",
-  titleLine2 = 'together!',
-  scrollText = 'CONTINUE TO SCROLL',
+  subtitle = endSectionData.subtitle,
+  titleLine1 = endSectionData.titleLine1,
+  titleLine2 = endSectionData.titleLine2,
+  scrollText = endSectionData.scrollText,
 } = Astro.props;
 ---
 
