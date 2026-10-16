@@ -1,68 +1,37 @@
 ---
+// src/components/about/AboutCapability/AboutCapability.astro
 import './aboutCapability.css';
+import {
+  aboutCapabilityData,
+  type AboutCapabilityData,
+  type CapabilityCard,
+} from '../../../data/pages/about';
 
-interface CapabilityCard {
-  title: string;
-  letter: string;
-  items: string[];
-}
+export type { CapabilityCard };
 
-const capabilities: CapabilityCard[] = [
-  {
-    title: 'Strategy',
-    letter: 's',
-    items: [
-      'Digital Experience Strategy',
-      'Technology Strategy',
-      'Creative Direction',
-      'Discovery',
-      'Research',
-    ],
-  },
-  {
-    title: 'Creative',
-    letter: 'c',
-    items: ['Art Direction', 'UX/UI Design', 'Motion Design', 'Interactive Design', 'Illustration'],
-  },
-  {
-    title: 'Tech',
-    letter: 't',
-    items: [
-      'WebGL Development',
-      'Front End Development',
-      'Unity/Unreal',
-      'Interactive Installations',
-      'AR and VR Experiences',
-    ],
-  },
-  {
-    title: 'Production',
-    letter: 'P',
-    items: [
-      'Procedural Modeling',
-      '3D Asset Creation',
-      '3D Optimization',
-      'Animation',
-      '3D Pipeline Development',
-    ],
-  },
-];
+export interface Props extends Partial<AboutCapabilityData> {}
+
+const {
+  titleLines = aboutCapabilityData.titleLines,
+  subheaderText = aboutCapabilityData.subheaderText,
+  subheaderCards = aboutCapabilityData.subheaderCards,
+  capabilities = aboutCapabilityData.capabilities,
+} = Astro.props;
 ---
 
 <div id="about-capability" class="section">
   <div id="about-capability-title">
-    <div id="about-capability-title-line-1">AREA OF</div>
-    <div id="about-capability-title-line-2">EXPERTISE</div>
+    <div id="about-capability-title-line-1">{titleLines[0]}</div>
+    <div id="about-capability-title-line-2">{titleLines[1]}</div>
   </div>
   <div id="about-capability-subheader">
     <div id="about-capability-subheader-text">
-      Multidisciplinary expertise across strategy, creative, technology, and production.
+      {subheaderText}
     </div>
     <div id="about-capability-subheader-cards">
-      <div class="about-capability-subheader-card">s</div>
-      <div class="about-capability-subheader-card">d</div>
-      <div class="about-capability-subheader-card">t</div>
-      <div class="about-capability-subheader-card">3</div>
+      {subheaderCards.map((card) => (
+        <div class="about-capability-subheader-card">{card}</div>
+      ))}
     </div>
   </div>
   <div id="about-capability-cards-wrapper">

@@ -1,6 +1,17 @@
 ---
-// src/components/AboutWho/AboutWho.astro
+// src/components/about/AboutWho/AboutWho.astro
 import './aboutWho.css';
+import { aboutWhoData, type AboutWhoData } from '../../../data/pages/about';
+
+export interface Props extends Partial<AboutWhoData> {}
+
+const {
+  scrollPrompt = aboutWhoData.scrollPrompt,
+  tagline = aboutWhoData.tagline,
+  headlineRight = aboutWhoData.headlineRight,
+  manifesto = aboutWhoData.manifesto,
+  team = aboutWhoData.team,
+} = Astro.props;
 ---
 
 <div id="about-who" class="section">
@@ -26,15 +37,15 @@ import './aboutWho.css';
             font-weight="800"
             font-size="36"
             letter-spacing="-0.02em"
-            fill="#fff"style="letter-spacing: 8px;"
+            fill="#fff" style="letter-spacing: 8px;"
           >
-            KYNDEV
+            {tagline.studioName}
           </text>
         </svg>
-        <div id="about-who-title-main-scroll">SCROLL TO EXPLORE</div>
+        <div id="about-who-title-main-scroll">{scrollPrompt}</div>
       </div>
       <div id="about-who-title-left">
-        <div id="about-who-title-left-1">WE ARE</div>
+        <div id="about-who-title-left-1">{tagline.weAre}</div>
         <div id="about-who-title-left-2">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 191.553 38.502">
             <text
@@ -44,41 +55,42 @@ import './aboutWho.css';
               font-weight="800"
               font-size="36"
               letter-spacing="-0.02em"
-              fill="#fff"style="font-size: 44px;font-weight: 400;letter-spacing: 2px;"
+              fill="#fff" style="font-size: 44px;font-weight: 400;letter-spacing: 2px;"
             >
-              KYNDEV
+              {tagline.studioName}
             </text>
           </svg>
         </div>
-        <div id="about-who-title-left-3">A CREATIVE</div>
+        <div id="about-who-title-left-3">{tagline.creative}</div>
         <div id="about-who-title-left-4">
-          <span>PRODUCTION&nbsp;</span>
-          <span>STUDIO</span>
+          <span>{tagline.production}&nbsp;</span>
+          <span>{tagline.studioWord}</span>
         </div>
       </div>
       <div id="about-who-title-right">
-        <div class="about-who-title-right-text">CRAFTING UNIQUE</div>
-        <div class="about-who-title-right-text">DIGITAL EXPERIENCES</div>
+        {headlineRight.map((line) => (
+          <div class="about-who-title-right-text">{line}</div>
+        ))}
       </div>
     </div>
     <div id="about-who-subsection-details" class="about-who-subsection">
       <div id="about-who-desc-top">
-        <span class="is-italic">A worldwide team</span>
-        <span>of</span>
+        <span class="is-italic">{manifesto.topItalic}</span>
+        <span>{manifesto.topText[0]}</span>
         <br class="is-desktop" />
-        <span>specialists in design,</span>
+        <span>{manifesto.topText[1]}</span>
         <br class="is-desktop" />
-        <span>motion, 3D, and technology</span>
+        <span>{manifesto.topText[2]}</span>
       </div>
       <div id="about-who-desc-bottom">
-        <span>working together to</span>
+        <span>{manifesto.bottomText[0]}</span>
         <br class="is-mobile" />
         <br class="is-desktop" />
-        <span>turn ambitious ideas into</span>
+        <span>{manifesto.bottomText[1]}</span>
         <br class="is-desktop" />
-        <span>immersive digital</span>
+        <span>{manifesto.bottomText[2]}</span>
         <br class="is-mobile" />
-        <span>experiences.</span>
+        <span>{manifesto.bottomText[3]}</span>
       </div>
     </div>
     <div id="about-who-subsection-team" class="about-who-subsection">
@@ -93,7 +105,7 @@ import './aboutWho.css';
                   id="about-who-team-number-center-item"
                   class="about-who-team-number-center-item"
                 >
-                  001
+                  {team.number}
                 </div>
               </div>
               <div id="about-who-team-number-right">]]</div>
@@ -114,14 +126,18 @@ import './aboutWho.css';
                   ></path>
                 </svg>
                 <div id="about-who-team-name-text-wrapper">
-                  <div id="about-who-team-name-text">Edan Kwan</div>
+                  <div id="about-who-team-name-text">{team.member.name}</div>
                   <div id="about-who-team-name-placeholder"></div>
                 </div>
               </div>
               <div id="about-who-team-job">
                 <div id="about-who-team-job-text">
-                  Cofounder & <br />
-                  Creative Director
+                  {team.member.roleLines.map((line, idx) => (
+                    <>
+                      {line}
+                      {idx < team.member.roleLines.length - 1 && <br />}
+                    </>
+                  ))}
                 </div>
                 <div id="about-who-team-job-placeholder"></div>
               </div>
@@ -157,15 +173,13 @@ import './aboutWho.css';
           </svg>
           <div id="about-who-team-desc">
             <p id="about-who-team-desc-text">
-              We combine different disciplines into one creative production process, allowing ideas
-              to move from concept to execution with clarity and craft. The result is digital work
-              that feels distinctive, technically refined, and built to make a lasting impact.
+              {team.narrative}
             </p>
             <span id="about-who-team-square"></span>
           </div>
         </div>
         <div id="about-who-team-left-mobile-tips">
-          <div id="about-who-team-left-mobile-tips-text">Swipe to change</div>
+          <div id="about-who-team-left-mobile-tips-text">{team.mobileSwipeHint}</div>
         </div>
         <div id="about-who-face-cursor">
           <svg

@@ -5,14 +5,15 @@ import AboutWho from '../components/about/AboutWho/AboutWho.astro';
 import AboutClients from '../components/about/AboutClients/AboutClients.astro';
 import AboutAwards from '../components/about/AboutAwards/AboutAwards.astro';
 import AboutCapability from '../components/about/AboutCapability/AboutCapability.astro';
+import { aboutMetaData } from '../data/pages/about';
 ---
 
 <Layout
-  title="KYNDEV - About Us"
-  description="KYNDEV is a boutique creative production studio with wide range of talents and capabilities for your next project."
-  ogUrl="https://kyndev.com/about/"
-  scrollNavPath="/projects"
-  scrollNavText="Projects"
+  title={aboutMetaData.title}
+  description={aboutMetaData.description}
+  ogUrl={aboutMetaData.ogUrl}
+  scrollNavPath={aboutMetaData.scrollNavPath}
+  scrollNavText={aboutMetaData.scrollNavText}
 >
   <div id="about" class="page">
     <AboutWho />
