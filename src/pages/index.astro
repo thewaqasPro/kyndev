@@ -5,14 +5,15 @@ import Hero from '../components/home/Hero/Hero.astro';
 import Reel from '../components/home/Reel/Reel.astro';
 import Featured from '../components/home/Featured/Featured.astro';
 import Goal from '../components/home/Goal/Goal.astro';
+import { homeMetaData } from '../data/pages/home';
 ---
 
 <Layout
-  title="KYNDEV - Award Winning 3D and Interactive Web Studio"
-  description="We design and produce 3D visual storytelling, immersive websites, and interactive digital experiences that help brands stand out online."
-  ogUrl="https://kyndev.com/"
-  scrollNavPath="/about"
-  scrollNavText="About Us"
+  title={homeMetaData.title}
+  description={homeMetaData.description}
+  ogUrl={homeMetaData.ogUrl}
+  scrollNavPath={homeMetaData.scrollNavPath}
+  scrollNavText={homeMetaData.scrollNavText}
 >
   <div id="home" class="page">
     <Hero />

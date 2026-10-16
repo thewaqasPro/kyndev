@@ -14,7 +14,7 @@
   align-items: stretch;
   box-sizing: border-box;
   /* Pure white canvas */
-  background: #ffffff;
+  /* background: #ffffff; */
   color: #11141d;
   /* Width matching header and other sections */
   padding: calc(var(--base-padding-y) + 7.25rem) var(--base-padding-x) var(--base-padding-y);
@@ -28,7 +28,7 @@
   flex: 1;
   min-height: 0;
   box-sizing: border-box;
-  background: #080a10;
+  /* background: #080a10; */
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 28px;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -62,7 +62,7 @@
 #hero-tools-deck:not([data-layout="split"]) #hero-tools-col-right {
   position: absolute;
   inset: 0;
-  z-index: 5;
+  z-index: 1;
   pointer-events: auto;
 }
 

@@ -216,7 +216,7 @@ export class HeroToolsScene {
           // Blue arc
           ctx.beginPath();
           ctx.strokeStyle = '#4285F4';
-          ctx.arc(0, 0, r * 0.78, (-45 * Math.PI) / 180, (45 * Math.PI) / 180, false);
+          ctx.arc(0, 0, r * 0.78, (-12 * Math.PI) / 180, (45 * Math.PI) / 180, false);
           ctx.stroke();
 
           // Green arc
@@ -239,7 +239,7 @@ export class HeroToolsScene {
 
           // Crossbar
           ctx.fillStyle = '#4285F4';
-          ctx.fillRect(0, -r * 0.21, r * 0.84, r * 0.42);
+          ctx.fillRect(0, -r * 0.21, r * 0.95, r * 0.42);
 
           ctx.restore();
         },

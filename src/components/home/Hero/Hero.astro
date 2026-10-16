@@ -1,15 +1,13 @@
 ---
 // src/components/Hero/Hero.astro
 import './hero.css';
+import { homeHeroData, type HomeHeroData } from '../../../data/pages/home/hero';
 
-interface Props {
-  title?: string;
-  scrollText?: string;
-}
+interface Props extends Partial<HomeHeroData> {}
 
 const {
-  title = 'Digital Marketing That Drives Growth.',
-  scrollText = 'scroll to explore',
+  title = homeHeroData.title,
+  scrollText = homeHeroData.scrollText,
 } = Astro.props;
 ---
 

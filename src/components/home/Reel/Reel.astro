@@ -2,21 +2,16 @@
 // src/components/home/Reel/Reel.astro
 import './reel.css';
 import ReelDecoration from './ReelDecoration.astro';
+import { homeReelData, type HomeReelData } from '../../../data/pages/home/reel';
 
-interface Props {
-  titleLine1?: string;
-  titleLine2?: string;
-  description?: string;
-  ctaText?: string;
-  ctaLink?: string;
-}
+interface Props extends Partial<HomeReelData> {}
 
 const {
-  titleLine1 = 'Strategy, Design',
-  titleLine2 = '& Digital Growth',
-  description = 'We build high-performance websites, custom solutions, and scalable web applications that grow with your business. From fast, secure hosting to ongoing optimization, we deliver reliable digital foundations that drive real results.',
-  ctaText = 'View Work',
-  ctaLink = '/work',
+  titleLine1 = homeReelData.titleLine1,
+  titleLine2 = homeReelData.titleLine2,
+  description = homeReelData.description,
+  ctaText = homeReelData.ctaText,
+  ctaLink = homeReelData.ctaLink,
 } = Astro.props;
 ---
 

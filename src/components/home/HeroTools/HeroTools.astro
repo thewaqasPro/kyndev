@@ -1,19 +1,22 @@
 ---
 // src/components/home/HeroTools/HeroTools.astro
 import "./heroTools.css";
+import { heroToolsData, type HeroToolsData } from "../../../data/pages/home";
 
-interface Props {
-  title?: string;
-  tag?: string;
-  description?: string;
+interface Props extends Partial<HeroToolsData> {
   layout?: "full" | "split";
   showReturnBanner?: boolean;
 }
 
 const {
-  title = "We engineer high-converting campaigns across Google, Meta, HubSpot & Klaviyo.",
-  tag = "Performance Marketing Ecosystem",
-  description = "Scale your brand with battle-tested paid acquisition, data-driven automation, and custom attribution models built for exponential ROI.",
+  title = heroToolsData.title,
+  titleAccent = heroToolsData.titleAccent,
+  tag = heroToolsData.tag,
+  description = heroToolsData.description,
+  ctaText = heroToolsData.ctaText,
+  ctaLink = heroToolsData.ctaLink,
+  scatterButtonText = heroToolsData.scatterButtonText,
+  defaultHud = heroToolsData.defaultHud,
   layout = "full",
   showReturnBanner = true,
 } = Astro.props;
@@ -43,7 +46,7 @@ const {
       <div id="hero-tools-header">
         <span id="hero-tools-tag">{tag}</span>
         <h1 id="hero-tools-title">
-          We engineer high-converting campaigns across <span class="accent">Google, Meta, HubSpot & Klaviyo</span>.
+          {title} <span class="accent">{titleAccent}</span>.
         </h1>
         <p id="hero-tools-description">
           {description}
@@ -52,25 +55,25 @@ const {
 
       <!-- Action buttons in split mode -->
       <div id="hero-tools-split-actions">
-        <a href="/services" class="hero-tools-btn" data-link-type="internal">
-          Explore Our Services →
+        <a href={ctaLink} class="hero-tools-btn" data-link-type="internal">
+          {ctaText}
         </a>
         <button id="hero-tools-split-impulse-btn" class="hero-tools-btn hero-tools-btn-secondary" type="button">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
           </svg>
-          Scatter Stack
+          {scatterButtonText}
         </button>
       </div>
+    </div>
 
-      <!-- Interactive Tool HUD Card -->
-      <div id="hero-tools-hud">
-        <div id="hero-tools-hud-icon">G</div>
-        <div id="hero-tools-hud-content">
-          <h3 id="hero-tools-hud-name">Google Ads</h3>
-          <span id="hero-tools-hud-sub">PPC & Search Scaling</span>
-          <span id="hero-tools-hud-hint">Click or drag any 3D tool badge to toss & inspect</span>
-        </div>
+    <!-- Interactive Tool HUD Card -->
+    <div id="hero-tools-hud">
+      <div id="hero-tools-hud-icon">{defaultHud.icon}</div>
+      <div id="hero-tools-hud-content">
+        <h3 id="hero-tools-hud-name">{defaultHud.name}</h3>
+        <span id="hero-tools-hud-sub">{defaultHud.subtitle}</span>
+        <span id="hero-tools-hud-hint">{defaultHud.hint}</span>
       </div>
     </div>
 
@@ -85,10 +88,10 @@ const {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
           </svg>
-          Scatter Stack
+          {scatterButtonText}
         </button>
-        <a href="/services" class="hero-tools-btn hero-tools-btn-secondary" data-link-type="internal">
-          Explore Our Services →
+        <a href={ctaLink} class="hero-tools-btn hero-tools-btn-secondary" data-link-type="internal">
+          {ctaText}
         </a>
       </div>
     </div>

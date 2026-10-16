@@ -1,23 +1,14 @@
 ---
+// src/components/home/Goal/Goal.astro
 import './goal.css';
+import { homeGoalData, type HomeGoalData } from '../../../data/pages/home';
 
-export interface Props {
-  title?: string;
-  paragraphs?: string[];
-  tunnelLines?: string[];
-}
-
-const defaultParagraphs = [
-  'We do not chase trends or produce work that looks like everyone else. We focus on creating visually distinctive digital experiences that reflect your brand, engage your audience, and make people remember what they saw.',
-  'Our process blends creative direction, 3D craft, and interactive development to build tailored digital journeys that feel original, polished, and built for impact.',
-];
-
-const defaultTunnelLines = ['Step into a new world', 'and let your', 'imagination run wild'];
+export interface Props extends Partial<HomeGoalData> {}
 
 const {
-  title = 'Where Creative Ideas Become Immersive Experiences',
-  paragraphs = defaultParagraphs,
-  tunnelLines = defaultTunnelLines,
+  title = homeGoalData.title,
+  paragraphs = homeGoalData.paragraphs,
+  tunnelLines = homeGoalData.tunnelLines,
 } = Astro.props;
 ---
 
@@ -48,8 +39,3 @@ const {
     </div>
   </div>
 </div>
-
-<script>
-  import { initGoal } from './Goal.ts';
-  initGoal();
-</script>
