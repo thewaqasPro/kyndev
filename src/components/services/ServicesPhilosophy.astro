@@ -1,30 +1,27 @@
 ---
 // src/components/services/ServicesPhilosophy.astro
 import './servicesShowcase.css';
+import {
+  servicesPhilosophyData,
+  type ServicesPhilosophyData,
+  type PhilosophyValue,
+} from '../../data/pages/services';
 
-const values = [
-  {
-    icon: '⚡',
-    title: 'Zero Bloat & Templates',
-    text: 'Every line of code and every pixel is crafted intentionally. We do not use off-the-shelf templates, heavy drag-and-drop builders, or generic frameworks.',
-  },
-  {
-    icon: '🎯',
-    title: 'Performance as an Art Form',
-    text: 'We hold our work to the highest technical standards—guaranteeing 60-120 FPS render loops, flawless Core Web Vitals, and sub-second global load times.',
-  },
-  {
-    icon: '👁️',
-    title: 'Immersive Emotional Resonance',
-    text: 'We fuse artistic creative direction with deep human psychology to create websites and digital worlds that people truly remember, share, and love.',
-  },
-];
+export type { PhilosophyValue };
+
+export interface Props extends Partial<ServicesPhilosophyData> {}
+
+const {
+  tag = servicesPhilosophyData.tag,
+  title = servicesPhilosophyData.title,
+  values = servicesPhilosophyData.values,
+} = Astro.props;
 ---
 
 <div id="services-philosophy" class="section services-philosophy-section">
   <div class="services-philosophy-header">
-    <div class="services-philosophy-tag">// The Studio Ethos</div>
-    <h2 class="services-philosophy-title">Built for Brands That Refuse to Be Ignored</h2>
+    <div class="services-philosophy-tag">{tag}</div>
+    <h2 class="services-philosophy-title">{title}</h2>
   </div>
 
   <div class="services-philosophy-grid">

@@ -6,15 +6,16 @@ import ServicesCapabilitiesShowcase from '../components/services/ServicesCapabil
 import ServicesList from '../components/services/ServicesList.astro';
 import ServicesProcess from '../components/services/ServicesProcess.astro';
 import ServicesPhilosophy from '../components/services/ServicesPhilosophy.astro';
+import { servicesMetaData } from '../data/pages/services';
 ---
 
 <Layout
-  title="KYNDEV - Our Services"
-  description="Responsive web development, UX/UI design, and digital growth services tailored to your goals. No templates, no guesswork."
-  ogUrl="https://kyndev.com/services/"
-  scrollNavPath="/projects"
-  scrollNavText="Our Projects"
-  scrollNavSubtitle="Next"
+  title={servicesMetaData.title}
+  description={servicesMetaData.description}
+  ogUrl={servicesMetaData.ogUrl}
+  scrollNavPath={servicesMetaData.scrollNavPath}
+  scrollNavText={servicesMetaData.scrollNavText}
+  scrollNavSubtitle={servicesMetaData.scrollNavSubtitle}
 >
   <div id="services" class="page">
     <ServicesHero />

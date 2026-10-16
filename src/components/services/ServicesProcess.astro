@@ -1,41 +1,27 @@
 ---
 // src/components/services/ServicesProcess.astro
 import './servicesProcess.css';
+import {
+  servicesProcessData,
+  type ServicesProcessData,
+  type ProcessStep,
+} from '../../data/pages/services';
 
-interface ProcessStep {
-  num: string;
-  title: string;
-  desc: string;
-}
+export type { ProcessStep };
 
-const steps: ProcessStep[] = [
-  {
-    num: '01',
-    title: 'Discovery',
-    desc: 'Uncovering brand objectives, audience behaviors, and technical opportunities through collaborative workshops.',
-  },
-  {
-    num: '02',
-    title: 'Architecture',
-    desc: 'Engineering user journeys, conversion wireframes, and design systems tailored specifically to your goals.',
-  },
-  {
-    num: '03',
-    title: 'Production',
-    desc: 'Crafting responsive layouts, WebGL animations, and seamless user experiences with zero boilerplate fluff.',
-  },
-  {
-    num: '04',
-    title: 'Optimization',
-    desc: 'Refining Core Web Vitals, deploying tracking, and executing iteration loops for sustainable compounding growth.',
-  },
-];
+export interface Props extends Partial<ServicesProcessData> {}
+
+const {
+  eyebrow = servicesProcessData.eyebrow,
+  title = servicesProcessData.title,
+  steps = servicesProcessData.steps,
+} = Astro.props;
 ---
 
 <div id="services-process" class="section">
   <div id="services-process-header">
-    <div id="services-process-eyebrow">Our Methodology //</div>
-    <h2 id="services-process-title">How we deliver results that matter</h2>
+    <div id="services-process-eyebrow">{eyebrow}</div>
+    <h2 id="services-process-title">{title}</h2>
   </div>
 
   {steps.map((step) => (
