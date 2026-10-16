@@ -1,10 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Architecture & File Structure - KYNDEV Docs</title>
+  <link rel="stylesheet" href="../css/docs.css">
+  <link rel="icon" type="image/png" href="../../assets/meta/favicon-32x32.png">
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="docs-header">
+    <div class="header-left">
+      <button class="mobile-nav-toggle" aria-label="Toggle navigation">☰</button>
+      <a href="../index.html" class="brand-badge">
+        <div class="brand-logo-mark">K</div>
+        <span>KYNDEV DOCS</span>
+      </a>
+      <span class="brand-version">v2.4.0 &bull; Modular</span>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="docs-search-input" placeholder="Search documentation, components, or debug keys..." />
+    </div>
+
+    <div class="header-right">
+      <button class="theme-toggle-btn" id="theme-toggle" title="Switch Theme">☀️</button>
+      <a href="http://localhost:4321/" target="_blank" class="live-site-link">View Live Site ↗</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <!-- Left Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="../index.html">Overview & Hub</a>
+          </li>
+          <li class="sidebar-nav-item active">
+            <a href="./project-overview-structure.html">Project & File Structure <span class="nav-tag">Active</span></a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./design-system-tokens.html">Design System & Tokens</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Runtime & WebGL</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./k-preloader-debugger.html">Brand "K" & ?debug-k</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./components-lifecycle.html">Components Lifecycle</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./marketing-tools-hero.html">Marketing Tools Hero (/hero-tools)</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-title">Routing & Previews</div>
+        <ul class="sidebar-nav-list">
+          <li class="sidebar-nav-item">
+            <a href="./multi-page-architecture.html">Multi-Page & SPA Routing</a>
+          </li>
+          <li class="sidebar-nav-item">
+            <a href="./component-preview-hub.html">Component Preview & Hub</a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="docs-content">
       <div class="article-header">
         <div class="article-breadcrumbs">
           <a href="../index.html">KYNDEV</a> / <span>Architecture</span> / <span>Project Overview & Structure</span>
         </div>
         <h1 class="article-title">Project Architecture & File Structure Breakdown</h1>
         <p class="article-lead">
-          In-depth technical breakdown of the 198 source files, 34 static pages, modular runtime architecture vs. legacy monolith, and dev server troubleshooting.
+          In-depth technical breakdown of the source files, static routes, modular data layer, runtime deconstruction, and dev server troubleshooting.
         </p>
       </div>
 
@@ -13,13 +94,13 @@
         <div class="cards-grid">
           <div class="doc-card">
             <div class="doc-card-icon">⚡</div>
-            <div class="doc-card-title">198 Source Files</div>
-            <div class="doc-card-desc">Organized across Astro pages, modular CSS stylesheets, 3D WebGL scenes, and decoupled UI controllers.</div>
+            <div class="doc-card-title">Modular Data Layer</div>
+            <div class="doc-card-desc">All site copy, navigation links, numbers, client logos, awards, and form options decoupled into strictly typed TypeScript files under <code>src/data/</code>.</div>
           </div>
           <div class="doc-card">
             <div class="doc-card-icon">📄</div>
             <div class="doc-card-title">34 Static Routes</div>
-            <div class="doc-card-desc">Built in ~1.1 seconds via Astro SSG, including 20 detailed project case studies and 6 specialized service verticals.</div>
+            <div class="doc-card-desc">Built in ~1.1 seconds via Astro SSG, including 20 detailed project case studies, 6 specialized service verticals, and 3D prototype stages.</div>
           </div>
           <div class="doc-card">
             <div class="doc-card-icon">🧩</div>
@@ -27,3 +108,138 @@
             <div class="doc-card-desc">Deconstructed from the original 26,946-line monolithic <code>runtime.js</code> into 11 clean, maintainable domains.</div>
           </div>
         </div>
+
+        <h2 id="directory-tree">2. Complete Directory Structure Map</h2>
+        <p>The project directory is structured into clean separation of concerns:</p>
+
+        <div class="code-header">
+          <span>Project Root Directory Layout</span>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <pre><code>kyndev.com/
+├── docs/                                # Technical markdown guides & architectural plans
+│   ├── CONTENT_MANAGEMENT_GUIDE.md     # Guide for updating website copy, links, & media
+│   ├── DESIGN_SYSTEM.md                # Extracted live front-end design system
+│   └── MULTI_PAGE_AND_COMPONENT_GUIDE.md# Multi-page architecture & K-morph guide
+├── documentation/                       # Standalone offline HTML documentation portal
+│   ├── index.html                      # Portal homepage
+│   ├── css/docs.css                    # Modern docs stylesheet
+│   ├── js/docs.js                      # Search, theme toggle, copy buttons
+│   └── pages/                          # Individual comprehensive topic guides
+├── public/                             # Public static assets & mirrors
+│   ├── assets/                         # 3D models (.buf), textures (.exr, .webp), audio (.mp3)
+│   └── documentation/                  # Mirrored docs for local dev server access
+└── src/                                # Application source code
+    ├── components/                     # Reusable Astro UI components
+    │   ├── common/                     # Global Header, Footer, EndSection, ScrollNav, Overlays
+    │   ├── home/                       # Hero, HeroTools, Featured, Reel, Goal
+    │   ├── about/                      # AboutWho, AboutCapability, AboutAwards, AboutClients
+    │   ├── services/                   # Single service templates & showcases
+    │   ├── contact/                    # ContactHero, ContactForm
+    │   ├── hub/                        # HubHero, HubCards
+    │   └── projects/                   # ProjectsGallery grid & ProjectDetails case study
+    ├── data/                           # Centralized Type-Safe Content & Data Layer
+    │   ├── common/                     # Header, footer, endSection CTA defaults
+    │   ├── pages/                      # Page-specific modular content
+    │   │   ├── home/                   # Hero copy, HeroTools deck, Reel, Featured, Goal
+    │   │   ├── about/                  # Studio story, Who, Clients, Awards, Capabilities
+    │   │   ├── services/               # Services Hero, Showcase, Process, Philosophy
+    │   │   ├── contact/                # Contact Hero, Form options, addresses, socials
+    │   │   ├── projects/               # Projects Gallery title & SEO metadata
+    │   │   └── hub/                    # Engineering prototype hub cards & filters
+    │   ├── projectsData.ts             # 20 detailed case study definitions
+    │   └── servicesData.ts             # 6 specialized service verticals
+    ├── layouts/                        # Master shell (Layout.astro)
+    ├── pages/                          # Astro page routes (generates 34 static HTML pages)
+    ├── scripts/                        # Modular client runtime scripts & Three.js scenes
+    └── styles/                         # Global typography, CSS variables, & design tokens</code></pre>
+
+        <h2 id="content-architecture">3. Type-Safe Content Architecture</h2>
+        <p>
+          Every page section imports its default copy, links, and structured arrays from <code>src/data/</code>. Components accept optional props matching their data structure (via <code>interface Props extends Partial&lt;DataType&gt;</code>) for 100% backward compatibility:
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Page Domain</th>
+                <th>Content Files</th>
+                <th>Managed Content</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>src/data/common/</code></td>
+                <td><code>header.ts</code>, <code>footer.ts</code>, <code>endSection.ts</code></td>
+                <td>Top navigation menu, CTA action, footer copyright, office locations, inquiry banner.</td>
+              </tr>
+              <tr>
+                <td><code>src/data/pages/home/</code></td>
+                <td><code>hero.ts</code>, <code>heroTools.ts</code>, <code>reel.ts</code>, <code>featured.ts</code>, <code>goal.ts</code></td>
+                <td>Original 3D Balloons hero, 3D Marketing Tools deck copy/HUD, video modal URL, 12 featured projects, mission narrative.</td>
+              </tr>
+              <tr>
+                <td><code>src/data/pages/about/</code></td>
+                <td><code>who.ts</code>, <code>clients.ts</code>, <code>awards.ts</code>, <code>capability.ts</code></td>
+                <td>Studio manifesto, team profiles, client logo carousels, 58 awards breakdown, 4 capability pillars.</td>
+              </tr>
+              <tr>
+                <td><code>src/data/pages/services/</code></td>
+                <td><code>hero.ts</code>, <code>capabilitiesShowcase.ts</code>, <code>process.ts</code>, <code>philosophy.ts</code></td>
+                <td>Services headline, capabilities matrix cards, 4-step delivery pipeline, studio ethos values.</td>
+              </tr>
+              <tr>
+                <td><code>src/data/pages/contact/</code></td>
+                <td><code>hero.ts</code>, <code>form.ts</code></td>
+                <td>Contact hero prompt, service checklist pills, budget tiers, direct emails, and social links.</td>
+              </tr>
+              <tr>
+                <td><code>src/data/pages/hub/</code></td>
+                <td><code>hero.ts</code>, <code>cards.ts</code></td>
+                <td>Engineering catalog filter tags, prototype cards, route badges, and technical summaries.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="troubleshooting">4. Dev Server Commands & Verification</h2>
+        <p>Useful commands for local development and QA validation:</p>
+
+        <pre><code># Typecheck all content files and TypeScript components
+npx tsc --noEmit
+
+# Validate smooth SPA transitions and container IDs
+npm run check:pages
+
+# Build all static pages for production
+npm run build</code></pre>
+
+        <div class="page-nav-footer">
+          <a href="../index.html" class="nav-link-box">
+            <span class="nav-link-sub">&larr; Previous</span>
+            <span class="nav-link-title">Overview & Architecture</span>
+          </a>
+          <a href="./design-system-tokens.html" class="nav-link-box">
+            <span class="nav-link-sub">Next Guide</span>
+            <span class="nav-link-title">Design System & Tokens &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- Right On-Page Table of Contents -->
+    <aside class="docs-toc">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list">
+        <li class="toc-item active"><a href="#metrics">1. Key Metrics</a></li>
+        <li class="toc-item"><a href="#directory-tree">2. Directory Structure</a></li>
+        <li class="toc-item"><a href="#content-architecture">3. Content Architecture</a></li>
+        <li class="toc-item"><a href="#troubleshooting">4. Dev Server & Verification</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <script src="../js/docs.js"></script>
+</body>
+</html>
