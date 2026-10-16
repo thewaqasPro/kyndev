@@ -3,15 +3,16 @@
 import Layout from '../layouts/Layout.astro';
 import ContactHero from '../components/contact/ContactHero.astro';
 import ContactForm from '../components/contact/ContactForm.astro';
+import { contactMetaData } from '../data/pages/contact';
 ---
 
 <Layout
-  title="KYNDEV - Contact Us"
-  description="Get in touch with KYNDEV. Whether you have a project idea, question, or want to collaborate, drop us a message."
-  ogUrl="https://kyndev.com/contact/"
-  scrollNavPath="/"
-  scrollNavText="Home"
-  scrollNavSubtitle="Back To"
+  title={contactMetaData.title}
+  description={contactMetaData.description}
+  ogUrl={contactMetaData.ogUrl}
+  scrollNavPath={contactMetaData.scrollNavPath}
+  scrollNavText={contactMetaData.scrollNavText}
+  scrollNavSubtitle={contactMetaData.scrollNavSubtitle}
 >
   <div id="contact" class="page">
     <ContactHero />

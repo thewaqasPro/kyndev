@@ -1,17 +1,21 @@
 ---
 // src/components/hub/HubHero.astro
 import './hub.css';
+import {
+  hubHeroData,
+  type HubHeroData,
+  type HubFilterOption,
+} from '../../data/pages/hub';
 
-interface Props {
-  eyebrow?: string;
-  title?: string;
-  description?: string;
-}
+export type { HubFilterOption };
+
+export interface Props extends Partial<HubHeroData> {}
 
 const {
-  eyebrow = 'KYNDEV Engineering // Showcase & Prototype Hub',
-  title = 'Interactive 3D Stages, Physics & Architecture Hub',
-  description = 'A unified engineering catalog of live production pages, 3D WebGL physics prototypes, bespoke shaders, and modular components built across the KYNDEV ecosystem.',
+  eyebrow = hubHeroData.eyebrow,
+  title = hubHeroData.title,
+  description = hubHeroData.description,
+  filters = hubHeroData.filters,
 } = Astro.props;
 ---
 
@@ -30,10 +34,14 @@ const {
   <p id="hub-hero-desc">{description}</p>
 
   <div class="hub-filters">
-    <button class="hub-filter-btn active" data-filter="all" type="button">All Experiences</button>
-    <button class="hub-filter-btn" data-filter="hero" type="button">Hero Prototypes</button>
-    <button class="hub-filter-btn" data-filter="pages" type="button">Flagship Pages</button>
-    <button class="hub-filter-btn" data-filter="services" type="button">Services Suite</button>
-    <button class="hub-filter-btn" data-filter="cases" type="button">Case Studies</button>
+    {filters.map((filter) => (
+      <button
+        class={`hub-filter-btn ${filter.active ? 'active' : ''}`}
+        data-filter={filter.id}
+        type="button"
+      >
+        {filter.label}
+      </button>
+    ))}
   </div>
 </div>

@@ -3,15 +3,16 @@
 import Layout from '../layouts/Layout.astro';
 import HubHero from '../components/hub/HubHero.astro';
 import HubCards from '../components/hub/HubCards.astro';
+import { hubMetaData } from '../data/pages/hub';
 ---
 
 <Layout
-  title="KYNDEV - Engineering Showcase & Component Hub"
-  description="Explore the unified engineering hub of 3D WebGL prototypes, interactive physics stages, bespoke shaders, and production components across KYNDEV."
-  ogUrl="https://kyndev.com/hub"
-  scrollNavPath="/"
-  scrollNavText="Home"
-  scrollNavSubtitle="Return To"
+  title={hubMetaData.title}
+  description={hubMetaData.description}
+  ogUrl={hubMetaData.ogUrl}
+  scrollNavPath={hubMetaData.scrollNavPath}
+  scrollNavText={hubMetaData.scrollNavText}
+  scrollNavSubtitle={hubMetaData.scrollNavSubtitle}
 >
   <div id="hub" class="page">
     <HubHero />

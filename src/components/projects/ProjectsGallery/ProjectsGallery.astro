@@ -3,13 +3,18 @@
 import './projectsGallery.css';
 import ProjectGalleryCard from './ProjectGalleryCard.astro';
 import { projectsList } from '../../../data/projectsData';
+import { projectsGalleryData, type ProjectsGalleryData } from '../../../data/pages/projects';
+
+export interface Props extends Partial<ProjectsGalleryData> {}
+
+const { title = projectsGalleryData.title } = Astro.props;
 ---
 
 <div id="projects" class="page">
   <div id="projects-main" class="section">
     <div id="projects-main-title-top">
       <div id="projects-main-title-wrapper">
-        <h4 id="projects-main-title">PROJECTS</h4>
+        <h4 id="projects-main-title">{title}</h4>
         <span id="projects-main-title-project-number">{projectsList.length}</span>
         <svg
           id="projects-main-title-project-arrow"

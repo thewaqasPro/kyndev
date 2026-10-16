@@ -2,14 +2,15 @@
 // src/pages/projects/index.astro
 import Layout from '../../layouts/Layout.astro';
 import ProjectsGallery from '../../components/projects/ProjectsGallery/ProjectsGallery.astro';
+import { projectsMetaData } from '../../data/pages/projects';
 ---
 
 <Layout
-  title="KYNDEV - Our Projects"
-  description="KYNDEV works with a wide range of clients including global brands, startups and agencies."
-  ogUrl="https://kyndev.com/projects/"
-  scrollNavPath="/about"
-  scrollNavText="About Us"
+  title={projectsMetaData.title}
+  description={projectsMetaData.description}
+  ogUrl={projectsMetaData.ogUrl}
+  scrollNavPath={projectsMetaData.scrollNavPath}
+  scrollNavText={projectsMetaData.scrollNavText}
 >
   <ProjectsGallery />
 </Layout>

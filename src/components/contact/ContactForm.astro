@@ -1,27 +1,27 @@
 ---
 // src/components/contact/ContactForm.astro
 import './contactForm.css';
+import {
+  contactFormData,
+  type ContactFormData,
+  type BudgetOption,
+  type SocialLink,
+} from '../../data/pages/contact';
 
-interface Props {
-  email?: string;
-  phone?: string;
-  address?: string;
-}
+export type { BudgetOption, SocialLink };
+
+export interface Props extends Partial<ContactFormData> {}
 
 const {
-  email = 'hello@kyndstudio.com',
-  phone = '+1 (778) 594-5459',
-  address = 'Rossland, B.C (HQ) & Bristol, UK',
+  email = contactFormData.email,
+  phone = contactFormData.phone,
+  address = contactFormData.address,
+  statusBadge = contactFormData.statusBadge,
+  servicesOptions = contactFormData.servicesOptions,
+  budgetOptions = contactFormData.budgetOptions,
+  socialLinks = contactFormData.socialLinks,
+  confirmationMessage = contactFormData.confirmationMessage,
 } = Astro.props;
-
-const servicesOptions = [
-  'Web Development',
-  'Web Design',
-  'Social Media Marketing',
-  'SEO',
-  'Sales Funnels',
-  'PPC Advertising',
-];
 ---
 
 <div id="contact-content" class="section">
@@ -67,10 +67,11 @@ const servicesOptions = [
       <div class="contact-field-group">
         <label class="contact-label" for="contact-budget">Estimated Budget</label>
         <select id="contact-budget" class="contact-select" name="budget">
-          <option value="10k-25k">$10,000 - $25,000</option>
-          <option value="25k-50k" selected>$25,000 - $50,000</option>
-          <option value="50k-100k">$50,000 - $100,000</option>
-          <option value="100k+">$100,000+</option>
+          {budgetOptions.map((opt) => (
+            <option value={opt.value} selected={opt.selected}>
+              {opt.label}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -111,7 +112,7 @@ const servicesOptions = [
   <div class="contact-info-column">
     <div class="contact-status-badge">
       <span class="badge-dot"></span>
-      <span>Available for Q2/Q3 Projects</span>
+      <span>{statusBadge}</span>
     </div>
 
     <div class="contact-info-card">
@@ -122,7 +123,7 @@ const servicesOptions = [
 
       <div class="contact-info-block">
         <span class="contact-info-block-header">Phone //</span>
-        <a class="contact-info-block-val" href="tel:+17785945459">{phone}</a>
+        <a class="contact-info-block-val" href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a>
       </div>
 
       <div class="contact-info-block">
@@ -131,33 +132,23 @@ const servicesOptions = [
       </div>
 
       <div class="contact-socials-grid">
-        <a class="contact-social-link" href="https://twitter.com/kyndev" target="_blank" rel="noreferrer">
-          <span>Twitter / X</span>
-          <span>↗</span>
-        </a>
-        <a class="contact-social-link" href="https://instagram.com/kyndev" target="_blank" rel="noreferrer">
-          <span>Instagram</span>
-          <span>↗</span>
-        </a>
-        <a class="contact-social-link" href="https://linkedin.com/company/kyndev" target="_blank" rel="noreferrer">
-          <span>LinkedIn</span>
-          <span>↗</span>
-        </a>
-        <a class="contact-social-link" href="https://github.com/kyndev" target="_blank" rel="noreferrer">
-          <span>GitHub</span>
-          <span>↗</span>
-        </a>
+        {socialLinks.map((social) => (
+          <a class="contact-social-link" href={social.href} target="_blank" rel="noreferrer">
+            <span>{social.name}</span>
+            <span>↗</span>
+          </a>
+        ))}
       </div>
     </div>
   </div>
 </div>
 
-<script>
+<script define:vars={{ confirmationMessage }}>
   const contactForm = document.getElementById('kynd-contact-form');
   if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      alert('Thank you for reaching out! The KYNDEV team will get back to you shortly.');
+      alert(confirmationMessage);
     });
   }
 </script>

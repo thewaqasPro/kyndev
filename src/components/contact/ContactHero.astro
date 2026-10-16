@@ -1,17 +1,14 @@
 ---
 // src/components/contact/ContactHero.astro
 import './contactHero.css';
+import { contactHeroData, type ContactHeroData } from '../../data/pages/contact';
 
-interface Props {
-  eyebrow?: string;
-  title?: string;
-  description?: string;
-}
+export interface Props extends Partial<ContactHeroData> {}
 
 const {
-  eyebrow = 'Contact Us // Get In Touch',
-  title = "Let's build something unforgettable together.",
-  description = "Whether you have a question, a project idea, or just want to say hello — we're all ears. Drop us a message and we'll get back to you as soon as we can.",
+  eyebrow = contactHeroData.eyebrow,
+  title = contactHeroData.title,
+  description = contactHeroData.description,
 } = Astro.props;
 ---
 
